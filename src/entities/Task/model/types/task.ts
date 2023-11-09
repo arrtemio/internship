@@ -6,9 +6,9 @@ export enum StatusEnum {
 
 export interface SubTask {
     id: number;
-    task_id: number;
+    taskId: number;
     title: string;
-    doneAt?: number;
+    completedAt: number | null;
     status: StatusEnum;
 }
 
@@ -16,7 +16,7 @@ export interface Task {
     id: number;
     title: string;
     createdAt: number;
-    completedAt?: number;
+    completedAt: number | null;
     status: StatusEnum;
     subTasks: SubTask[];
 }
