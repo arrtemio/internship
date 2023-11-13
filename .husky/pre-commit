@@ -3,3 +3,4 @@
 
 npm run lint:ts
 npm run lint:ts:fix
+npm test

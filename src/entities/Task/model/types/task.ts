@@ -22,5 +22,5 @@ export interface Task {
 }
 
 export interface TasksSchema {
-    tasks: Task[];
+    data: Task[];
 }

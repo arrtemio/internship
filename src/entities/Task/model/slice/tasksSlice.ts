@@ -4,7 +4,7 @@ import {
 } from '../types/task';
 
 const initialState: TasksSchema = {
-    tasks: [],
+    data: [],
 };
 
 const updateLocalStorage = (tasks: Task[]) => {
@@ -14,22 +14,22 @@ const updateLocalStorage = (tasks: Task[]) => {
 const getTaskById = (tasks: (Task | SubTask)[], id: number) => tasks.find((task) => task.id === id);
 
 export const tasksSlice = createSlice({
-    name: 'task',
+    name: 'tasks',
     initialState,
     reducers: {
         getAllTasks: (state) => {
-            state.tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+            state.data = JSON.parse(localStorage.getItem('tasks') || '[]');
         },
 
         createNewTask: (state, action: PayloadAction<Task>) => {
-            state.tasks.push(action.payload);
-            updateLocalStorage(state.tasks);
+            state.data.push(action.payload);
+            updateLocalStorage(state.data);
         },
 
         changeTaskStatus: (state, action: PayloadAction<Task>) => {
             const { status } = action.payload;
 
-            const currentTask = getTaskById(state.tasks, action.payload.id) as Task;
+            const currentTask = getTaskById(state.data, action.payload.id) as Task;
             currentTask.status = status;
 
             if (status === StatusEnum.COMPLETED) {
@@ -40,19 +40,19 @@ export const tasksSlice = createSlice({
                 currentTask.completedAt = null;
             }
 
-            updateLocalStorage(state.tasks);
+            updateLocalStorage(state.data);
         },
 
         createSubTask: (state, action: PayloadAction<SubTask>) => {
-            const currentTask = getTaskById(state.tasks, action.payload.taskId) as Task;
+            const currentTask = getTaskById(state.data, action.payload.taskId) as Task;
             currentTask.subTasks.push(action.payload);
             if (currentTask.status === StatusEnum.COMPLETED) currentTask.status = StatusEnum.IN_PROGRESS;
 
-            updateLocalStorage(state.tasks);
+            updateLocalStorage(state.data);
         },
 
         changeSubTaskStatus: (state, action: PayloadAction<SubTask>) => {
-            const currentTask = getTaskById(state.tasks, action.payload.taskId) as Task;
+            const currentTask = getTaskById(state.data, action.payload.taskId) as Task;
             if (currentTask) {
                 const currentSubTask = getTaskById(currentTask.subTasks, action.payload.id) as SubTask;
 
@@ -73,7 +73,7 @@ export const tasksSlice = createSlice({
                 }
             }
 
-            updateLocalStorage(state.tasks);
+            updateLocalStorage(state.data);
         },
     },
 });
