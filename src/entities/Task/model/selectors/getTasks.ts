@@ -1,3 +1,3 @@
-import { TasksSchema } from '../types/task';
+import { StateSchema } from '../../../../app/store';
 
-export const getTasks = (state: TasksSchema) => state.tasks || [];
+export const getTasks = (state: StateSchema) => state.tasks.data || [];

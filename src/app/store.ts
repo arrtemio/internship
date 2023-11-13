@@ -1,9 +1,13 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { tasksReducer } from '../entities/Task/model/slice/tasksSlice';
+import { TasksSchema } from '../entities/Task/model/types/task';
 
-const rootReducer = combineReducers({
+export interface StateSchema {
+    tasks: TasksSchema
+}
+
+const rootReducer = combineReducers<StateSchema>({
     tasks: tasksReducer,
-
 });
 
 export const store = configureStore({
