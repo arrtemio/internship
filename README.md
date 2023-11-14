@@ -2,6 +2,12 @@
 
 This project is a React-based application for an internship.
 
+Tasks are created by interacting with an input at the top of the page, and all tasks are listed below the input.
+Each task has its status, which can be changed by selecting the desired status from a dropdown list.
+Clicking on a task opens a menu where you can add subtasks to the selected task.
+If all subtasks are "Completed", the task is automatically marked as "Completed".
+If a task is marked as "Completed" but you add a subtask to it, the status of the main task changes to "In progress."
+
 ## Installation
 
 To set up the project, follow these steps:
@@ -40,10 +46,13 @@ Ejects the project and provides more advanced configuration options.
 
 ## Dependencies
 
-This project includes several dependencies for development and runtime. Key dependencies include:
+This project includes several dependencies for development and runtime. Also app use Material ui as ui kit and redux toolkit for state managment. Key dependencies include:
 
 - React
 - React-DOM
+- React-redux
+- Redux-toolkit
+- Material ui
 - Web Vitals
 
 For a complete list of all dependencies, check the `package.json` file.
