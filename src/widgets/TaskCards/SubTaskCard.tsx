@@ -2,10 +2,9 @@ import React, { FC, memo } from 'react';
 import {
     Box, Card, SelectChangeEvent, Typography,
 } from '@mui/material';
-import { StatusEnum, SubTask } from '../../../entities/Task/model/types/task';
-import { useAppDispatch } from '../../lib/hooks/redux';
-import { tasksActions } from '../../../entities/Task/model/slice/tasksSlice';
-import { getDateAndTime } from '../../lib/helpers/getDateAndTime';
+import { StatusEnum, SubTask, tasksActions } from '../../entities/Task';
+import { useAppDispatch } from '../../shared/lib/hooks/redux';
+import { getDateAndTime } from '../../shared/lib/helpers';
 import { SelectStatus } from '../SelectStatus/SelectStatus';
 
 interface SubTaskCardProps {
@@ -35,7 +34,12 @@ export const SubTaskCard: FC<SubTaskCardProps> = memo(({ task }) => {
                 {task.title}
             </Typography>
             <Box>
-                <Typography>{getDateAndTime(task.completedAt)?.date}</Typography>
+                { task.completedAt && (
+                    <Typography variant="caption">
+                        Done:
+                        {getDateAndTime(task.completedAt)?.date}
+                    </Typography>
+                ) }
             </Box>
         </Card>
     );

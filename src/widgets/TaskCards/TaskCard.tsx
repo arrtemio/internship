@@ -2,10 +2,10 @@ import React, { FC, memo } from 'react';
 import {
     Box, Card, SelectChangeEvent, Typography,
 } from '@mui/material';
-import { StatusEnum, Task } from '../../../entities/Task/model/types/task';
-import { useAppDispatch } from '../../lib/hooks/redux';
-import { tasksActions } from '../../../entities/Task/model/slice/tasksSlice';
-import { getDateAndTime } from '../../lib/helpers/getDateAndTime';
+import { StatusEnum, Task } from '../../entities/Task/model/types/task';
+import { useAppDispatch } from '../../shared/lib/hooks/redux';
+import { tasksActions } from '../../entities/Task/model/slice/tasksSlice';
+import { getDateAndTime } from '../../shared/lib/helpers';
 import { SelectStatus } from '../SelectStatus/SelectStatus';
 
 interface TaskCardProps {
@@ -24,8 +24,8 @@ export const TaskCard: FC<TaskCardProps> = memo(({ task }) => {
             sx={{
                 width: '100%',
                 display: 'flex',
-                padding: '10px',
                 flexDirection: 'column',
+                boxShadow: 'none',
             }}
         >
             <Box
@@ -34,21 +34,24 @@ export const TaskCard: FC<TaskCardProps> = memo(({ task }) => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
+                    gap: '5px',
                 }}
             >
                 <SelectStatus value={task.status} onChange={handleChange} />
-                <Typography width="100%" align="left">
+                <Typography sx={{ fontSize: 'large' }} width="100%" align="left">
                     {task.title}
                 </Typography>
-                <Box>
-                    <Typography>
-                        Created at:
+                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                    <Typography variant="caption">
+                        Created:
                         {getDateAndTime(task.createdAt)?.date}
                     </Typography>
-                    <Typography>
-                        Done at:
-                        {getDateAndTime(task.completedAt)?.date}
-                    </Typography>
+                    { task.completedAt && (
+                        <Typography variant="caption">
+                            Done:
+                            {getDateAndTime(task.completedAt)?.date}
+                        </Typography>
+                    ) }
                 </Box>
             </Box>
             <Box>
