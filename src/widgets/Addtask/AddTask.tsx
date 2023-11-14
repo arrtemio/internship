@@ -3,9 +3,15 @@ import { Box, Button, TextField } from '@mui/material';
 
 interface AddTaskProps {
     action: (title: string) => void;
+    variant?: 'outlined' | 'standard' | 'filled';
+    placeholder?: string;
 }
 
-export const AddTask: FC<AddTaskProps> = memo(({ action }) => {
+export const AddTask: FC<AddTaskProps> = memo(({
+    action,
+    placeholder = 'Create new task',
+    variant = 'outlined',
+}) => {
     const [taskName, setTaskName] = useState<string>('');
 
     const createTask = () => {
@@ -14,15 +20,14 @@ export const AddTask: FC<AddTaskProps> = memo(({ action }) => {
         setTaskName('');
     };
     return (
-
         <Box
             sx={{ display: 'flex' }}
         >
             <TextField
-                label="Create new task"
+                label={placeholder}
                 value={taskName}
                 onChange={(e) => setTaskName(e.target.value)}
-                variant="outlined"
+                variant={variant}
                 fullWidth
             />
             <Button

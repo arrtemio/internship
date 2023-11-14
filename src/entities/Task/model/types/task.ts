@@ -5,15 +5,15 @@ export enum StatusEnum {
 }
 
 export interface SubTask {
-    id: number;
-    taskId: number;
+    id: string;
+    taskId: string;
     title: string;
     completedAt: number | null;
     status: StatusEnum;
 }
 
 export interface Task {
-    id: number;
+    id: string;
     title: string;
     createdAt: number;
     completedAt: number | null;

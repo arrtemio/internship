@@ -11,7 +11,7 @@ const updateLocalStorage = (tasks: Task[]) => {
     localStorage.setItem('tasks', JSON.stringify(tasks));
 };
 
-const getTaskById = (tasks: (Task | SubTask)[], id: number) => tasks.find((task) => task.id === id);
+const getTaskById = (tasks: (Task | SubTask)[], id: string) => tasks.find((task) => task.id === id);
 
 export const tasksSlice = createSlice({
     name: 'tasks',
@@ -46,7 +46,10 @@ export const tasksSlice = createSlice({
         createSubTask: (state, action: PayloadAction<SubTask>) => {
             const currentTask = getTaskById(state.data, action.payload.taskId) as Task;
             currentTask.subTasks.push(action.payload);
-            if (currentTask.status === StatusEnum.COMPLETED) currentTask.status = StatusEnum.IN_PROGRESS;
+            if (currentTask.status === StatusEnum.COMPLETED) {
+                currentTask.status = StatusEnum.IN_PROGRESS;
+                currentTask.completedAt = null;
+            }
 
             updateLocalStorage(state.data);
         },
