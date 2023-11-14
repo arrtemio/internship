@@ -2,8 +2,8 @@ import React, { FC, memo } from 'react';
 import {
     FormControl, InputLabel, MenuItem, Select, SelectChangeEvent,
 } from '@mui/material';
-import { StatusEnum } from '../../entities/Task/model/types/task';
-import { returnStatusColor } from '../../shared/lib/helpers/returnStatusColor/returnStatusColor';
+import { StatusEnum } from '../../entities/Task';
+import { returnStatusColor } from '../../shared/lib/helpers';
 
 interface SelectStatusProps {
     onChange?: (e: SelectChangeEvent) => void;

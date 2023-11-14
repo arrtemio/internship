@@ -2,9 +2,8 @@ import React, { FC, memo } from 'react';
 import {
     Box, Card, SelectChangeEvent, Typography,
 } from '@mui/material';
-import { StatusEnum, Task } from '../../entities/Task/model/types/task';
+import { StatusEnum, Task, tasksActions } from '../../entities/Task';
 import { useAppDispatch } from '../../shared/lib/hooks/redux';
-import { tasksActions } from '../../entities/Task/model/slice/tasksSlice';
 import { getDateAndTime } from '../../shared/lib/helpers';
 import { SelectStatus } from '../SelectStatus/SelectStatus';
 

@@ -1,4 +1,4 @@
-import { StatusEnum, SubTask, Task } from '../../entities/Task/model/types/task';
+import { StatusEnum, SubTask, Task } from '../../entities/Task';
 
 export const testTask: Task = {
     id: 'Asdager123',

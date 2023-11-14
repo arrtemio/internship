@@ -1,4 +1,4 @@
-import { StatusEnum } from '../../../../entities/Task/model/types/task';
+import { StatusEnum } from '../../../../entities/Task';
 
 export const returnStatusColor = (value: StatusEnum): 'success' | 'primary' | 'secondary' => {
     let color: 'success' | 'primary' | 'secondary';

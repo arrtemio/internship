@@ -2,7 +2,7 @@ import { DeepPartial } from '@reduxjs/toolkit';
 import { StatusEnum, Task, TasksSchema } from '../types/task';
 import { tasksActions, tasksReducer } from './tasksSlice';
 import { testSubtask, testTask } from '../../../../shared/test/TestTask';
-import { generateRandomId } from '../../../../shared/lib/helpers/generateRandomID/generateRandomID';
+import { generateRandomId } from '../../../../shared/lib/helpers';
 
 describe('tasksSlice', () => {
     const state: DeepPartial<TasksSchema> = {
