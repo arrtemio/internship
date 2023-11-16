@@ -1,24 +1,21 @@
-export enum StatusEnum {
-    COMPLETED = 'COMPLETED',
-    TO_DO = 'TO_DO',
-    IN_PROGRESS = 'IN_PROGRESS'
+export enum Status {
+    COMPLETED = 'Completed',
+    TO_DO = 'To do',
+    IN_PROGRESS = 'In progress'
 }
 
-export interface SubTask {
+export const StatusArr = Object.values(Status);
+
+export interface BaseTask {
     id: string;
-    taskId: string;
     title: string;
     completedAt: number | null;
-    status: StatusEnum;
+    status: Status;
 }
 
-export interface Task {
-    id: string;
-    title: string;
+export interface Task extends BaseTask{
     createdAt: number;
-    completedAt: number | null;
-    status: StatusEnum;
-    subTasks: SubTask[];
+    subTasks: BaseTask[];
 }
 
 export interface TasksSchema {

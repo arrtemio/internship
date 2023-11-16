@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
-    StatusEnum, SubTask, Task, TasksSchema,
+    Status, BaseTask, Task, TasksSchema,
 } from '../types/task';
 
 const initialState: TasksSchema = {
@@ -11,7 +11,9 @@ const updateLocalStorage = (tasks: Task[]) => {
     localStorage.setItem('tasks', JSON.stringify(tasks));
 };
 
-const getTaskById = (tasks: (Task | SubTask)[], id: string) => tasks.find((task) => task.id === id);
+const getTaskById = <T extends BaseTask>(tasks: T[], id: string): T | undefined => (
+    tasks.find((task) => task.id === id)
+);
 
 export const tasksSlice = createSlice({
     name: 'tasks',
@@ -27,15 +29,19 @@ export const tasksSlice = createSlice({
         },
 
         changeTaskStatus: (state, action: PayloadAction<Task>) => {
-            const { status } = action.payload;
+            const { status, id } = action.payload;
 
-            const currentTask = getTaskById(state.data, action.payload.id) as Task;
+            const currentTask = getTaskById(state.data, id);
+            if (!currentTask) return;
+
             currentTask.status = status;
 
-            if (status === StatusEnum.COMPLETED) {
+            if (status === Status.COMPLETED) {
                 currentTask.completedAt = Date.now();
-                currentTask.subTasks = currentTask.subTasks.map((sub) => (
-                    { ...sub, status: StatusEnum.COMPLETED, completedAt: Date.now() }));
+                currentTask.subTasks.forEach((sub) => {
+                    sub.status = Status.COMPLETED;
+                    sub.completedAt = Date.now();
+                });
             } else {
                 currentTask.completedAt = null;
             }
@@ -43,37 +49,43 @@ export const tasksSlice = createSlice({
             updateLocalStorage(state.data);
         },
 
-        createSubTask: (state, action: PayloadAction<SubTask>) => {
-            const currentTask = getTaskById(state.data, action.payload.taskId) as Task;
-            currentTask.subTasks.push(action.payload);
-            if (currentTask.status === StatusEnum.COMPLETED) {
-                currentTask.status = StatusEnum.IN_PROGRESS;
+        createSubTask: (state, action: PayloadAction<{ subTask: BaseTask, taskID: string }>) => {
+            const { subTask, taskID } = action.payload;
+            const currentTask = getTaskById(state.data, taskID);
+
+            if (!currentTask) return;
+
+            currentTask.subTasks.push(subTask);
+            if (currentTask.status === Status.COMPLETED) {
+                currentTask.status = Status.IN_PROGRESS;
                 currentTask.completedAt = null;
             }
 
             updateLocalStorage(state.data);
         },
 
-        changeSubTaskStatus: (state, action: PayloadAction<SubTask>) => {
-            const currentTask = getTaskById(state.data, action.payload.taskId) as Task;
-            if (currentTask) {
-                const currentSubTask = getTaskById(currentTask.subTasks, action.payload.id) as SubTask;
+        changeSubTaskStatus: (state, action: PayloadAction<{ subTask: BaseTask, taskID: string }>) => {
+            const { subTask, taskID } = action.payload;
+            const currentTask = getTaskById(state.data, taskID);
 
-                currentSubTask.completedAt = action.payload.status === StatusEnum.COMPLETED
-                    ? Date.now()
-                    : null;
+            if (!currentTask) return;
 
-                if (currentSubTask) currentSubTask.status = action.payload.status;
+            const currentSubTask = getTaskById(currentTask.subTasks, subTask.id);
 
-                const isAllSubTasksComplete = !currentTask.subTasks.find((sub) => sub.status !== StatusEnum.COMPLETED);
+            if (!currentSubTask) return;
 
-                if (isAllSubTasksComplete) {
-                    currentTask.status = StatusEnum.COMPLETED;
-                    currentTask.completedAt = Date.now();
-                } else {
-                    currentTask.status = StatusEnum.IN_PROGRESS;
-                    currentTask.completedAt = null;
-                }
+            currentSubTask.status = subTask.status;
+            currentSubTask.completedAt = subTask.status === Status.COMPLETED
+                ? Date.now()
+                : null;
+
+            const areAllSubTasksCompleted = currentTask.subTasks.every((sub) => sub.status === Status.COMPLETED);
+            if (areAllSubTasksCompleted) {
+                currentTask.status = Status.COMPLETED;
+                currentTask.completedAt = Date.now();
+            } else {
+                currentTask.status = Status.IN_PROGRESS;
+                currentTask.completedAt = null;
             }
 
             updateLocalStorage(state.data);

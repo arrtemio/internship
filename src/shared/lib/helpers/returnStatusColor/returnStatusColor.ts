@@ -1,13 +1,18 @@
-import { StatusEnum } from '../../../../entities/Task';
+import { Status } from 'entities/Task';
 
-export const returnStatusColor = (value: StatusEnum): 'success' | 'primary' | 'secondary' => {
+export const returnStatusColor = (value: Status) => {
     let color: 'success' | 'primary' | 'secondary';
 
-    color = value === StatusEnum.COMPLETED
-        ? 'success'
-        : value === StatusEnum.IN_PROGRESS
-            ? 'secondary'
-            : 'primary';
+    switch (value) {
+    case Status.IN_PROGRESS:
+        color = 'secondary';
+        break;
+    case Status.COMPLETED:
+        color = 'success';
+        break;
+    default:
+        color = 'primary';
+    }
 
     return color;
 };
