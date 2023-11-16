@@ -2,10 +2,10 @@ import React, { FC, memo } from 'react';
 import {
     Box, Card, SelectChangeEvent, Typography,
 } from '@mui/material';
-import { StatusEnum, Task, tasksActions } from '../../entities/Task';
-import { useAppDispatch } from '../../shared/lib/hooks/redux';
-import { getDateAndTime } from '../../shared/lib/helpers';
-import { SelectStatus } from '../SelectStatus/SelectStatus';
+import { useAppDispatch } from 'shared/lib/hooks/redux';
+import { getDateAndTime } from 'shared/lib/helpers';
+import { SelectStatus } from 'features/SelectStatus/SelectStatus';
+import { Status, Task, tasksActions } from 'entities/Task';
 
 interface TaskCardProps {
     task: Task;
@@ -15,7 +15,7 @@ export const TaskCard: FC<TaskCardProps> = memo(({ task }) => {
     const dispatch = useAppDispatch();
 
     const handleChange = (e: SelectChangeEvent) => {
-        dispatch(tasksActions.changeTaskStatus({ ...task, status: e.target.value as StatusEnum }));
+        dispatch(tasksActions.changeTaskStatus({ ...task, status: e.target.value as Status }));
     };
 
     return (
@@ -43,12 +43,12 @@ export const TaskCard: FC<TaskCardProps> = memo(({ task }) => {
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                     <Typography variant="caption">
                         Created:
-                        {getDateAndTime(task.createdAt)?.date}
+                        {getDateAndTime(task.createdAt)}
                     </Typography>
                     { task.completedAt && (
                         <Typography variant="caption">
                             Done:
-                            {getDateAndTime(task.completedAt)?.date}
+                            {getDateAndTime(task.completedAt)}
                         </Typography>
                     ) }
                 </Box>

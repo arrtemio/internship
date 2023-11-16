@@ -1,7 +1,7 @@
 import { DeepPartial } from '@reduxjs/toolkit';
+import { testTask } from 'shared/test/TestTask';
+import { StateSchema } from 'app/store';
 import { getTasks } from './getTasks';
-import { testTask } from '../../../../shared/test/TestTask';
-import { StateSchema } from '../../../../app/store';
 
 describe('getTasks', () => {
     let state: DeepPartial<StateSchema>;

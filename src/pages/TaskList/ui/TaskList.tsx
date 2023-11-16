@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react';
 import { Box, Container } from '@mui/material';
-import { AddTask } from '../../../widgets/Addtask/AddTask';
+import { AddTask } from 'features/Addtask/AddTask';
 import {
-    MainTask, tasksActions, StatusEnum, Task, getTasks,
-} from '../../../entities/Task';
-import { useAppDispatch, useAppSelector } from '../../../shared/lib/hooks/redux';
-import { generateRandomId } from '../../../shared/lib/helpers';
+    tasksActions, Status, Task, getTasks,
+} from 'entities/Task';
+import { useAppDispatch, useAppSelector } from 'shared/lib/hooks/redux';
+import { generateRandomId } from 'shared/lib/helpers';
+import { MainTask } from 'widgets/MainTask/MainTask';
 
-export const MainPage = () => {
+export const TaskList = () => {
     const dispatch = useAppDispatch();
     const tasks = useAppSelector(getTasks);
 
@@ -22,7 +23,7 @@ export const MainPage = () => {
             id: randomID,
             title,
             createdAt: Date.now(),
-            status: StatusEnum.TO_DO,
+            status: Status.TO_DO,
             subTasks: [],
             completedAt: null,
         };
@@ -30,9 +31,7 @@ export const MainPage = () => {
     };
 
     return (
-        <Container
-            sx={{ mt: '20px' }}
-        >
+        <Container sx={{ mt: '20px' }}>
             <>
                 <AddTask action={createTask} />
                 <Box sx={{

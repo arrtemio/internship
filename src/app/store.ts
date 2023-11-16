@@ -1,5 +1,5 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { tasksReducer, TasksSchema } from '../entities/Task';
+import { tasksReducer, TasksSchema } from 'entities/Task';
 
 export interface StateSchema {
     tasks: TasksSchema

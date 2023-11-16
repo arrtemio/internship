@@ -1,10 +1,10 @@
 import React from 'react';
-import { MainPage } from '../pages/MainPage';
+import { TaskList } from 'pages/TaskList';
 
 function App() {
     return (
         <div className="App">
-            <MainPage />
+            <TaskList />
         </div>
     );
 }
