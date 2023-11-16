@@ -1,11 +1,7 @@
 export const getDateAndTime = (timestamp: number | null) => {
-    if (timestamp) {
-        const fullDate = new Date(timestamp);
+    if (!timestamp) return null;
 
-        const date = fullDate.toLocaleDateString();
-        const time = fullDate.toLocaleTimeString();
+    const fullDate = new Date(timestamp);
 
-        return { date, time };
-    }
-    return null;
+    return `${fullDate.toLocaleDateString()} / ${fullDate.toLocaleTimeString()}`;
 };

@@ -7,13 +7,18 @@ import {
     Container, Typography,
 } from '@mui/material';
 
-import { StatusEnum, SubTask, Task } from '../../model/types/task';
-import { SubTaskCard } from '../../../../widgets/TaskCards/SubTaskCard';
-import { tasksActions } from '../../model/slice/tasksSlice';
-import { useAppDispatch } from '../../../../shared/lib/hooks/redux';
-import { AddTask } from '../../../../widgets/Addtask/AddTask';
-import { TaskCard } from '../../../../widgets/TaskCards/TaskCard';
-import { generateRandomId } from '../../../../shared/lib/helpers';
+import {
+    Status,
+    BaseTask,
+    SubTaskCard,
+    Task,
+    TaskCard,
+    tasksActions,
+} from 'entities/Task';
+import { useAppDispatch } from 'shared/lib/hooks/redux';
+import { AddTask } from 'features/Addtask/AddTask';
+import { generateRandomId } from 'shared/lib/helpers';
+import { flexColumn } from 'styles/style';
 
 interface MainTaskProps {
     task: Task;
@@ -29,14 +34,13 @@ export const MainTask: FC<MainTaskProps> = memo(({ task, ID }) => {
     const createSubTask = (title: string) => {
         const randomID = generateRandomId();
 
-        const subTask: SubTask = {
+        const subTask: BaseTask = {
             id: randomID,
             title,
-            status: StatusEnum.TO_DO,
-            taskId: task.id,
+            status: Status.TO_DO,
             completedAt: null,
         };
-        dispatch(tasksActions.createSubTask(subTask));
+        dispatch(tasksActions.createSubTask({ subTask, taskID: task.id }));
     };
 
     return (
@@ -49,7 +53,7 @@ export const MainTask: FC<MainTaskProps> = memo(({ task, ID }) => {
                 id={`panel${ID}-header`}
                 onClick={handleExpanded}
             >
-                <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                <Box sx={{ ...flexColumn, width: '100%' }}>
                     <TaskCard data-testid="taskCard" task={task} />
                     {!expanded && (
                         <Typography
@@ -63,12 +67,18 @@ export const MainTask: FC<MainTaskProps> = memo(({ task, ID }) => {
                 </Box>
             </AccordionSummary>
             <AccordionDetails>
-                <Container sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <Container sx={{ ...flexColumn, gap: '10px' }}>
                     <AddTask placeholder="Create sub task" action={createSubTask} />
                     {task.subTasks
                         && (
-                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                                {task.subTasks.map((sub) => <SubTaskCard key={sub.id} task={sub} />)}
+                            <Box sx={{ ...flexColumn, gap: '5px' }}>
+                                {task.subTasks.map((sub) => (
+                                    <SubTaskCard
+                                        key={sub.id}
+                                        subTask={sub}
+                                        taskID={task.id}
+                                    />
+                                ))}
                             </Box>
                         )}
                 </Container>
