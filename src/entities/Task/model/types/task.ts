@@ -4,7 +4,7 @@ export enum Status {
     IN_PROGRESS = 'In progress'
 }
 
-export const StatusArr = Object.values(Status);
+export const StatusValues = Object.values(Status);
 
 export interface BaseTask {
     id: string;

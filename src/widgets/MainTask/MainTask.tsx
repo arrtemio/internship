@@ -26,6 +26,7 @@ interface MainTaskProps {
 }
 
 export const MainTask: FC<MainTaskProps> = memo(({ task, ID }) => {
+    const { subTasks, id } = task;
     const [expanded, setExpanded] = useState<boolean>(false);
     const dispatch = useAppDispatch();
 
@@ -40,7 +41,7 @@ export const MainTask: FC<MainTaskProps> = memo(({ task, ID }) => {
             status: Status.TO_DO,
             completedAt: null,
         };
-        dispatch(tasksActions.createSubTask({ subTask, taskID: task.id }));
+        dispatch(tasksActions.createSubTask({ subTask, taskID: id }));
     };
 
     return (
@@ -57,7 +58,6 @@ export const MainTask: FC<MainTaskProps> = memo(({ task, ID }) => {
                     <TaskCard data-testid="taskCard" task={task} />
                     {!expanded && (
                         <Typography
-                            data-testid="clickZone"
                             sx={{ fontSize: 'small' }}
                             align="center"
                         >
@@ -68,11 +68,15 @@ export const MainTask: FC<MainTaskProps> = memo(({ task, ID }) => {
             </AccordionSummary>
             <AccordionDetails>
                 <Container sx={{ ...flexColumn, gap: '10px' }}>
-                    <AddTask placeholder="Create sub task" action={createSubTask} />
-                    {task.subTasks
+                    <AddTask
+                        size="small"
+                        placeholder="Create sub task"
+                        action={createSubTask}
+                    />
+                    {subTasks
                         && (
                             <Box sx={{ ...flexColumn, gap: '5px' }}>
-                                {task.subTasks.map((sub) => (
+                                {subTasks.map((sub) => (
                                     <SubTaskCard
                                         key={sub.id}
                                         subTask={sub}
