@@ -28,10 +28,10 @@ export const tasksSlice = createSlice({
             updateLocalStorage(state.data);
         },
 
-        changeTaskStatus: (state, action: PayloadAction<Task>) => {
-            const { status, id } = action.payload;
+        changeTaskStatus: (state, action: PayloadAction<{taskID: string, status: Status}>) => {
+            const { status, taskID } = action.payload;
 
-            const currentTask = getTaskById(state.data, id);
+            const currentTask = getTaskById(state.data, taskID);
             if (!currentTask) return;
 
             currentTask.status = status;
@@ -64,18 +64,22 @@ export const tasksSlice = createSlice({
             updateLocalStorage(state.data);
         },
 
-        changeSubTaskStatus: (state, action: PayloadAction<{ subTask: BaseTask, taskID: string }>) => {
-            const { subTask, taskID } = action.payload;
+        changeSubTaskStatus: (state, action: PayloadAction<{
+            status: Status,
+            subTaskID: string,
+            taskID: string,
+        }>) => {
+            const { subTaskID, status, taskID } = action.payload;
             const currentTask = getTaskById(state.data, taskID);
 
             if (!currentTask) return;
 
-            const currentSubTask = getTaskById(currentTask.subTasks, subTask.id);
+            const currentSubTask = getTaskById(currentTask.subTasks, subTaskID);
 
             if (!currentSubTask) return;
 
-            currentSubTask.status = subTask.status;
-            currentSubTask.completedAt = subTask.status === Status.COMPLETED
+            currentSubTask.status = status;
+            currentSubTask.completedAt = status === Status.COMPLETED
                 ? Date.now()
                 : null;
 

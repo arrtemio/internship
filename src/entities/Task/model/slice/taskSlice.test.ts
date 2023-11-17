@@ -32,7 +32,7 @@ describe('tasksSlice', () => {
 
     test('Change task status to In Progress', () => {
         expect(tasksReducer(state as TasksSchema, tasksActions.changeTaskStatus(
-            { ...testTask, status: Status.IN_PROGRESS },
+            { taskID: testTask.id, status: Status.IN_PROGRESS },
         )))
             .toEqual({
                 data: [
@@ -43,7 +43,7 @@ describe('tasksSlice', () => {
 
     test('Change task status to Complete', () => {
         expect(tasksReducer(state as TasksSchema, tasksActions.changeTaskStatus(
-            { ...testTask, status: Status.COMPLETED },
+            { taskID: testTask.id, status: Status.COMPLETED },
         )))
             .toEqual({
                 data: [
@@ -106,12 +106,9 @@ describe('tasksSlice', () => {
     test('Change sub Task status', () => {
         expect(tasksReducer(state as TasksSchema, tasksActions.changeSubTaskStatus(
             {
-                subTask: {
-                    id: 'bdkldfnb123',
-                    status: Status.COMPLETED,
-                    title: 'test subtask 1',
-                    completedAt: null,
-                },
+
+                subTaskID: 'bdkldfnb123',
+                status: Status.COMPLETED,
                 taskID: testTask.id,
             },
         ))).toEqual({
