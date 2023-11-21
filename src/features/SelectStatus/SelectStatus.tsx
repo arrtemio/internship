@@ -3,9 +3,9 @@ import {
     FormControl, InputLabel, MenuItem, Select, SelectChangeEvent,
 } from '@mui/material';
 import { Status } from 'entities/Task';
-import { returnStatusColor } from 'shared/lib/helpers';
 import { StatusValues } from 'entities/Task/model/types/task';
-import { statusColors } from 'styles/style';
+import { colorsVariant, statusColors } from 'styles/style';
+import { SelectStatusStyle } from './SelectStatus.style';
 
 interface SelectStatusProps {
     onChange?: (e: SelectChangeEvent) => void;
@@ -13,13 +13,19 @@ interface SelectStatusProps {
 }
 
 export const SelectStatus: FC<SelectStatusProps> = memo(({ onChange, value }) => {
-    const color = returnStatusColor(value);
+    const color = colorsVariant[value];
+    const selectStyle = SelectStatusStyle.select(value);
+    const labelStyle = { color: statusColors[value] };
+
+    const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+        event.stopPropagation();
+    };
 
     return (
-        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+        <FormControl sx={SelectStatusStyle.form} size="small">
             <InputLabel
                 color={color}
-                sx={{ color: statusColors[value] }}
+                sx={labelStyle}
             >
                 Status
             </InputLabel>
@@ -27,14 +33,9 @@ export const SelectStatus: FC<SelectStatusProps> = memo(({ onChange, value }) =>
                 value={value}
                 label="Status"
                 onChange={onChange}
-                onClick={(event) => event.stopPropagation()}
+                onClick={handleClick}
                 color={color}
-                sx={{
-                    fontSize: 'small',
-                    '& .MuiOutlinedInput-notchedOutline': {
-                        borderColor: statusColors[value],
-                    },
-                }}
+                sx={selectStyle}
             >
                 {StatusValues.map((status) => (
                     <MenuItem

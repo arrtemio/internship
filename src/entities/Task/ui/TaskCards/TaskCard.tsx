@@ -6,7 +6,7 @@ import { useAppDispatch } from 'shared/lib/hooks/redux';
 import { getDateAndTime } from 'shared/lib/helpers';
 import { SelectStatus } from 'features/SelectStatus/SelectStatus';
 import { Status, Task, tasksActions } from 'entities/Task';
-import { flexBetween, flexColumn } from 'styles/style';
+import { TaskCardStyles } from './TaskCards.style';
 
 interface TaskCardProps {
     task: Task;
@@ -23,46 +23,24 @@ export const TaskCard: FC<TaskCardProps> = memo(({ task }) => {
     } = task;
 
     const dispatch = useAppDispatch();
+
     const textDecoration = status === Status.COMPLETED ? 'line-through' : 'none';
     const createdTime = getDateAndTime(createdAt);
     const completeTime = getDateAndTime(completedAt);
+    const titleStyle = { ...TaskCardStyles.title, textDecoration };
 
     const handleChange = (e: SelectChangeEvent) => {
         dispatch(tasksActions.changeTaskStatus({ taskID: id, status: e.target.value as Status }));
     };
 
     return (
-        <Card
-            sx={{
-                width: '100%',
-                ...flexColumn,
-                boxShadow: 'none',
-            }}
-        >
-            <Box
-                sx={{
-                    width: '100%',
-                    ...flexBetween,
-                    gap: '5px',
-                }}
-            >
+        <Card sx={TaskCardStyles.card}>
+            <Box sx={TaskCardStyles.main}>
                 <SelectStatus value={status} onChange={handleChange} />
-                <Typography
-                    sx={{
-                        fontSize: 'large',
-                        textDecoration,
-                    }}
-                    width="100%"
-                    align="left"
-                >
+                <Typography sx={titleStyle}>
                     {title}
                 </Typography>
-                <Box sx={{
-                    whiteSpace: 'nowrap',
-                    textAlign: 'right',
-                    ...flexColumn,
-                }}
-                >
+                <Box sx={TaskCardStyles.date}>
                     <Typography variant="caption">
                         Created:
                         {createdTime}

@@ -6,7 +6,8 @@ import { Status, BaseTask, tasksActions } from 'entities/Task';
 import { useAppDispatch } from 'shared/lib/hooks/redux';
 import { getDateAndTime } from 'shared/lib/helpers';
 import { SelectStatus } from 'features/SelectStatus/SelectStatus';
-import { cardStyle, statusColors } from 'styles/style';
+import { statusColors } from 'styles/style';
+import { SubTaskCardStyles } from './TaskCards.style';
 
 interface SubTaskCardProps {
     subTask: BaseTask;
@@ -16,8 +17,11 @@ interface SubTaskCardProps {
 export const SubTaskCard: FC<SubTaskCardProps> = memo(({ subTask, taskID }) => {
     const dispatch = useAppDispatch();
     const { status, title, completedAt } = subTask;
+
     const completedTime = getDateAndTime(completedAt);
     const textDecoration = status === Status.COMPLETED ? 'line-through' : 'none';
+    const cardStyle = { ...SubTaskCardStyles.card, borderColor: `${statusColors[status]}` };
+    const titleStyle = { textDecoration, ...SubTaskCardStyles.title };
 
     const handleChange = (e: SelectChangeEvent) => {
         dispatch(tasksActions.changeSubTaskStatus({
@@ -30,17 +34,13 @@ export const SubTaskCard: FC<SubTaskCardProps> = memo(({ subTask, taskID }) => {
     return (
         <Card
             variant="outlined"
-            sx={{ ...cardStyle, borderColor: `${statusColors[status]}` }}
+            sx={cardStyle}
         >
             <SelectStatus value={status} onChange={handleChange} />
-            <Typography
-                sx={{ textDecoration }}
-                width="100%"
-                align="left"
-            >
+            <Typography sx={titleStyle}>
                 {title}
             </Typography>
-            <Box sx={{ whiteSpace: 'nowrap', textAlign: 'right' }}>
+            <Box sx={SubTaskCardStyles.date}>
                 { completedAt && (
                     <Typography variant="caption">
                         Done:

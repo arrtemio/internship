@@ -1,5 +1,6 @@
 import React, { FC, memo, useState } from 'react';
 import { Box, Button, TextField } from '@mui/material';
+import { AddTaskStyle } from './AddTask.style';
 
 interface AddTaskProps {
     action: (title: string) => void;
@@ -14,41 +15,47 @@ export const AddTask: FC<AddTaskProps> = memo(({
     variant = 'outlined',
     size = 'medium',
 }) => {
-    const [taskName, setTaskName] = useState<string>('');
+    const [value, setValue] = useState<string>('');
     const [error, setError] = useState<boolean>(false);
+
+    const buttonStyle = size === 'medium' ? AddTaskStyle.buttonMedium : AddTaskStyle.buttonSmall;
+    const helperText = error ? 'The field cannot be empty' : ' ';
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (error) setError(false);
-        setTaskName(event.target.value);
+        setValue(event.target.value);
     };
 
     const createTask = () => {
-        if (!taskName.trim()) {
+        const taskName = value.trim();
+        if (!taskName) {
             setError(true);
             return;
         }
 
-        action(taskName.trim());
+        action(taskName);
 
-        setTaskName('');
+        setValue('');
     };
     return (
-        <Box sx={{ display: 'flex', gap: '15px' }}>
+        <Box sx={AddTaskStyle.addTaskBox}>
             <TextField
                 label={placeholder}
-                value={taskName}
+                value={value}
                 onChange={handleChange}
                 variant={variant}
                 fullWidth
                 size={size}
                 error={error}
-                helperText={`${error ? 'cannot be empty' : ' '}`}
+                helperText={helperText}
             />
             <Button
                 type="submit"
                 variant="outlined"
                 onClick={createTask}
-                sx={{ height: `${size === 'medium' ? '56px' : '40px'}` }}
+                sx={buttonStyle}
+                disabled={error}
+                color={error ? 'error' : 'primary'}
             >
                 Create
             </Button>

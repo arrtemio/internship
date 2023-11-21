@@ -7,6 +7,7 @@ import {
 import { useAppDispatch, useAppSelector } from 'shared/lib/hooks/redux';
 import { generateRandomId } from 'shared/lib/helpers';
 import { MainTask } from 'widgets/MainTask/MainTask';
+import { TaskListStyle } from './TaskList.style';
 
 export const TaskList = () => {
     const dispatch = useAppDispatch();
@@ -17,10 +18,8 @@ export const TaskList = () => {
     }, [dispatch]);
 
     const createTask = (title: string) => {
-        const randomID = generateRandomId();
-
         const task: Task = {
-            id: randomID,
+            id: generateRandomId(),
             title,
             createdAt: Date.now(),
             status: Status.TO_DO,
@@ -31,18 +30,16 @@ export const TaskList = () => {
     };
 
     return (
-        <Container sx={{ mt: '20px' }}>
+        <Container sx={TaskListStyle.container}>
             <>
                 <AddTask action={createTask} />
-                <Box sx={{
-                    mt: '20px',
-                    gap: '10px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                }}
-                >
+                <Box sx={TaskListStyle.box}>
                     {tasks.map((task) => (
-                        <MainTask ID={generateRandomId(4)} key={task.id} task={task} />
+                        <MainTask
+                            ID={task.id}
+                            key={task.id}
+                            task={task}
+                        />
                     ))}
                 </Box>
             </>

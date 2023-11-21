@@ -18,7 +18,7 @@ import {
 import { useAppDispatch } from 'shared/lib/hooks/redux';
 import { AddTask } from 'features/Addtask/AddTask';
 import { generateRandomId } from 'shared/lib/helpers';
-import { flexColumn } from 'styles/style';
+import { MainTaskStyle } from './MainTask.style';
 
 interface MainTaskProps {
     task: Task;
@@ -54,12 +54,11 @@ export const MainTask: FC<MainTaskProps> = memo(({ task, ID }) => {
                 id={`panel${ID}-header`}
                 onClick={handleExpanded}
             >
-                <Box sx={{ ...flexColumn, width: '100%' }}>
-                    <TaskCard data-testid="taskCard" task={task} />
+                <Box sx={MainTaskStyle.taskBox}>
+                    <TaskCard task={task} />
                     {!expanded && (
                         <Typography
-                            sx={{ fontSize: 'small' }}
-                            align="center"
+                            sx={MainTaskStyle.click}
                         >
                             Click for more
                         </Typography>
@@ -67,7 +66,7 @@ export const MainTask: FC<MainTaskProps> = memo(({ task, ID }) => {
                 </Box>
             </AccordionSummary>
             <AccordionDetails>
-                <Container sx={{ ...flexColumn, gap: '10px' }}>
+                <Container sx={MainTaskStyle.details}>
                     <AddTask
                         size="small"
                         placeholder="Create sub task"
@@ -75,7 +74,7 @@ export const MainTask: FC<MainTaskProps> = memo(({ task, ID }) => {
                     />
                     {subTasks
                         && (
-                            <Box sx={{ ...flexColumn, gap: '5px' }}>
+                            <Box sx={MainTaskStyle.subTasksList}>
                                 {subTasks.map((sub) => (
                                     <SubTaskCard
                                         key={sub.id}
