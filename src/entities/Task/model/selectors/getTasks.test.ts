@@ -6,14 +6,13 @@ import { getTasks } from './getTasks';
 describe('getTasks', () => {
     let state: DeepPartial<StateSchema>;
 
-    beforeEach(() => {
+    test('should return tasks', () => {
         state = {
             tasks: {
                 data: [testTask],
             },
         };
-    });
-    test('should return tasks', () => {
+
         expect(getTasks(state as StateSchema)).toEqual([testTask]);
     });
 

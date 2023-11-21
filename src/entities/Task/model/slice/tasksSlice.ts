@@ -37,10 +37,11 @@ export const tasksSlice = createSlice({
             currentTask.status = status;
 
             if (status === Status.COMPLETED) {
-                currentTask.completedAt = Date.now();
+                const timeStamp = Date.now();
+                currentTask.completedAt = timeStamp;
                 currentTask.subTasks.forEach((sub) => {
                     sub.status = Status.COMPLETED;
-                    sub.completedAt = Date.now();
+                    sub.completedAt = timeStamp;
                 });
             } else {
                 currentTask.completedAt = null;
@@ -78,15 +79,17 @@ export const tasksSlice = createSlice({
 
             if (!currentSubTask) return;
 
+            const timeStamp = Date.now();
+
             currentSubTask.status = status;
             currentSubTask.completedAt = status === Status.COMPLETED
-                ? Date.now()
+                ? timeStamp
                 : null;
 
             const areAllSubTasksCompleted = currentTask.subTasks.every((sub) => sub.status === Status.COMPLETED);
             if (areAllSubTasksCompleted) {
                 currentTask.status = Status.COMPLETED;
-                currentTask.completedAt = Date.now();
+                currentTask.completedAt = timeStamp;
             } else {
                 currentTask.status = Status.IN_PROGRESS;
                 currentTask.completedAt = null;

@@ -1,7 +1,7 @@
 import { DeepPartial } from '@reduxjs/toolkit';
 import { testSubtask, testTask } from 'shared/test/TestTask';
 import { generateRandomId } from 'shared/lib/helpers';
-import { Status, Task, TasksSchema } from '../types/task';
+import { Status, TasksSchema } from '../types/task';
 import { tasksActions, tasksReducer } from './tasksSlice';
 
 describe('tasksSlice', () => {
@@ -11,7 +11,6 @@ describe('tasksSlice', () => {
         ],
     };
     const randomID = generateRandomId();
-    const task: Task = { ...testTask, id: randomID };
 
     test('Get all todos', () => {
         const state = {};
@@ -21,7 +20,9 @@ describe('tasksSlice', () => {
     });
 
     test('Create new task', () => {
-        expect(tasksReducer(state as TasksSchema, tasksActions.createNewTask(task)))
+        expect(tasksReducer(state as TasksSchema, tasksActions.createNewTask(
+            { ...testTask, id: randomID },
+        )))
             .toEqual({
                 data: [
                     testTask,
@@ -48,26 +49,24 @@ describe('tasksSlice', () => {
             .toEqual({
                 data: [
                     {
-                        id: 'Asdager123',
+                        ...testTask,
                         status: Status.COMPLETED,
                         completedAt: expect.any(Number),
-                        title: 'test task',
-                        createdAt: 1699860692936,
-                        subTasks: [
-                            {
-                                id: 'bdkldfnb123',
-                                status: Status.COMPLETED,
-                                title: 'test subtask 1',
-                                completedAt: expect.any(Number),
-                            },
-                        ],
+                        subTasks: testTask.subTasks.map((t) => ({
+                            ...t,
+                            status: Status.COMPLETED,
+                            completedAt: expect.any(Number),
+                        })),
                     },
                 ],
             });
     });
 
     test('Create subTask', () => {
-        expect(tasksReducer(state as TasksSchema, tasksActions.createSubTask({ subTask: testSubtask, taskID: testTask.id })))
+        expect(tasksReducer(state as TasksSchema, tasksActions.createSubTask({
+            subTask: testSubtask,
+            taskID: testTask.id,
+        })))
             .toEqual({
                 data: [
                     { ...testTask, subTasks: [...testTask.subTasks, testSubtask] },
@@ -79,18 +78,19 @@ describe('tasksSlice', () => {
         const state: DeepPartial<TasksSchema> = {
             data: [
                 {
-                    id: 'Asdager123',
+                    ...testTask,
                     status: Status.COMPLETED,
-                    completedAt: 1699860692936,
-                    title: 'test task',
-                    createdAt: 1699860692936,
+                    completedAt: expect.any(Number),
                     subTasks: [
                         { ...testSubtask, id: 'asd2314asd' },
                     ],
                 },
             ],
         };
-        expect(tasksReducer(state as TasksSchema, tasksActions.createSubTask({ subTask: testSubtask, taskID: testTask.id })))
+        expect(tasksReducer(state as TasksSchema, tasksActions.createSubTask({
+            subTask: testSubtask,
+            taskID: testTask.id,
+        })))
             .toEqual({
                 data: [
                     {
@@ -114,19 +114,14 @@ describe('tasksSlice', () => {
         ))).toEqual({
             data: [
                 {
-                    id: 'Asdager123',
+                    ...testTask,
                     status: Status.COMPLETED,
                     completedAt: expect.any(Number),
-                    title: 'test task',
-                    createdAt: 1699860692936,
-                    subTasks: [
-                        {
-                            id: 'bdkldfnb123',
-                            status: Status.COMPLETED,
-                            title: 'test subtask 1',
-                            completedAt: expect.any(Number),
-                        },
-                    ],
+                    subTasks: testTask.subTasks.map((t) => ({
+                        ...t,
+                        status: Status.COMPLETED,
+                        completedAt: expect.any(Number),
+                    })),
                 },
             ],
         });

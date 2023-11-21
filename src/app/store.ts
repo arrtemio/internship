@@ -2,7 +2,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { tasksReducer, TasksSchema } from 'entities/Task';
 
 export interface StateSchema {
-    tasks: TasksSchema
+    tasks: TasksSchema,
 }
 
 const rootReducer = combineReducers<StateSchema>({
@@ -13,6 +13,6 @@ export const store = configureStore({
     reducer: rootReducer,
 });
 
-export type RootState = ReturnType<typeof store.getState>
+export type RootState = ReturnType<typeof store.getState>;
 
-export type AppDispatch = typeof store.dispatch
+export type AppDispatch = typeof store.dispatch;
