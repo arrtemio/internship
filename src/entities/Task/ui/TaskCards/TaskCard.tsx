@@ -6,7 +6,7 @@ import { useAppDispatch } from 'shared/lib/hooks/redux';
 import { getDateAndTime } from 'shared/lib/helpers';
 import { SelectStatus } from 'features/SelectStatus/SelectStatus';
 import { Status, Task, tasksActions } from 'entities/Task';
-import { TaskCardStyles } from './TaskCards.style';
+import { TaskCardStyles as styles } from './TaskCards.style';
 
 interface TaskCardProps {
     task: Task;
@@ -27,20 +27,20 @@ export const TaskCard: FC<TaskCardProps> = memo(({ task }) => {
     const textDecoration = status === Status.COMPLETED ? 'line-through' : 'none';
     const createdTime = getDateAndTime(createdAt);
     const completeTime = getDateAndTime(completedAt);
-    const titleStyle = { ...TaskCardStyles.title, textDecoration };
+    const titleStyle = { ...styles.title, textDecoration };
 
     const handleChange = (e: SelectChangeEvent) => {
         dispatch(tasksActions.changeTaskStatus({ taskID: id, status: e.target.value as Status }));
     };
 
     return (
-        <Card sx={TaskCardStyles.card}>
-            <Box sx={TaskCardStyles.main}>
+        <Card sx={styles.card} data-testid="TaskCard-card">
+            <Box sx={styles.main}>
                 <SelectStatus value={status} onChange={handleChange} />
-                <Typography sx={titleStyle}>
+                <Typography data-testid="TaskCard-title" sx={titleStyle}>
                     {title}
                 </Typography>
-                <Box sx={TaskCardStyles.date}>
+                <Box sx={styles.date}>
                     <Typography variant="caption">
                         Created:
                         {createdTime}
@@ -54,7 +54,7 @@ export const TaskCard: FC<TaskCardProps> = memo(({ task }) => {
                 </Box>
             </Box>
             <Box>
-                <Typography align="right">
+                <Typography data-testid="TaskCard-total" align="right">
                     Total Sub Tasks:
                     {subTasks.length}
                 </Typography>

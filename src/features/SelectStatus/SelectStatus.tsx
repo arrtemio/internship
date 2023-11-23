@@ -5,7 +5,7 @@ import {
 import { Status } from 'entities/Task';
 import { StatusValues } from 'entities/Task/model/types/task';
 import { colorsVariant, statusColors } from 'styles/style';
-import { SelectStatusStyle } from './SelectStatus.style';
+import { SelectStatusStyle as styles } from './SelectStatus.style';
 
 interface SelectStatusProps {
     onChange?: (e: SelectChangeEvent) => void;
@@ -14,7 +14,7 @@ interface SelectStatusProps {
 
 export const SelectStatus: FC<SelectStatusProps> = memo(({ onChange, value }) => {
     const color = colorsVariant[value];
-    const selectStyle = SelectStatusStyle.select(value);
+    const selectStyle = styles.select(value);
     const labelStyle = { color: statusColors[value] };
 
     const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -22,7 +22,7 @@ export const SelectStatus: FC<SelectStatusProps> = memo(({ onChange, value }) =>
     };
 
     return (
-        <FormControl sx={SelectStatusStyle.form} size="small">
+        <FormControl sx={styles.form} size="small">
             <InputLabel
                 color={color}
                 sx={labelStyle}
@@ -36,11 +36,13 @@ export const SelectStatus: FC<SelectStatusProps> = memo(({ onChange, value }) =>
                 onClick={handleClick}
                 color={color}
                 sx={selectStyle}
+                data-testid="SelectStatus-select"
             >
                 {StatusValues.map((status) => (
                     <MenuItem
                         key={status}
                         value={status}
+                        data-testid={`SelectStatus-item-${status}`}
                     >
                         {status}
                     </MenuItem>

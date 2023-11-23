@@ -7,7 +7,7 @@ import {
 import { useAppDispatch, useAppSelector } from 'shared/lib/hooks/redux';
 import { generateRandomId } from 'shared/lib/helpers';
 import { MainTask } from 'widgets/MainTask/MainTask';
-import { TaskListStyle } from './TaskList.style';
+import { TaskListStyle as styles } from './TaskList.style';
 
 export const TaskList = () => {
     const dispatch = useAppDispatch();
@@ -30,13 +30,12 @@ export const TaskList = () => {
     };
 
     return (
-        <Container sx={TaskListStyle.container}>
+        <Container sx={styles.container}>
             <>
                 <AddTask action={createTask} />
-                <Box sx={TaskListStyle.box}>
+                <Box sx={styles.box}>
                     {tasks.map((task) => (
                         <MainTask
-                            ID={task.id}
                             key={task.id}
                             task={task}
                         />

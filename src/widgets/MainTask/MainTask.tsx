@@ -18,14 +18,13 @@ import {
 import { useAppDispatch } from 'shared/lib/hooks/redux';
 import { AddTask } from 'features/Addtask/AddTask';
 import { generateRandomId } from 'shared/lib/helpers';
-import { MainTaskStyle } from './MainTask.style';
+import { MainTaskStyle as styles } from './MainTask.style';
 
 interface MainTaskProps {
     task: Task;
-    ID: string;
 }
 
-export const MainTask: FC<MainTaskProps> = memo(({ task, ID }) => {
+export const MainTask: FC<MainTaskProps> = memo(({ task }) => {
     const { subTasks, id } = task;
     const [expanded, setExpanded] = useState<boolean>(false);
     const dispatch = useAppDispatch();
@@ -33,10 +32,8 @@ export const MainTask: FC<MainTaskProps> = memo(({ task, ID }) => {
     const handleExpanded = () => setExpanded((prevState) => !prevState);
 
     const createSubTask = (title: string) => {
-        const randomID = generateRandomId();
-
         const subTask: BaseTask = {
-            id: randomID,
+            id: generateRandomId(),
             title,
             status: Status.TO_DO,
             completedAt: null,
@@ -48,33 +45,34 @@ export const MainTask: FC<MainTaskProps> = memo(({ task, ID }) => {
         <Accordion
             TransitionProps={{ unmountOnExit: true }}
             expanded={expanded}
+            data-testid="MainTask"
         >
             <AccordionSummary
-                aria-controls={`panel${ID}-content`}
-                id={`panel${ID}-header`}
+                aria-controls={`panel${id}-content`}
+                id={`panel${id}-header`}
                 onClick={handleExpanded}
+                data-testid="MainTask-main"
             >
-                <Box sx={MainTaskStyle.taskBox}>
+                <Box sx={styles.taskBox}>
                     <TaskCard task={task} />
                     {!expanded && (
-                        <Typography
-                            sx={MainTaskStyle.click}
-                        >
+                        <Typography sx={styles.click}>
                             Click for more
                         </Typography>
                     )}
                 </Box>
             </AccordionSummary>
             <AccordionDetails>
-                <Container sx={MainTaskStyle.details}>
+                <Container sx={styles.details} data-testid="MainTask-details">
                     <AddTask
                         size="small"
                         placeholder="Create sub task"
                         action={createSubTask}
+                        id={task.id}
                     />
                     {subTasks
                         && (
-                            <Box sx={MainTaskStyle.subTasksList}>
+                            <Box sx={styles.subTasksList}>
                                 {subTasks.map((sub) => (
                                     <SubTaskCard
                                         key={sub.id}

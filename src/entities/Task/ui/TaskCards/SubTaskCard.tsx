@@ -7,7 +7,7 @@ import { useAppDispatch } from 'shared/lib/hooks/redux';
 import { getDateAndTime } from 'shared/lib/helpers';
 import { SelectStatus } from 'features/SelectStatus/SelectStatus';
 import { statusColors } from 'styles/style';
-import { SubTaskCardStyles } from './TaskCards.style';
+import { SubTaskCardStyles as styles } from './TaskCards.style';
 
 interface SubTaskCardProps {
     subTask: BaseTask;
@@ -20,8 +20,8 @@ export const SubTaskCard: FC<SubTaskCardProps> = memo(({ subTask, taskID }) => {
 
     const completedTime = getDateAndTime(completedAt);
     const textDecoration = status === Status.COMPLETED ? 'line-through' : 'none';
-    const cardStyle = { ...SubTaskCardStyles.card, borderColor: `${statusColors[status]}` };
-    const titleStyle = { textDecoration, ...SubTaskCardStyles.title };
+    const cardStyle = { ...styles.card, borderColor: `${statusColors[status]}` };
+    const titleStyle = { textDecoration, ...styles.title };
 
     const handleChange = (e: SelectChangeEvent) => {
         dispatch(tasksActions.changeSubTaskStatus({
@@ -40,7 +40,7 @@ export const SubTaskCard: FC<SubTaskCardProps> = memo(({ subTask, taskID }) => {
             <Typography sx={titleStyle}>
                 {title}
             </Typography>
-            <Box sx={SubTaskCardStyles.date}>
+            <Box sx={styles.date}>
                 { completedAt && (
                     <Typography variant="caption">
                         Done:
