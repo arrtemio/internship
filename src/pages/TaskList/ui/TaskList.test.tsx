@@ -6,6 +6,8 @@ import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { testTask } from 'shared/test/TestTask';
 import { Status } from 'entities/Task';
+import { act } from 'react-dom/test-utils';
+import userEvent from '@testing-library/user-event';
 import { TaskList } from './TaskList';
 
 jest.mock('shared/lib/helpers');
@@ -18,7 +20,7 @@ describe('TaskList test', () => {
         (getDateAndTime as jest.Mock).mockImplementation(() => '14.11.2023 / 15.53.23');
     });
 
-    test('Task and sub task creation test', () => {
+    test('Create task and subtask test', () => {
         render(
             <Provider store={setupStore(initialState)}>
                 <TaskList />
@@ -47,7 +49,7 @@ describe('TaskList test', () => {
         expect(screen.getByText('New_test_sub_task')).toBeInTheDocument();
     });
 
-    test('Create new sub task in complete task test', () => {
+    test('Create new sub task, when task is completed', () => {
         localStorage.setItem('tasks', JSON.stringify([{ ...testTask, status: Status.COMPLETED, subTasks: [] }]));
 
         render(
@@ -56,7 +58,7 @@ describe('TaskList test', () => {
             </Provider>,
         );
 
-        expect(screen.getAllByText('Completed')).toHaveLength(1);
+        expect(screen.getAllByText(Status.COMPLETED)).toHaveLength(1);
         expect(screen.getByText('Click for more')).toBeInTheDocument();
 
         fireEvent.click(screen.getByText('Click for more'));
@@ -69,7 +71,32 @@ describe('TaskList test', () => {
         expect(generateRandomId).toHaveBeenCalled();
         expect(screen.getByText('New_test_sub_task')).toBeInTheDocument();
 
-        expect(screen.queryAllByText('Completed')).toHaveLength(0);
-        expect(screen.getAllByText('In progress')).toHaveLength(1);
+        expect(screen.queryAllByText(Status.COMPLETED)).toHaveLength(0);
+        expect(screen.getAllByText(Status.IN_PROGRESS)).toHaveLength(1);
+    });
+
+    test('Change task status', () => {
+        localStorage.setItem('tasks', JSON.stringify([testTask]));
+
+        render(
+            <Provider store={setupStore(initialState)}>
+                <TaskList />
+            </Provider>,
+        );
+
+        expect(screen.getByText(Status.TO_DO)).toBeInTheDocument();
+
+        fireEvent.click(screen.getByText(testTask.title));
+        expect(screen.getByLabelText(/create sub task/i)).toBeInTheDocument();
+        expect(screen.getByText(Status.IN_PROGRESS)).toBeInTheDocument();
+
+        act(() => {
+            userEvent.click(screen.getByText(Status.TO_DO));
+        });
+        act(() => {
+            userEvent.click(screen.getByText(Status.COMPLETED));
+        });
+
+        expect(screen.getAllByText('Done:14.11.2023 / 15.53.23')).toHaveLength(2);
     });
 });
