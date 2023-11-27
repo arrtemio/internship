@@ -12,14 +12,13 @@ import '@testing-library/jest-dom/extend-expect';
 
 jest.mock('shared/lib/helpers');
 
-const mockTask = testTask;
 const state = { tasks: { data: [{ ...testTask }] } };
 
 test('expands and collapses the accordion when clicked', async () => {
     (getDateAndTime as jest.Mock).mockImplementation(() => '14.11.2023 / 15.53.23');
     render(
         <Provider store={setupStore(state)}>
-            <MainTask task={mockTask} />
+            <MainTask task={testTask} />
         </Provider>,
     );
 

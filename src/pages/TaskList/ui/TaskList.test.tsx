@@ -1,5 +1,7 @@
 import { generateRandomId, getDateAndTime } from 'shared/lib/helpers';
-import { render, screen, fireEvent } from '@testing-library/react';
+import {
+    render, screen, fireEvent, waitFor,
+} from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { setupStore } from 'app/store';
 import React from 'react';
@@ -75,7 +77,7 @@ describe('TaskList test', () => {
         expect(screen.getAllByText(Status.IN_PROGRESS)).toHaveLength(1);
     });
 
-    test('Change task status', () => {
+    test('Change task status to Completed', async () => {
         localStorage.setItem('tasks', JSON.stringify([testTask]));
 
         render(
@@ -84,19 +86,23 @@ describe('TaskList test', () => {
             </Provider>,
         );
 
-        expect(screen.getByText(Status.TO_DO)).toBeInTheDocument();
+        expect(screen.getByText(testTask.status)).toBeInTheDocument();
+        expect(screen.getByText(testTask.title)).toBeInTheDocument();
 
         fireEvent.click(screen.getByText(testTask.title));
-        expect(screen.getByLabelText(/create sub task/i)).toBeInTheDocument();
-        expect(screen.getByText(Status.IN_PROGRESS)).toBeInTheDocument();
+
+        expect(screen.getByTestId('MainTask-details')).toBeInTheDocument();
+        expect(screen.getByText(testTask.subTasks[0].title)).toBeInTheDocument();
 
         act(() => {
-            userEvent.click(screen.getByText(Status.TO_DO));
+            userEvent.click(screen.getByText(testTask.status));
         });
         act(() => {
             userEvent.click(screen.getByText(Status.COMPLETED));
         });
 
-        expect(screen.getAllByText('Done:14.11.2023 / 15.53.23')).toHaveLength(2);
+        await waitFor(() => {
+            expect(screen.getAllByText(Status.COMPLETED)).toHaveLength(testTask.subTasks.length + 1);
+        });
     });
 });

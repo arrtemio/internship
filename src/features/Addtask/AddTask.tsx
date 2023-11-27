@@ -4,7 +4,6 @@ import { AddTaskStyle as styles } from './AddTask.style';
 
 interface AddTaskProps {
     action: (title: string) => void;
-    variant?: 'outlined' | 'standard' | 'filled';
     placeholder?: string;
     size?: 'small' | 'medium';
     id?: string;
@@ -14,7 +13,6 @@ export const AddTask: FC<AddTaskProps> = memo(({
     action,
     id = '',
     placeholder = 'Create new task',
-    variant = 'outlined',
     size = 'medium',
 }) => {
     const [value, setValue] = useState<string>('');
@@ -45,7 +43,6 @@ export const AddTask: FC<AddTaskProps> = memo(({
                 label={placeholder}
                 value={value}
                 onChange={handleChange}
-                variant={variant}
                 fullWidth
                 size={size}
                 error={error}
@@ -58,6 +55,7 @@ export const AddTask: FC<AddTaskProps> = memo(({
                 disabled={error}
                 color={error ? 'error' : 'primary'}
                 data-testid={`AddTask-button${id ? `-${id}` : ''}`}
+                size={size}
             >
                 Create
             </Button>

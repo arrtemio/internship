@@ -15,15 +15,21 @@ describe('SelectStatus component', () => {
     test('open/close status select menu', async () => {
         render(<SelectStatus value={Status.TO_DO} />);
         expect(screen.getByText(Status.TO_DO)).toBeInTheDocument();
+
         act(() => {
             userEvent.click(screen.getByText(Status.TO_DO));
         });
-        expect(screen.queryByText(Status.COMPLETED)).toBeInTheDocument();
+        // List of Select options
+        expect(screen.getByRole('listbox')).toBeInTheDocument();
+        // Select option
+        expect(screen.getByTestId('SelectStatus-item-Completed')).toBeInTheDocument();
 
-        act(() => { userEvent.click(screen.getByText(Status.COMPLETED)); });
+        act(() => {
+            userEvent.click(screen.getByTestId('SelectStatus-item-Completed'));
+        });
 
         await waitFor(() => {
-            expect(screen.queryByText(Status.IN_PROGRESS)).not.toBeInTheDocument();
+            expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
         });
     });
 });

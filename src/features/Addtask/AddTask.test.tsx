@@ -11,7 +11,14 @@ describe('AddTask component', () => {
     });
 
     test('should render without errors', () => {
-        render(<AddTask action={() => {}} />);
+        render(<AddTask action={mockAction} />);
+        expect(screen.getByLabelText(/create new task/i)).toBeInTheDocument();
+        expect(screen.getByTestId('AddTask-button')).toBeInTheDocument();
+    });
+
+    test('render with the provided placeholder', () => {
+        render(<AddTask action={mockAction} placeholder="Test placeholder" />);
+        expect(screen.getByLabelText(/test placeholder/i)).toBeInTheDocument();
     });
 
     test('should call action with correct task name when create button is clicked', () => {
