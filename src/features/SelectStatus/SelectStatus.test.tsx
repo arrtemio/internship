@@ -14,7 +14,6 @@ describe('SelectStatus component', () => {
 
     test('open/close status select menu', async () => {
         render(<SelectStatus value={Status.TO_DO} />);
-        expect(screen.getByText(Status.TO_DO)).toBeInTheDocument();
 
         act(() => {
             userEvent.click(screen.getByText(Status.TO_DO));

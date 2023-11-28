@@ -12,30 +12,48 @@ import '@testing-library/jest-dom/extend-expect';
 
 jest.mock('shared/lib/helpers');
 
-const state = { tasks: { data: [{ ...testTask }] } };
-
-test('expands and collapses the accordion when clicked', async () => {
-    (getDateAndTime as jest.Mock).mockImplementation(() => '14.11.2023 / 15.53.23');
-    render(
-        <Provider store={setupStore(state)}>
+describe('MainTask test', () => {
+    const renderMainTask = () => render(
+        <Provider store={setupStore({ tasks: { data: [testTask] } })}>
             <MainTask task={testTask} />
         </Provider>,
     );
 
-    const taskTitle = screen.getByTestId('TaskCard-title');
-    expect(taskTitle).toBeInTheDocument();
-    expect(screen.getByText('Created:14.11.2023 / 15.53.23')).toBeInTheDocument();
+    beforeEach(() => {
+        (getDateAndTime as jest.Mock).mockImplementation(() => '14.11.2023 / 15.53.23');
+    });
 
-    fireEvent.click(screen.getByTestId('TaskCard-title'));
+    test('Render task', () => {
+        renderMainTask();
 
-    const details = screen.getByTestId('MainTask-details');
-    expect(details).toBeInTheDocument();
-    expect(screen.getByText('test subtask 1')).toBeInTheDocument();
+        expect(screen.getByText(testTask.title)).toBeInTheDocument();
+        expect(screen.getByText(testTask.status)).toBeInTheDocument();
+        expect(screen.getByText('Created:14.11.2023 / 15.53.23')).toBeInTheDocument();
+    });
 
-    fireEvent.click(taskTitle);
+    test('Subtask render', () => {
+        renderMainTask();
 
-    await waitFor(() => {
-        expect(details).not.toBeInTheDocument();
-        expect(screen.queryByText('test subtask 1')).not.toBeInTheDocument();
+        fireEvent.click(screen.getByText(testTask.title));
+
+        expect(screen.getByTestId('MainTask-details')).toBeInTheDocument();
+        expect(screen.getByText(testTask.subTasks[0].title)).toBeInTheDocument();
+        expect(screen.getByText(testTask.subTasks[0].status)).toBeInTheDocument();
+    });
+
+    test('expands and collapses the accordion when clicked', async () => {
+        renderMainTask();
+
+        const taskTitle = screen.getByTestId('TaskCard-title');
+        fireEvent.click(taskTitle);
+
+        const details = screen.getByTestId('MainTask-details');
+        expect(details).toBeInTheDocument();
+
+        fireEvent.click(taskTitle);
+
+        await waitFor(() => {
+            expect(details).not.toBeInTheDocument();
+        });
     });
 });

@@ -16,9 +16,9 @@ describe('AddTask component', () => {
         expect(screen.getByTestId('AddTask-button')).toBeInTheDocument();
     });
 
-    test('render with the provided placeholder', () => {
-        render(<AddTask action={mockAction} placeholder="Test placeholder" />);
-        expect(screen.getByLabelText(/test placeholder/i)).toBeInTheDocument();
+    test.each(['test placeholder'])('render with the provided placeholder', (text: string) => {
+        render(<AddTask action={mockAction} placeholder={text} />);
+        expect(screen.getByLabelText(new RegExp(text, 'i'))).toBeInTheDocument();
     });
 
     test('should call action with correct task name when create button is clicked', () => {
@@ -36,15 +36,20 @@ describe('AddTask component', () => {
     test('should show an error message if the task name is empty when create button is clicked', () => {
         render(<AddTask action={mockAction} />);
 
-        const input = screen.getByLabelText(/create new task/i);
         const button = screen.getByTestId('AddTask-button');
-
-        fireEvent.change(input, { target: { value: '' } });
         fireEvent.click(button);
 
         expect(button).toBeDisabled();
         expect(screen.getByText(/the field cannot be empty/i)).toBeInTheDocument();
+    });
 
+    test('should hide error message when is entered into input', () => {
+        render(<AddTask action={mockAction} />);
+
+        const input = screen.getByLabelText(/create new task/i);
+        const button = screen.getByTestId('AddTask-button');
+
+        fireEvent.click(button);
         fireEvent.change(input, { target: { value: taskName } });
 
         expect(button).not.toBeDisabled();

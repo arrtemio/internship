@@ -15,37 +15,40 @@ import { TaskList } from './TaskList';
 jest.mock('shared/lib/helpers');
 
 describe('TaskList test', () => {
-    const initialState = {};
+    const renderTaskList = () => {
+        render(
+            <Provider store={setupStore({})}>
+                <TaskList />
+            </Provider>,
+        );
+    };
 
     beforeEach(() => {
         (generateRandomId as jest.Mock).mockImplementation(() => 'ghj43GF6');
         (getDateAndTime as jest.Mock).mockImplementation(() => '14.11.2023 / 15.53.23');
     });
 
-    test('Create task and subtask test', () => {
-        render(
-            <Provider store={setupStore(initialState)}>
-                <TaskList />
-            </Provider>,
-        );
+    test('Create task test', () => {
+        renderTaskList();
 
         const taskInput = (screen.getByLabelText(/create new task/i));
-        expect(taskInput).toBeInTheDocument();
-
         fireEvent.input(taskInput, { target: { value: 'New task' } });
         fireEvent.click(screen.getByTestId('AddTask-button'));
 
         expect(generateRandomId).toHaveBeenCalled();
         expect(screen.getByText('Created:14.11.2023 / 15.53.23')).toBeInTheDocument();
         expect(screen.getByText('New task')).toBeInTheDocument();
+    });
 
-        fireEvent.click(screen.getByText('New task'));
+    test('Create subtask test', () => {
+        localStorage.setItem('tasks', JSON.stringify([{ ...testTask, subTasks: [] }]));
+        renderTaskList();
+
+        fireEvent.click(screen.getByText(testTask.title));
 
         const subTaskInput = screen.getByLabelText(/create sub task/i);
-        expect(subTaskInput).toBeInTheDocument();
-
         fireEvent.input(subTaskInput, { target: { value: 'New_test_sub_task' } });
-        fireEvent.click(screen.getByTestId('AddTask-button-ghj43GF6'));
+        fireEvent.click(screen.getByTestId(`AddTask-button-${testTask.id}`));
 
         expect(generateRandomId).toHaveBeenCalled();
         expect(screen.getByText('New_test_sub_task')).toBeInTheDocument();
@@ -53,47 +56,23 @@ describe('TaskList test', () => {
 
     test('Create new sub task, when task is completed', () => {
         localStorage.setItem('tasks', JSON.stringify([{ ...testTask, status: Status.COMPLETED, subTasks: [] }]));
-
-        render(
-            <Provider store={setupStore(initialState)}>
-                <TaskList />
-            </Provider>,
-        );
-
-        expect(screen.getAllByText(Status.COMPLETED)).toHaveLength(1);
-        expect(screen.getByText('Click for more')).toBeInTheDocument();
+        renderTaskList();
 
         fireEvent.click(screen.getByText('Click for more'));
-        expect(screen.queryByText('Click for more')).not.toBeInTheDocument();
-        expect(screen.getByLabelText(/create sub task/i)).toBeInTheDocument();
-
         fireEvent.input(screen.getByLabelText(/create sub task/i), { target: { value: 'New_test_sub_task' } });
         fireEvent.click(screen.getByTestId(`AddTask-button-${testTask.id}`));
 
         expect(generateRandomId).toHaveBeenCalled();
         expect(screen.getByText('New_test_sub_task')).toBeInTheDocument();
-
         expect(screen.queryAllByText(Status.COMPLETED)).toHaveLength(0);
         expect(screen.getAllByText(Status.IN_PROGRESS)).toHaveLength(1);
     });
 
-    test('Change task status to Completed', async () => {
+    test('Change task status to Completed. Task and subtask status must be Completed', async () => {
         localStorage.setItem('tasks', JSON.stringify([testTask]));
-
-        render(
-            <Provider store={setupStore(initialState)}>
-                <TaskList />
-            </Provider>,
-        );
-
-        expect(screen.getByText(testTask.status)).toBeInTheDocument();
-        expect(screen.getByText(testTask.title)).toBeInTheDocument();
+        renderTaskList();
 
         fireEvent.click(screen.getByText(testTask.title));
-
-        expect(screen.getByTestId('MainTask-details')).toBeInTheDocument();
-        expect(screen.getByText(testTask.subTasks[0].title)).toBeInTheDocument();
-
         act(() => {
             userEvent.click(screen.getByText(testTask.status));
         });
