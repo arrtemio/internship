@@ -22,10 +22,11 @@ describe('TaskList test', () => {
             </Provider>,
         );
     };
+    const dateAndTime = '14.11.2023 / 15.53.23';
 
     beforeEach(() => {
         (generateRandomId as jest.Mock).mockImplementation(() => 'ghj43GF6');
-        (getDateAndTime as jest.Mock).mockImplementation(() => '14.11.2023 / 15.53.23');
+        (getDateAndTime as jest.Mock).mockImplementation(() => dateAndTime);
     });
 
     test('Create task test', () => {
@@ -36,7 +37,7 @@ describe('TaskList test', () => {
         fireEvent.click(screen.getByTestId('AddTask-button'));
 
         expect(generateRandomId).toHaveBeenCalled();
-        expect(screen.getByText('Created:14.11.2023 / 15.53.23')).toBeInTheDocument();
+        expect(screen.getByText(`Created:${dateAndTime}`)).toBeInTheDocument();
         expect(screen.getByText('New task')).toBeInTheDocument();
     });
 
@@ -68,7 +69,7 @@ describe('TaskList test', () => {
         expect(screen.getAllByText(Status.IN_PROGRESS)).toHaveLength(1);
     });
 
-    test('Change task status to Completed. Task and subtask status must be Completed', async () => {
+    test('Change task status to Completed. Task and subtask status should be Completed', async () => {
         localStorage.setItem('tasks', JSON.stringify([testTask]));
         renderTaskList();
 
