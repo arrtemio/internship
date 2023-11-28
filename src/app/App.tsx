@@ -1,10 +1,10 @@
 import React from 'react';
-import './styles/App.scss';
+import { TaskList } from 'pages/TaskList';
 
 function App() {
     return (
         <div className="App">
-            new app
+            <TaskList />
         </div>
     );
 }
