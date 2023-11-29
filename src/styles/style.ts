@@ -5,6 +5,11 @@ export const flexColumn = {
     flexDirection: 'column',
 };
 
+export const flexGrow = {
+    flexGrow: 1,
+    webkitFlexGrow: 1,
+};
+
 export const statusColors = {
     [Status.COMPLETED]: '#2e7d32',
     [Status.IN_PROGRESS]: '#9c27b0',
