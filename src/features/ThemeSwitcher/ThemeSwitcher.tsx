@@ -15,7 +15,6 @@ const ThemeSwitcher: FC<ThemeSwitcherProps> = ({ label }) => {
             control={(
                 <MaterialUISwitch
                     theme={theme}
-                    sx={{ m: 1 }}
                     checked={theme.palette.mode === ThemeName.DARK}
                 />
             )}

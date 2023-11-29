@@ -3,15 +3,16 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import ThemeSwitcher from 'features/ThemeSwitcher/ThemeSwitcher';
+import { flexGrow } from 'styles/style';
 
 export const NavBar = () => (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={flexGrow}>
         <AppBar position="static">
             <Toolbar>
                 <Typography
                     variant="h6"
                     component="div"
-                    sx={{ flexGrow: 1 }}
+                    sx={flexGrow}
                 >
                     Task list
                 </Typography>
