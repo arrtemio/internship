@@ -4,6 +4,7 @@ import './styles/index.css';
 import { Provider } from 'react-redux';
 import App from 'app/App';
 import { setupStore } from 'app/store';
+import { AppThemeProvider } from 'app/providers/AppThemeProvider';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
@@ -11,7 +12,9 @@ const root = ReactDOM.createRoot(
 root.render(
     <React.StrictMode>
         <Provider store={setupStore()}>
-            <App />
+            <AppThemeProvider>
+                <App />
+            </AppThemeProvider>
         </Provider>
     </React.StrictMode>,
 );
