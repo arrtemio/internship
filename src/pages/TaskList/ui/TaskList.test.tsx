@@ -1,27 +1,20 @@
 import { generateRandomId, getDateAndTime } from 'shared/lib/helpers';
-import {
-    render, screen, fireEvent, waitFor,
-} from '@testing-library/react';
-import { Provider } from 'react-redux';
-import { setupStore } from 'app/store';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { testTask } from 'shared/test/TestTask';
 import { Status } from 'entities/Task';
 import { act } from 'react-dom/test-utils';
 import userEvent from '@testing-library/user-event';
+import { componentRender } from 'shared/lib/tests';
 import { TaskList } from './TaskList';
 
 jest.mock('shared/lib/helpers');
 
 describe('TaskList test', () => {
-    const renderTaskList = () => {
-        render(
-            <Provider store={setupStore({})}>
-                <TaskList />
-            </Provider>,
-        );
-    };
+    const renderTaskList = () => componentRender(<TaskList />, {
+        initialState: {},
+    });
     const dateAndTime = '14.11.2023 / 15.53.23';
 
     beforeEach(() => {

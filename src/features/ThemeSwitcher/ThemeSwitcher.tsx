@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, memo } from 'react';
 import { FormControlLabel } from '@mui/material';
 import { ThemeName, useTheme } from 'app/providers/AppThemeProvider';
 import { MaterialUISwitch } from './ThemeSwitcher.style';
@@ -7,7 +7,7 @@ interface ThemeSwitcherProps {
     label?: string;
 }
 
-const ThemeSwitcher: FC<ThemeSwitcherProps> = ({ label }) => {
+const ThemeSwitcher: FC<ThemeSwitcherProps> = memo(({ label }) => {
     const { theme, toggleTheme } = useTheme();
 
     return (
@@ -23,6 +23,6 @@ const ThemeSwitcher: FC<ThemeSwitcherProps> = ({ label }) => {
             data-testid={`ThemeSwitcher-mode-${theme.palette.mode}`}
         />
     );
-};
+});
 
 export default ThemeSwitcher;

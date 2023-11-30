@@ -6,6 +6,7 @@ import { useAppDispatch } from 'shared/lib/hooks/redux';
 import { getDateAndTime } from 'shared/lib/helpers';
 import { SelectStatus } from 'features/SelectStatus/SelectStatus';
 import { Status, Task, tasksActions } from 'entities/Task';
+import { useTranslation } from 'react-i18next';
 import { TaskCardStyles as styles } from './TaskCards.style';
 
 interface TaskCardProps {
@@ -23,6 +24,7 @@ export const TaskCard: FC<TaskCardProps> = memo(({ task }) => {
     } = task;
 
     const dispatch = useAppDispatch();
+    const { t } = useTranslation('translation');
 
     const textDecoration = status === Status.COMPLETED ? 'line-through' : 'none';
     const createdTime = getDateAndTime(createdAt);
@@ -42,12 +44,14 @@ export const TaskCard: FC<TaskCardProps> = memo(({ task }) => {
                 </Typography>
                 <Box sx={styles.date}>
                     <Typography variant="caption">
-                        Created:
+                        {t('Created')}
+                        :
                         {createdTime}
                     </Typography>
                     { completedAt && (
                         <Typography variant="caption">
-                            Done:
+                            {t('Done')}
+                            :
                             {completeTime}
                         </Typography>
                     ) }
@@ -55,7 +59,8 @@ export const TaskCard: FC<TaskCardProps> = memo(({ task }) => {
             </Box>
             <Box>
                 <Typography data-testid="TaskCard-total" align="right">
-                    Total Sub Tasks:
+                    {t('Total Sub Tasks')}
+                    :
                     {subTasks.length}
                 </Typography>
             </Box>

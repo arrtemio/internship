@@ -18,6 +18,7 @@ import {
 import { useAppDispatch } from 'shared/lib/hooks/redux';
 import { AddTask } from 'features/Addtask/AddTask';
 import { generateRandomId } from 'shared/lib/helpers';
+import { useTranslation } from 'react-i18next';
 import { MainTaskStyle as styles } from './MainTask.style';
 
 interface MainTaskProps {
@@ -28,6 +29,7 @@ export const MainTask: FC<MainTaskProps> = memo(({ task }) => {
     const { subTasks, id } = task;
     const [expanded, setExpanded] = useState<boolean>(false);
     const dispatch = useAppDispatch();
+    const { t } = useTranslation('translation');
 
     const handleExpanded = () => setExpanded((prevState) => !prevState);
 
@@ -57,7 +59,7 @@ export const MainTask: FC<MainTaskProps> = memo(({ task }) => {
                     <TaskCard task={task} />
                     {!expanded && (
                         <Typography sx={styles.click}>
-                            Click for more
+                            {t('Click for more')}
                         </Typography>
                     )}
                 </Box>

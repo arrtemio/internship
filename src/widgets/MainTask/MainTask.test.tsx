@@ -1,23 +1,17 @@
 import React from 'react';
-import {
-    render, screen, fireEvent, waitFor,
-} from '@testing-library/react';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
 import { testTask } from 'shared/test/TestTask';
-import { setupStore } from 'app/store';
-import { Provider } from 'react-redux';
 import { getDateAndTime } from 'shared/lib/helpers';
-import { MainTask } from './MainTask';
-
 import '@testing-library/jest-dom/extend-expect';
+import { componentRender } from 'shared/lib/tests';
+import { MainTask } from './MainTask';
 
 jest.mock('shared/lib/helpers');
 
 describe('MainTask test', () => {
-    const renderMainTask = () => render(
-        <Provider store={setupStore({ tasks: { data: [testTask] } })}>
-            <MainTask task={testTask} />
-        </Provider>,
-    );
+    const renderMainTask = () => componentRender(<MainTask task={testTask} />, {
+        initialState: { tasks: { data: [testTask] } },
+    });
 
     beforeEach(() => {
         (getDateAndTime as jest.Mock).mockImplementation(() => '14.11.2023 / 15.53.23');

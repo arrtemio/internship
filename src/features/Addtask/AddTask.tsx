@@ -1,5 +1,6 @@
 import React, { FC, memo, useState } from 'react';
 import { Box, Button, TextField } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { AddTaskStyle as styles } from './AddTask.style';
 
 interface AddTaskProps {
@@ -17,9 +18,12 @@ export const AddTask: FC<AddTaskProps> = memo(({
 }) => {
     const [value, setValue] = useState<string>('');
     const [error, setError] = useState<boolean>(false);
+    const { t } = useTranslation('translation');
+
+    const labelText = t(placeholder);
 
     const buttonStyle = size === 'medium' ? styles.buttonMedium : styles.buttonSmall;
-    const helperText = error ? 'The field cannot be empty' : ' ';
+    const helperText = error ? t('The field cannot be empty') : ' ';
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (error) setError(false);
@@ -40,7 +44,7 @@ export const AddTask: FC<AddTaskProps> = memo(({
     return (
         <Box sx={styles.addTaskBox}>
             <TextField
-                label={placeholder}
+                label={labelText}
                 value={value}
                 onChange={handleChange}
                 fullWidth
@@ -57,7 +61,7 @@ export const AddTask: FC<AddTaskProps> = memo(({
                 data-testid={`AddTask-button${id ? `-${id}` : ''}`}
                 size={size}
             >
-                Create
+                {t('Create')}
             </Button>
         </Box>
     );
