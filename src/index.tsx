@@ -6,6 +6,8 @@ import App from 'app/App';
 import { setupStore } from 'app/store';
 import { AppThemeProvider } from 'app/providers/AppThemeProvider';
 
+import 'shared/config/i18n/i18n';
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
