@@ -7,6 +7,7 @@ module.exports = {
     extends: [
         'plugin:react/recommended',
         'airbnb',
+        'plugin:i18next/recommended'
     ],
     parser: '@typescript-eslint/parser',
     parserOptions: {
@@ -16,7 +17,7 @@ module.exports = {
         ecmaVersion: 'latest',
         sourceType: 'module',
     },
-    plugins: ['react', '@typescript-eslint', 'react-hooks'],
+    plugins: ['react', '@typescript-eslint', 'react-hooks', 'i18next'],
     rules: {
         'react/jsx-indent': [2, 4],
         'react/jsx-indent-props': [2, 4],
@@ -26,6 +27,7 @@ module.exports = {
         }],
         'import/no-unresolved': 'off',
         'import/prefer-default-export': 'off',
+        'linebreak-style': 'off',
         'no-unused-vars': 'warn',
         'react/require-default-props': 'off',
         'react/react-in-jsx-scope': 'off',
@@ -46,6 +48,10 @@ module.exports = {
             code: 120,
             ignoreComments: true,
         }],
+        'i18next/no-literal-string': ['warn', {
+            markupOnly: true,
+            ignoreAttribute: ['data-testid', 'to'],
+        }],
         'react-hooks/rules-of-hooks': 'error',
         'react-hooks/exhaustive-deps': 'error',
         'no-param-reassign': 'off',
@@ -54,5 +60,8 @@ module.exports = {
     },
     overrides: [{
         files: ['**/src/**/*.test.{ts,tsx}'],
+        rules: {
+            'i18next/no-literal-string': 'off',
+        },
     }],
 };

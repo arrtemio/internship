@@ -5,6 +5,7 @@ import {
 import { Status } from 'entities/Task';
 import { StatusValues } from 'entities/Task/model/types/task';
 import { colorsVariant, statusColors } from 'styles/style';
+import { useTranslation } from 'react-i18next';
 import { SelectStatusStyle as styles } from './SelectStatus.style';
 
 interface SelectStatusProps {
@@ -13,6 +14,8 @@ interface SelectStatusProps {
 }
 
 export const SelectStatus: FC<SelectStatusProps> = memo(({ onChange, value }) => {
+    const { t } = useTranslation('translation');
+
     const color = colorsVariant[value];
     const selectStyle = styles.select(value);
     const labelStyle = { color: statusColors[value] };
@@ -27,11 +30,11 @@ export const SelectStatus: FC<SelectStatusProps> = memo(({ onChange, value }) =>
                 color={color}
                 sx={labelStyle}
             >
-                Status
+                {t('Status')}
             </InputLabel>
             <Select
                 value={value}
-                label="Status"
+                label={t('Status')}
                 onChange={onChange}
                 onClick={handleClick}
                 color={color}
@@ -44,7 +47,7 @@ export const SelectStatus: FC<SelectStatusProps> = memo(({ onChange, value }) =>
                         value={status}
                         data-testid={`SelectStatus-item-${status}`}
                     >
-                        {status}
+                        {t(status)}
                     </MenuItem>
                 ))}
             </Select>
