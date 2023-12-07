@@ -7,18 +7,12 @@ import {
     Container, Typography,
 } from '@mui/material';
 
-import {
-    Status,
-    BaseTask,
-    SubTaskCard,
-    Task,
-    TaskCard,
-    tasksActions,
-} from 'entities/Task';
+import { SubTaskCard, Task, TaskCard } from 'entities/Task';
 import { useAppDispatch } from 'shared/lib/hooks/redux';
 import { AddTask } from 'features/Addtask/AddTask';
-import { generateRandomId } from 'shared/lib/helpers';
 import { useTranslation } from 'react-i18next';
+import { createSubTaskDto } from 'entities/Task/model/types/task';
+import { createSubTask } from 'entities/Task/model/actions/tasksActions';
 import { MainTaskStyle as styles } from './MainTask.style';
 
 interface MainTaskProps {
@@ -33,14 +27,9 @@ export const MainTask: FC<MainTaskProps> = memo(({ task }) => {
 
     const handleExpanded = () => setExpanded((prevState) => !prevState);
 
-    const createSubTask = (title: string) => {
-        const subTask: BaseTask = {
-            id: generateRandomId(),
-            title,
-            status: Status.TO_DO,
-            completedAt: null,
-        };
-        dispatch(tasksActions.createSubTask({ subTask, taskID: id }));
+    const createNewSubTask = (title: string) => {
+        const subTask = createSubTaskDto(title);
+        dispatch(createSubTask({ subTask, taskID: id }));
     };
 
     return (
@@ -69,7 +58,7 @@ export const MainTask: FC<MainTaskProps> = memo(({ task }) => {
                     <AddTask
                         size="small"
                         placeholder="Create sub task"
-                        action={createSubTask}
+                        action={createNewSubTask}
                         id={task.id}
                     />
                     {subTasks
