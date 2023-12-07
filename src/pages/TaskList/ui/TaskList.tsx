@@ -1,38 +1,36 @@
 import React, { useEffect } from 'react';
 import { Box, Container } from '@mui/material';
 import { AddTask } from 'features/Addtask/AddTask';
-import {
-    tasksActions, Status, Task, getTasks,
-} from 'entities/Task';
 import { useAppDispatch, useAppSelector } from 'shared/lib/hooks/redux';
-import { generateRandomId } from 'shared/lib/helpers';
 import { MainTask } from 'widgets/MainTask/MainTask';
+import {
+    createTask, getAllTasks, createTasKDto, getTasksData, getTasksLoading, getTasksError,
+} from 'entities/Task';
+import { Loader } from 'shared/ui/Loader/Loader';
+import { ErrorMessage } from 'shared/ui/ErrorMessage/ErrorMessage';
 import { TaskListStyle as styles } from './TaskList.style';
 
 export const TaskList = () => {
     const dispatch = useAppDispatch();
-    const tasks = useAppSelector(getTasks);
+    const tasks = useAppSelector(getTasksData);
+    const isLoading = useAppSelector(getTasksLoading);
+    const error = useAppSelector(getTasksError);
 
     useEffect(() => {
-        dispatch(tasksActions.getAllTasks());
+        dispatch(getAllTasks());
     }, [dispatch]);
 
-    const createTask = (title: string) => {
-        const task: Task = {
-            id: generateRandomId(),
-            title,
-            createdAt: Date.now(),
-            status: Status.TO_DO,
-            subTasks: [],
-            completedAt: null,
-        };
-        dispatch(tasksActions.createNewTask(task));
+    const createNewTask = (title: string) => {
+        const task = createTasKDto(title);
+        dispatch(createTask(task));
     };
 
     return (
         <Container sx={styles.container}>
             <>
-                <AddTask action={createTask} />
+                <ErrorMessage error={error} />
+                <Loader isLoading={isLoading} />
+                <AddTask action={createNewTask} />
                 <Box sx={styles.box}>
                     {tasks.map((task) => (
                         <MainTask
