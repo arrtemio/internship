@@ -4,7 +4,7 @@ import { AddTask } from 'features/Addtask/AddTask';
 import { useAppDispatch, useAppSelector } from 'shared/lib/hooks/redux';
 import { MainTask } from 'widgets/MainTask/MainTask';
 import {
-    createTask, getAllTasks, createTasKDto, getTasksData, getTasksLoading, getTasksError,
+    createTask, getAllTasks, createTaskDto, getTasksData, getTasksLoading, getTasksError,
 } from 'entities/Task';
 import { Loader } from 'shared/ui/Loader/Loader';
 import { ErrorMessage } from 'shared/ui/ErrorMessage/ErrorMessage';
@@ -21,14 +21,14 @@ export const TaskList = () => {
     }, [dispatch]);
 
     const createNewTask = (title: string) => {
-        const task = createTasKDto(title);
+        const task = createTaskDto(title);
         dispatch(createTask(task));
     };
 
     return (
         <Container sx={styles.container}>
             <>
-                <ErrorMessage error={error} />
+                {error && <ErrorMessage error={error} />}
                 <Loader isLoading={isLoading} />
                 <AddTask action={createNewTask} />
                 <Box sx={styles.box}>

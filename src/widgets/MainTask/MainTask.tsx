@@ -1,10 +1,6 @@
 import React, { FC, memo, useState } from 'react';
 import {
-    Accordion,
-    AccordionDetails,
-    AccordionSummary,
-    Box,
-    Container, Typography,
+    Accordion, AccordionDetails, AccordionSummary, Box, Container, Typography,
 } from '@mui/material';
 
 import { SubTaskCard, Task, TaskCard } from 'entities/Task';

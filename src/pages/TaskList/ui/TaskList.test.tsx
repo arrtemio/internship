@@ -3,7 +3,7 @@ import { screen, fireEvent, waitFor } from '@testing-library/react';
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { testTask } from 'shared/test/TestTask';
-import { Status } from 'entities/Task';
+import { createTask, getTasksData, Status } from 'entities/Task';
 import { act } from 'react-dom/test-utils';
 import userEvent from '@testing-library/user-event';
 import { componentRender } from 'shared/lib/tests';
@@ -32,12 +32,12 @@ describe('TaskList test', () => {
     // });
     //
     // test('Create task test', async () => {
-    //     (useAppSelector as jest.Mock).mockReturnValue([]);
+    //     (useAppSelector as jest.Mock).mockReturnValue({ data: [], isLoading: false, error: undefined });
     //     (useAppDispatch as jest.Mock).mockReturnValue(mockedDispatch);
     //
     //     renderTaskList();
-    //
     //     expect(getAllTasks).toHaveBeenCalled();
+    //     screen.debug();
     //
     //     const taskInput = (screen.getByLabelText(/create new task/i));
     //     fireEvent.input(taskInput, { target: { value: 'New task' } });
@@ -46,7 +46,7 @@ describe('TaskList test', () => {
     //     await waitFor(() => {
     //         expect(screen.getByText(`Created:${dateAndTime}`)).toBeInTheDocument();
     //         expect(screen.getByText('New task')).toBeInTheDocument();
-    //     }, { timeout: 1000 });
+    //     });
     // });
     //
     // test('Create subtask test', () => {

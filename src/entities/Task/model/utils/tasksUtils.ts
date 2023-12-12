@@ -1,6 +1,6 @@
-import { BaseTask, Status, Task } from '../types/task';
+import { BaseTask, Status, TaskDTO } from '../types/task';
 
-export const changeTaskStatusFn = (task: Task, status: Status) => {
+export const changeTaskStatusFn = (task: TaskDTO, status: Status) => {
     task.status = status;
 
     if (status === Status.COMPLETED) {
@@ -15,7 +15,7 @@ export const changeTaskStatusFn = (task: Task, status: Status) => {
     }
 };
 
-export const createSubTaskFn = (task: Task, subTask: BaseTask) => {
+export const createSubTaskFn = (task: TaskDTO, subTask: BaseTask) => {
     task.subTasks.push(subTask);
     if (task.status === Status.COMPLETED) {
         task.status = Status.IN_PROGRESS;
@@ -23,7 +23,7 @@ export const createSubTaskFn = (task: Task, subTask: BaseTask) => {
     }
 };
 
-export const changeSubTaskStatusFn = (task: Task, subTask: BaseTask, status: Status) => {
+export const changeSubTaskStatusFn = (task: TaskDTO, subTask: BaseTask, status: Status) => {
     const timeStamp = Date.now();
 
     subTask.status = status;

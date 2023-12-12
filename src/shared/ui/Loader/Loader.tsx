@@ -6,7 +6,7 @@ interface LoaderProps {
     isLoading: boolean;
 }
 
-export const Loader: FC<LoaderProps> = memo(({ isLoading }) => (
+export const Loader: FC<LoaderProps> = memo(({ isLoading = false }) => (
     <Backdrop
         sx={styles.backdrop}
         open={isLoading}

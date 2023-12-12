@@ -1,43 +1,30 @@
-import { DeepPartial } from '@reduxjs/toolkit';
 import { testTask } from 'shared/test/TestTask';
 import { StateSchema } from 'app/store';
 import { getTasksData, getTasksError, getTasksLoading } from './tasksSelectors';
 
 describe('tasksSelectors test', () => {
-    let state: DeepPartial<StateSchema>;
+    const state: StateSchema = {
+        tasks: {
+            data: [testTask],
+            isLoading: true,
+            error: 'Error',
+        },
+    };
 
     test('should return tasks data', () => {
-        state = {
-            tasks: {
-                data: [testTask],
-            },
-        };
-
-        expect(getTasksData(state as StateSchema)).toEqual([testTask]);
+        expect(getTasksData(state)).toEqual([testTask]);
     });
 
     test('should return isLoading', () => {
-        state = {
-            tasks: {
-                isLoading: true,
-            },
-        };
-
-        expect(getTasksLoading(state as StateSchema)).toEqual(true);
+        expect(getTasksLoading(state)).toEqual(true);
     });
 
     test('should return isLoading', () => {
-        state = {
-            tasks: {
-                error: 'Error',
-            },
-        };
-
-        expect(getTasksError(state as StateSchema)).toEqual('Error');
+        expect(getTasksError(state)).toEqual('Error');
     });
 
     test('should work with empty state', () => {
-        state = {
+        const state = {
             tasks: {},
         };
 

@@ -1,51 +1,38 @@
-import { DeepPartial } from '@reduxjs/toolkit';
 import { testSubtask, testTask } from 'shared/test/TestTask';
 import { generateRandomId } from 'shared/lib/helpers';
 import { Status, TasksSchema } from '../types/task';
 import { tasksReducer } from './tasksSlice';
 import {
-    changeSubTaskStatus,
-    changeTaskStatus,
-    createSubTask,
-    createTask,
-    getAllTasks,
+    changeSubTaskStatus, changeTaskStatus, createSubTask, createTask, getAllTasks,
 } from '../actions/tasksActions';
 
 describe('tasksSlice', () => {
-    let state: DeepPartial<TasksSchema>;
-    beforeEach(() => {
-        state = {
-            data: [
-                testTask,
-            ],
-            error: undefined,
-            isLoading: false,
-        };
-    });
+    const state: TasksSchema = {
+        data: [testTask],
+        error: undefined,
+        isLoading: false,
+    };
     const randomID = generateRandomId();
 
     test('Get all tasks pending', () => {
-        const state = {};
-        const newState = tasksReducer(state as TasksSchema, getAllTasks.pending(''));
+        const newState = tasksReducer(state, getAllTasks.pending(''));
 
         expect(newState.isLoading).toEqual(true);
         expect(newState.error).toEqual(undefined);
     });
     test('Get all tasks success', () => {
-        const state = {};
-        const newState = tasksReducer(state as TasksSchema, getAllTasks.fulfilled([{ ...testTask }], ''));
+        const newState = tasksReducer(state, getAllTasks.fulfilled([testTask], ''));
 
-        expect(newState.data).toEqual([{ ...testTask }]);
+        expect(newState.data).toEqual([testTask]);
     });
     test('Get all tasks rejected', () => {
-        const state = {};
-        const newState = tasksReducer(state as TasksSchema, getAllTasks.rejected({ message: 'error', name: 'Error' }, ''));
+        const newState = tasksReducer(state, getAllTasks.rejected);
 
-        expect(newState.error).toEqual('error');
+        expect(newState.error).toEqual('An unexpected error occurred');
     });
 
     test('Create new task', () => {
-        const newState = tasksReducer(state as TasksSchema, createTask.fulfilled(
+        const newState = tasksReducer(state, createTask.fulfilled(
             { ...testTask, id: randomID },
             '',
             testTask,
@@ -55,7 +42,7 @@ describe('tasksSlice', () => {
     });
 
     test('Change task status to In Progress', () => {
-        const newState = tasksReducer(state as TasksSchema, changeTaskStatus.fulfilled(
+        const newState = tasksReducer(state, changeTaskStatus.fulfilled(
             { taskID: testTask.id, status: Status.IN_PROGRESS },
             '',
             { taskID: testTask.id, status: Status.IN_PROGRESS },
@@ -64,7 +51,7 @@ describe('tasksSlice', () => {
     });
 
     test('Change task status to Complete', () => {
-        const newState = tasksReducer(state as TasksSchema, changeTaskStatus.fulfilled(
+        const newState = tasksReducer(state, changeTaskStatus.fulfilled(
             { taskID: testTask.id, status: Status.COMPLETED },
             '',
             { taskID: testTask.id, status: Status.COMPLETED },
@@ -93,7 +80,7 @@ describe('tasksSlice', () => {
     });
 
     test('Create subTask when the task is Complete', () => {
-        const state: DeepPartial<TasksSchema> = {
+        const state: TasksSchema = {
             data: [
                 {
                     ...testTask,
@@ -104,8 +91,10 @@ describe('tasksSlice', () => {
                     ],
                 },
             ],
+            error: undefined,
+            isLoading: false,
         };
-        const newState = tasksReducer(state as TasksSchema, createSubTask.fulfilled(
+        const newState = tasksReducer(state, createSubTask.fulfilled(
             { subTask: testSubtask, taskID: testTask.id },
             '',
             { subTask: testSubtask, taskID: testTask.id },
@@ -119,7 +108,7 @@ describe('tasksSlice', () => {
     });
 
     test('Change sub Task status', () => {
-        const newState = tasksReducer(state as TasksSchema, changeSubTaskStatus.fulfilled(
+        const newState = tasksReducer(state, changeSubTaskStatus.fulfilled(
             { status: Status.COMPLETED, taskID: testTask.id, subTaskID: 'bdkldfnb123' },
             '',
             { status: Status.COMPLETED, taskID: testTask.id, subTaskID: 'bdkldfnb123' },

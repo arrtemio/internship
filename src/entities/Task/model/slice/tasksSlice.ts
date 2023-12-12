@@ -1,13 +1,7 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
+import { BaseTask, TasksSchema } from '../types/task';
 import {
-    BaseTask, Status, Task, TasksSchema,
-} from '../types/task';
-import {
-    changeSubTaskStatus,
-    changeTaskStatus,
-    createSubTask,
-    createTask,
-    getAllTasks,
+    changeSubTaskStatus, changeTaskStatus, createSubTask, createTask, getAllTasks,
 } from '../actions/tasksActions';
 import { changeSubTaskStatusFn, changeTaskStatusFn, createSubTaskFn } from '../utils/tasksUtils';
 
@@ -31,39 +25,33 @@ export const tasksSlice = createSlice({
                 state.isLoading = true;
                 state.error = undefined;
             })
-            .addCase(getAllTasks.fulfilled, (state, action: PayloadAction<Task[]>) => {
+            .addCase(getAllTasks.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.data = action.payload;
             })
             .addCase(getAllTasks.rejected, (state, action) => {
                 state.isLoading = false;
-                state.error = action.error.message;
+                state.error = action.payload || 'An unexpected error occurred';
             })
 
             .addCase(createTask.pending, (state) => {
                 state.isLoading = true;
                 state.error = undefined;
             })
-            .addCase(createTask.fulfilled, (state, action: PayloadAction<Task>) => {
+            .addCase(createTask.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.data.push(action.payload);
             })
             .addCase(createTask.rejected, (state, action) => {
                 state.isLoading = false;
-                state.error = action.error.message;
+                state.error = action.payload || 'An unexpected error occurred';
             })
 
             .addCase(changeTaskStatus.pending, (state) => {
                 state.isLoading = true;
                 state.error = undefined;
             })
-            .addCase(changeTaskStatus.fulfilled, (
-                state,
-                action: PayloadAction<{
-                    taskID: string,
-                    status: Status
-                }>,
-            ) => {
+            .addCase(changeTaskStatus.fulfilled, (state, action) => {
                 state.isLoading = false;
 
                 const { status, taskID } = action.payload;
@@ -75,20 +63,14 @@ export const tasksSlice = createSlice({
             })
             .addCase(changeTaskStatus.rejected, (state, action) => {
                 state.isLoading = false;
-                state.error = action.error.message;
+                state.error = action.payload || 'An unexpected error occurred';
             })
 
             .addCase(createSubTask.pending, (state) => {
                 state.isLoading = true;
                 state.error = undefined;
             })
-            .addCase(createSubTask.fulfilled, (
-                state,
-                action: PayloadAction<{
-                    subTask: BaseTask,
-                    taskID: string
-                }>,
-            ) => {
+            .addCase(createSubTask.fulfilled, (state, action) => {
                 state.isLoading = false;
 
                 const { subTask, taskID } = action.payload;
@@ -100,21 +82,14 @@ export const tasksSlice = createSlice({
             })
             .addCase(createSubTask.rejected, (state, action) => {
                 state.isLoading = false;
-                state.error = action.error.message;
+                state.error = action.payload || 'An unexpected error occurred';
             })
 
             .addCase(changeSubTaskStatus.pending, (state) => {
                 state.isLoading = true;
                 state.error = undefined;
             })
-            .addCase(changeSubTaskStatus.fulfilled, (
-                state,
-                action: PayloadAction<{
-                    status: Status,
-                    subTaskID: string,
-                    taskID: string,
-                }>,
-            ) => {
+            .addCase(changeSubTaskStatus.fulfilled, (state, action) => {
                 state.isLoading = false;
 
                 const { subTaskID, status, taskID } = action.payload;
@@ -129,7 +104,7 @@ export const tasksSlice = createSlice({
             })
             .addCase(changeSubTaskStatus.rejected, (state, action) => {
                 state.isLoading = false;
-                state.error = action.error.message;
+                state.error = action.payload || 'An unexpected error occurred';
             });
     },
 });
