@@ -5,9 +5,10 @@ import {
 import { useAppDispatch } from 'shared/lib/hooks/redux';
 import { getDateAndTime } from 'shared/lib/helpers';
 import { SelectStatus } from 'features/SelectStatus/SelectStatus';
-import { Status, Task, tasksActions } from 'entities/Task';
+import { Status, Task } from 'entities/Task';
 import { useTranslation } from 'react-i18next';
 import { TaskCardStyles as styles } from './TaskCards.style';
+import { changeTaskStatus } from '../../model/actions/tasksActions';
 
 interface TaskCardProps {
     task: Task;
@@ -32,7 +33,7 @@ export const TaskCard: FC<TaskCardProps> = memo(({ task }) => {
     const titleStyle = { ...styles.title, textDecoration };
 
     const handleChange = (e: SelectChangeEvent) => {
-        dispatch(tasksActions.changeTaskStatus({ taskID: id, status: e.target.value as Status }));
+        dispatch(changeTaskStatus({ taskID: id, status: e.target.value as Status }));
     };
 
     return (

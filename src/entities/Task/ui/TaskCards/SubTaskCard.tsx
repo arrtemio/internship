@@ -2,13 +2,14 @@ import React, { FC, memo } from 'react';
 import {
     Box, Card, SelectChangeEvent, Typography,
 } from '@mui/material';
-import { Status, BaseTask, tasksActions } from 'entities/Task';
+import { Status, BaseTask } from 'entities/Task';
 import { useAppDispatch } from 'shared/lib/hooks/redux';
 import { getDateAndTime } from 'shared/lib/helpers';
 import { SelectStatus } from 'features/SelectStatus/SelectStatus';
 import { statusColors } from 'styles/style';
 import { useTranslation } from 'react-i18next';
 import { SubTaskCardStyles as styles } from './TaskCards.style';
+import { changeSubTaskStatus } from '../../model/actions/tasksActions';
 
 interface SubTaskCardProps {
     subTask: BaseTask;
@@ -26,7 +27,7 @@ export const SubTaskCard: FC<SubTaskCardProps> = memo(({ subTask, taskID }) => {
     const titleStyle = { textDecoration, ...styles.title };
 
     const handleChange = (e: SelectChangeEvent) => {
-        dispatch(tasksActions.changeSubTaskStatus({
+        dispatch(changeSubTaskStatus({
             subTaskID: subTask.id,
             taskID,
             status: e.target.value as Status,

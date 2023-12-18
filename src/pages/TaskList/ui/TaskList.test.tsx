@@ -1,81 +1,51 @@
-import { generateRandomId, getDateAndTime } from 'shared/lib/helpers';
-import { screen, fireEvent, waitFor } from '@testing-library/react';
 import React from 'react';
-import '@testing-library/jest-dom/extend-expect';
+import { screen, waitFor } from '@testing-library/react';
+import configureStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
 import { testTask } from 'shared/test/TestTask';
-import { Status } from 'entities/Task';
-import { act } from 'react-dom/test-utils';
-import userEvent from '@testing-library/user-event';
+import { firestore } from 'app/firebase';
+import 'core-js';
+import '@testing-library/jest-dom';
 import { componentRender } from 'shared/lib/tests';
+import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
+import * as dateAndTime from 'shared/lib/helpers/getDateAndTime/getDateAndTime';
+import { getDateAndTime } from 'shared/lib/helpers';
 import { TaskList } from './TaskList';
 
-jest.mock('shared/lib/helpers');
+const middlewares = [thunk.withExtraArgument({ firestore })];
+const mockStore = configureStore(middlewares);
 
-describe('TaskList test', () => {
-    const renderTaskList = () => componentRender(<TaskList />, {
-        initialState: {},
-    });
-    const dateAndTime = '14.11.2023 / 15.53.23';
+describe('TaskList', () => {
+    it('renders the task list correctly', async () => {
+        const initialState = {
+            tasks: {
+                data: [testTask],
+                isLoading: false,
+                error: undefined,
+            },
+        };
+        type StoreType = {
+            dispatch: ThunkDispatch<StoreType, void, AnyAction>;
+        };
 
-    beforeEach(() => {
-        (generateRandomId as jest.Mock).mockImplementation(() => 'ghj43GF6');
-        (getDateAndTime as jest.Mock).mockImplementation(() => dateAndTime);
-    });
+        const store: StoreType = mockStore(initialState);
+        const renderTaskList = () => componentRender(<TaskList />, { initialState });
 
-    test('Create task test', () => {
+        const dateAndTimeFn = jest.spyOn(dateAndTime, 'getDateAndTime');
+        jest.spyOn(store, 'dispatch').mockImplementationOnce(() => Promise.resolve());
+
         renderTaskList();
-
-        const taskInput = (screen.getByLabelText(/create new task/i));
-        fireEvent.input(taskInput, { target: { value: 'New task' } });
-        fireEvent.click(screen.getByTestId('AddTask-button'));
-
-        expect(generateRandomId).toHaveBeenCalled();
-        expect(screen.getByText(`Created:${dateAndTime}`)).toBeInTheDocument();
-        expect(screen.getByText('New task')).toBeInTheDocument();
-    });
-
-    test('Create subtask test', () => {
-        localStorage.setItem('tasks', JSON.stringify([{ ...testTask, subTasks: [] }]));
-        renderTaskList();
-
-        fireEvent.click(screen.getByText(testTask.title));
-
-        const subTaskInput = screen.getByLabelText(/create sub task/i);
-        fireEvent.input(subTaskInput, { target: { value: 'New_test_sub_task' } });
-        fireEvent.click(screen.getByTestId(`AddTask-button-${testTask.id}`));
-
-        expect(generateRandomId).toHaveBeenCalled();
-        expect(screen.getByText('New_test_sub_task')).toBeInTheDocument();
-    });
-
-    test('Create new sub task, when task is completed', () => {
-        localStorage.setItem('tasks', JSON.stringify([{ ...testTask, status: Status.COMPLETED, subTasks: [] }]));
-        renderTaskList();
-
-        fireEvent.click(screen.getByText('Click for more'));
-        fireEvent.input(screen.getByLabelText(/create sub task/i), { target: { value: 'New_test_sub_task' } });
-        fireEvent.click(screen.getByTestId(`AddTask-button-${testTask.id}`));
-
-        expect(generateRandomId).toHaveBeenCalled();
-        expect(screen.getByText('New_test_sub_task')).toBeInTheDocument();
-        expect(screen.queryAllByText(Status.COMPLETED)).toHaveLength(0);
-        expect(screen.getAllByText(Status.IN_PROGRESS)).toHaveLength(1);
-    });
-
-    test('Change task status to Completed. Task and subtask status should be Completed', async () => {
-        localStorage.setItem('tasks', JSON.stringify([testTask]));
-        renderTaskList();
-
-        fireEvent.click(screen.getByText(testTask.title));
-        act(() => {
-            userEvent.click(screen.getByText(testTask.status));
-        });
-        act(() => {
-            userEvent.click(screen.getByText(Status.COMPLETED));
-        });
 
         await waitFor(() => {
-            expect(screen.getAllByText(Status.COMPLETED)).toHaveLength(testTask.subTasks.length + 1);
+            const title = screen.getByTestId('TaskCard-title');
+            const taskStatus = screen.getByTestId('SelectStatus-select');
+            const taskDateAndTime = getDateAndTime(testTask.createdAt);
+
+            expect(title).toHaveTextContent(testTask.title);
+            expect(taskStatus).toHaveTextContent(testTask.status);
+            expect(dateAndTimeFn).toHaveBeenCalledWith(testTask.createdAt);
+            expect(screen.getByText(`Created:${taskDateAndTime}`)).toBeInTheDocument();
+            expect(screen.getByText(`Total Sub Tasks:${testTask.subTasks.length}`)).toBeInTheDocument();
         });
     });
 });

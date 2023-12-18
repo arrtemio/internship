@@ -1,14 +1,14 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
+import { BaseTask, TasksSchema } from '../types/task';
 import {
-    Status, BaseTask, Task, TasksSchema,
-} from '../types/task';
+    changeSubTaskStatus, changeTaskStatus, createSubTask, createTask, getAllTasks,
+} from '../actions/tasksActions';
+import { changeSubTaskStatusFn, changeTaskStatusFn, createSubTaskFn } from '../utils/tasksUtils';
 
 const initialState: TasksSchema = {
     data: [],
-};
-
-const updateLocalStorage = (tasks: Task[]) => {
-    localStorage.setItem('tasks', JSON.stringify(tasks));
+    isLoading: false,
+    error: undefined,
 };
 
 const getTaskById = <T extends BaseTask>(tasks: T[], id: string): T | undefined => (
@@ -18,89 +18,95 @@ const getTaskById = <T extends BaseTask>(tasks: T[], id: string): T | undefined 
 export const tasksSlice = createSlice({
     name: 'tasks',
     initialState,
-    reducers: {
-        getAllTasks: (state) => {
-            state.data = JSON.parse(localStorage.getItem('tasks') || '[]');
-        },
+    reducers: {},
+    extraReducers: (builder) => {
+        builder
+            .addCase(getAllTasks.pending, (state) => {
+                state.isLoading = true;
+                state.error = undefined;
+            })
+            .addCase(getAllTasks.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.data = action.payload;
+            })
+            .addCase(getAllTasks.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload || 'An unexpected error occurred';
+            })
 
-        createNewTask: (state, action: PayloadAction<Task>) => {
-            state.data.push(action.payload);
-            updateLocalStorage(state.data);
-        },
+            .addCase(createTask.pending, (state) => {
+                state.isLoading = true;
+                state.error = undefined;
+            })
+            .addCase(createTask.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.data.push(action.payload);
+            })
+            .addCase(createTask.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload || 'An unexpected error occurred';
+            })
 
-        changeTaskStatus: (state, action: PayloadAction<{taskID: string, status: Status}>) => {
-            const { status, taskID } = action.payload;
+            .addCase(changeTaskStatus.pending, (state) => {
+                state.isLoading = true;
+                state.error = undefined;
+            })
+            .addCase(changeTaskStatus.fulfilled, (state, action) => {
+                state.isLoading = false;
 
-            const currentTask = getTaskById(state.data, taskID);
-            if (!currentTask) return;
+                const { status, taskID } = action.payload;
 
-            currentTask.status = status;
+                const currentTask = getTaskById(state.data, taskID);
+                if (!currentTask) return;
 
-            if (status === Status.COMPLETED) {
-                const timeStamp = Date.now();
-                currentTask.completedAt = timeStamp;
-                currentTask.subTasks.forEach((sub) => {
-                    sub.status = Status.COMPLETED;
-                    sub.completedAt = timeStamp;
-                });
-            } else {
-                currentTask.completedAt = null;
-            }
+                changeTaskStatusFn(currentTask, status);
+            })
+            .addCase(changeTaskStatus.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload || 'An unexpected error occurred';
+            })
 
-            updateLocalStorage(state.data);
-        },
+            .addCase(createSubTask.pending, (state) => {
+                state.isLoading = true;
+                state.error = undefined;
+            })
+            .addCase(createSubTask.fulfilled, (state, action) => {
+                state.isLoading = false;
 
-        createSubTask: (state, action: PayloadAction<{ subTask: BaseTask, taskID: string }>) => {
-            const { subTask, taskID } = action.payload;
-            const currentTask = getTaskById(state.data, taskID);
+                const { subTask, taskID } = action.payload;
+                const currentTask = getTaskById(state.data, taskID);
 
-            if (!currentTask) return;
+                if (!currentTask) return;
 
-            currentTask.subTasks.push(subTask);
-            if (currentTask.status === Status.COMPLETED) {
-                currentTask.status = Status.IN_PROGRESS;
-                currentTask.completedAt = null;
-            }
+                createSubTaskFn(currentTask, subTask);
+            })
+            .addCase(createSubTask.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload || 'An unexpected error occurred';
+            })
 
-            updateLocalStorage(state.data);
-        },
+            .addCase(changeSubTaskStatus.pending, (state) => {
+                state.isLoading = true;
+                state.error = undefined;
+            })
+            .addCase(changeSubTaskStatus.fulfilled, (state, action) => {
+                state.isLoading = false;
 
-        changeSubTaskStatus: (state, action: PayloadAction<{
-            status: Status,
-            subTaskID: string,
-            taskID: string,
-        }>) => {
-            const { subTaskID, status, taskID } = action.payload;
-            const currentTask = getTaskById(state.data, taskID);
+                const { subTaskID, status, taskID } = action.payload;
+                const currentTask = getTaskById(state.data, taskID);
 
-            if (!currentTask) return;
+                if (!currentTask) return;
 
-            const currentSubTask = getTaskById(currentTask.subTasks, subTaskID);
+                const currentSubTask = getTaskById(currentTask.subTasks, subTaskID);
 
-            if (!currentSubTask) return;
-
-            const timeStamp = Date.now();
-
-            currentSubTask.status = status;
-            currentSubTask.completedAt = status === Status.COMPLETED
-                ? timeStamp
-                : null;
-
-            const areAllSubTasksCompleted = currentTask.subTasks.every((sub) => sub.status === Status.COMPLETED);
-            if (areAllSubTasksCompleted) {
-                currentTask.status = Status.COMPLETED;
-                currentTask.completedAt = timeStamp;
-            } else {
-                currentTask.status = Status.IN_PROGRESS;
-                currentTask.completedAt = null;
-            }
-
-            updateLocalStorage(state.data);
-        },
+                if (!currentSubTask) return;
+                changeSubTaskStatusFn(currentTask, currentSubTask, status);
+            })
+            .addCase(changeSubTaskStatus.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload || 'An unexpected error occurred';
+            });
     },
 });
 
-export const {
-    reducer: tasksReducer,
-    actions: tasksActions,
-} = tasksSlice;
+export const tasksReducer = tasksSlice.reducer;
