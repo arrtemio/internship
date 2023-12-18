@@ -8,6 +8,8 @@ import 'core-js';
 import '@testing-library/jest-dom';
 import { componentRender } from 'shared/lib/tests';
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
+import * as dateAndTime from 'shared/lib/helpers/getDateAndTime/getDateAndTime';
+import { getDateAndTime } from 'shared/lib/helpers';
 import { TaskList } from './TaskList';
 
 const middlewares = [thunk.withExtraArgument({ firestore })];
@@ -29,13 +31,21 @@ describe('TaskList', () => {
         const store: StoreType = mockStore(initialState);
         const renderTaskList = () => componentRender(<TaskList />, { initialState });
 
+        const dateAndTimeFn = jest.spyOn(dateAndTime, 'getDateAndTime');
         jest.spyOn(store, 'dispatch').mockImplementationOnce(() => Promise.resolve());
 
         renderTaskList();
 
         await waitFor(() => {
             const title = screen.getByTestId('TaskCard-title');
+            const taskStatus = screen.getByTestId('SelectStatus-select');
+            const taskDateAndTime = getDateAndTime(testTask.createdAt);
+
             expect(title).toHaveTextContent(testTask.title);
+            expect(taskStatus).toHaveTextContent(testTask.status);
+            expect(dateAndTimeFn).toHaveBeenCalledWith(testTask.createdAt);
+            expect(screen.getByText(`Created:${taskDateAndTime}`)).toBeInTheDocument();
+            expect(screen.getByText(`Total Sub Tasks:${testTask.subTasks.length}`)).toBeInTheDocument();
         });
     });
 });
