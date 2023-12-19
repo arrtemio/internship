@@ -44,6 +44,8 @@ module.exports = {
         'no-nested-ternary': 'off',
         'jsx-a11y/no-static-element-interactions': 'off',
         'jsx-a11y/click-events-have-key-events': 'off',
+        'jsx-a11y/anchor-is-valid': 'warn',
+        'react/jsx-curly-newline': 'warn',
         'max-len': ['warn', {
             code: 120,
             ignoreComments: true,
@@ -56,8 +58,7 @@ module.exports = {
         'react-hooks/exhaustive-deps': 'error',
         'no-param-reassign': 'off',
     },
-    globals: {
-    },
+    globals: {},
     overrides: [{
         files: ['**/src/**/*.test.{ts,tsx}'],
         rules: {
