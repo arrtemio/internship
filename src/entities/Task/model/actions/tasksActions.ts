@@ -3,6 +3,7 @@ import {
 } from 'firebase/firestore';
 import { firestore } from 'app/firebase';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { handleAsyncThunkError } from 'shared/lib/helpers';
 import { changeSubTaskStatusFn, changeTaskStatusFn, createSubTaskFn } from '../utils/tasksUtils';
 import {
     BaseTask, ChangeSubTaskStatus, ChangeTaskStatus, CreateSubTask, Task, TaskDTO,
@@ -18,13 +19,6 @@ const getTaskByID = async (taskID: string) => {
     if (!taskData) throw new Error('Task not found');
 
     return { taskRef, taskData };
-};
-
-const handleAsyncThunkError = (error: any) => {
-    if (error instanceof Error) {
-        return error.message;
-    }
-    return 'An unexpected error occurred';
 };
 
 export const getAllTasks = createAsyncThunk<Task[], void, { rejectValue: string }>(
@@ -46,7 +40,7 @@ export const getAllTasks = createAsyncThunk<Task[], void, { rejectValue: string 
 
 export const createTask = createAsyncThunk<Task, TaskDTO, { rejectValue: string }>(
     'tasks/createTask',
-    async (task: TaskDTO, { rejectWithValue }) => {
+    async (task, { rejectWithValue }) => {
         try {
             const taskRef = await addDoc(tasksCollection, task);
             const newTask: Task = { id: taskRef.id, ...task };
@@ -60,7 +54,7 @@ export const createTask = createAsyncThunk<Task, TaskDTO, { rejectValue: string 
 
 export const changeTaskStatus = createAsyncThunk<ChangeTaskStatus, ChangeTaskStatus, { rejectValue: string }>(
     'tasks/changeTaskStatus',
-    async ({ taskID, status }: ChangeTaskStatus, { rejectWithValue }) => {
+    async ({ taskID, status }, { rejectWithValue }) => {
         try {
             const { taskData, taskRef } = await getTaskByID(taskID);
             changeTaskStatusFn(taskData, status);
@@ -76,7 +70,7 @@ export const changeTaskStatus = createAsyncThunk<ChangeTaskStatus, ChangeTaskSta
 
 export const createSubTask = createAsyncThunk<CreateSubTask, CreateSubTask, { rejectValue: string }>(
     'tasks/createSubTask',
-    async ({ taskID, subTask }: CreateSubTask, { rejectWithValue }) => {
+    async ({ taskID, subTask }, { rejectWithValue }) => {
         try {
             const { taskData, taskRef } = await getTaskByID(taskID);
             createSubTaskFn(taskData, subTask);
@@ -92,7 +86,7 @@ export const createSubTask = createAsyncThunk<CreateSubTask, CreateSubTask, { re
 
 export const changeSubTaskStatus = createAsyncThunk<ChangeSubTaskStatus, ChangeSubTaskStatus, { rejectValue: string }>(
     'tasks/changeSubTaskStatus',
-    async ({ status, taskID, subTaskID }: ChangeSubTaskStatus, { rejectWithValue }) => {
+    async ({ status, taskID, subTaskID }, { rejectWithValue }) => {
         try {
             const { taskData, taskRef } = await getTaskByID(taskID);
             const currentSubTask = taskData.subTasks.find((sub: BaseTask) => sub.id === subTaskID);

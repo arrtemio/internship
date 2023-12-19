@@ -4,32 +4,35 @@ import { AddTask } from 'features/Addtask/AddTask';
 import { useAppDispatch, useAppSelector } from 'shared/lib/hooks/redux';
 import { MainTask } from 'widgets/MainTask/MainTask';
 import {
-    createTask, getAllTasks, createTaskDto, getTasksData, getTasksLoading, getTasksError,
+    createTask, getAllTasks, createTaskDto, getTasksData,
 } from 'entities/Task';
-import { Loader } from 'shared/ui/Loader/Loader';
-import { ErrorMessage } from 'shared/ui/ErrorMessage/ErrorMessage';
+import { getUserIsAuth, checkIsAuth } from 'entities/User';
+import Typography from '@mui/material/Typography';
+import { useTranslation } from 'react-i18next';
 import { TaskListStyle as styles } from './TaskList.style';
 
 export const TaskList = () => {
     const dispatch = useAppDispatch();
+    const { t } = useTranslation('translation');
     const tasks = useAppSelector(getTasksData);
-    const isLoading = useAppSelector(getTasksLoading);
-    const error = useAppSelector(getTasksError);
+    const isAuth = useAppSelector(getUserIsAuth);
 
     useEffect(() => {
-        dispatch(getAllTasks());
-    }, [dispatch]);
+        dispatch(checkIsAuth());
+
+        if (isAuth) {
+            dispatch(getAllTasks());
+        }
+    }, [dispatch, isAuth]);
 
     const createNewTask = (title: string) => {
         const task = createTaskDto(title);
         dispatch(createTask(task));
     };
 
-    return (
+    return isAuth ? (
         <Container sx={styles.container}>
             <>
-                {error && <ErrorMessage error={error} />}
-                <Loader isLoading={isLoading} />
                 <AddTask action={createNewTask} />
                 <Box sx={styles.box}>
                     {tasks.map((task) => (
@@ -41,5 +44,12 @@ export const TaskList = () => {
                 </Box>
             </>
         </Container>
-    );
+    )
+        : (
+            <Container sx={styles.message}>
+                <Typography textAlign="center" variant="h4">
+                    {t('You must be logged in to use the application!')}
+                </Typography>
+            </Container>
+        );
 };

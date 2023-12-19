@@ -1,13 +1,15 @@
 import { FC, memo, useState } from 'react';
 import { Alert, Snackbar } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { ErrorMessageStyle as styles } from './ErrorMessage.style';
 
 interface ErrorMessageProps {
-    error: string | undefined,
+    error: string,
 }
 
 export const ErrorMessage: FC<ErrorMessageProps> = memo(({ error }) => {
     const [open, setOpen] = useState<boolean>(Boolean(error));
+    const { t } = useTranslation(('translation'));
 
     const handleClose = () => {
         setOpen(false);
@@ -25,7 +27,7 @@ export const ErrorMessage: FC<ErrorMessageProps> = memo(({ error }) => {
                 severity="error"
                 sx={styles.alert}
             >
-                {error}
+                {t(error)}
             </Alert>
         </Snackbar>
     );

@@ -10,6 +10,8 @@ import { componentRender } from 'shared/lib/tests';
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import * as dateAndTime from 'shared/lib/helpers/getDateAndTime/getDateAndTime';
 import { getDateAndTime } from 'shared/lib/helpers';
+import { StateSchema } from 'app/store';
+import { testUser } from 'shared/test/TestUser';
 import { TaskList } from './TaskList';
 
 const middlewares = [thunk.withExtraArgument({ firestore })];
@@ -17,11 +19,16 @@ const mockStore = configureStore(middlewares);
 
 describe('TaskList', () => {
     it('renders the task list correctly', async () => {
-        const initialState = {
+        const initialState: StateSchema = {
             tasks: {
                 data: [testTask],
                 isLoading: false,
                 error: undefined,
+            },
+            user: {
+                data: testUser,
+                isAuth: true,
+                isLoading: false,
             },
         };
         type StoreType = {
