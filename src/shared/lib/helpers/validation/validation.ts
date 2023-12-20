@@ -17,7 +17,7 @@ export const passChecking = (pass: string, setter: (message: string) => void) =>
         return false;
     }
     if (pass.length < 6) {
-        setter('Password must be more than 6 characters');
+        setter('Password must be at least 6 characters');
         return false;
     }
     return true;

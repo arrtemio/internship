@@ -12,30 +12,23 @@ describe('AuthModal', () => {
     test('should renders without error', () => {
         renderComponent();
 
-        const wrapper = screen.getByTestId('AuthModal-wrapper');
-        const title = screen.getByTestId('AuthModal-title');
-        const switchBtn = screen.getByTestId('AuthModal-caption-switch');
-        const emailField = screen.getByTestId('AuthModal-email');
-        const passField = screen.getByTestId('AuthModal-pass');
-
-        expect(wrapper).toBeInTheDocument();
-        expect(title).toBeInTheDocument();
-        expect(switchBtn).toBeInTheDocument();
-        expect(emailField).toBeInTheDocument();
-        expect(passField).toBeInTheDocument();
+        expect(screen.getByTestId('AuthModal-wrapper')).toBeInTheDocument();
+        expect(screen.getByTestId('AuthModal-title')).toBeInTheDocument();
+        expect(screen.getByTestId('AuthModal-caption-switch')).toBeInTheDocument();
+        expect(screen.getByTestId('AuthModal-email')).toBeInTheDocument();
+        expect(screen.getByTestId('AuthModal-pass')).toBeInTheDocument();
     });
 
     test('Switch from Login to Registration', () => {
         renderComponent();
 
         const title = screen.getByTestId('AuthModal-title');
-        const switchBtn = screen.getByTestId('AuthModal-caption-switch');
         const captionSwitchLink = screen.getByTestId('AuthModal-caption-switch');
 
         expect(title).toHaveTextContent('Login');
         expect(captionSwitchLink).toHaveTextContent('Registration');
 
-        fireEvent.click(switchBtn);
+        fireEvent.click(screen.getByTestId('AuthModal-caption-switch'));
 
         expect(title).toHaveTextContent('Registration');
         expect(captionSwitchLink).toHaveTextContent('Login');
@@ -44,9 +37,7 @@ describe('AuthModal', () => {
     test('Empty email and password submit', () => {
         renderComponent();
 
-        const submitBtn = screen.getByTestId('AuthModal-btn-login');
-
-        fireEvent.click(submitBtn);
+        fireEvent.click(screen.getByTestId('AuthModal-btn-login'));
 
         expect(screen.getAllByText('Field cannot be empty')).toHaveLength(2);
     });
@@ -54,15 +45,11 @@ describe('AuthModal', () => {
     test('Incorrect email and password submit', () => {
         renderComponent();
 
-        const emailField = screen.getByLabelText('Email');
-        const passField = screen.getByLabelText('Password');
-        const submitBtn = screen.getByTestId('AuthModal-btn-login');
-
-        fireEvent.change(emailField, { target: { value: 'asd' } });
-        fireEvent.change(passField, { target: { value: 'asd' } });
-        fireEvent.click(submitBtn);
+        fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'asd' } });
+        fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'asd' } });
+        fireEvent.click(screen.getByTestId('AuthModal-btn-login'));
 
         expect(screen.getByText('Must be an email')).toBeInTheDocument();
-        expect(screen.getByText('Password must be more than 6 characters')).toBeInTheDocument();
+        expect(screen.getByText('Password must be at least 6 characters')).toBeInTheDocument();
     });
 });

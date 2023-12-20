@@ -22,7 +22,7 @@
   "Do not have an account yet?": "Nie masz jeszcze konta?",
   "Field cannot be empty": "Pole nie może być puste",
   "Must be an email": "Musi to być e-mail",
-  "Password must be more than 6 characters": "Hasło musi mieć więcej niż 6 znaków",
+  "Password must be at least 6 characters": "Hasło musi mieć co najmniej 6 znaków",
   "An unexpected error occurred": "Wystąpił nieoczekiwany błąd",
   "Task not found": "Nie znaleziono zadania",
   "Sub task not found": "Nie znaleziono zadania podrzędnego",

@@ -32,22 +32,24 @@ export const TaskList = () => {
 
     return isAuth ? (
         <Container sx={styles.container}>
-            <>
-                <AddTask action={createNewTask} />
-                <Box sx={styles.box}>
-                    {tasks.map((task) => (
-                        <MainTask
-                            key={task.id}
-                            task={task}
-                        />
-                    ))}
-                </Box>
-            </>
+            <AddTask action={createNewTask} />
+            <Box sx={styles.box}>
+                {tasks.map((task) => (
+                    <MainTask
+                        key={task.id}
+                        task={task}
+                    />
+                ))}
+            </Box>
         </Container>
     )
         : (
             <Container sx={styles.message}>
-                <Typography textAlign="center" variant="h4">
+                <Typography
+                    data-testid="TaskList-unauthorized"
+                    textAlign="center"
+                    variant="h4"
+                >
                     {t('You must be logged in to use the application!')}
                 </Typography>
             </Container>

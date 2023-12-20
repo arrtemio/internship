@@ -73,9 +73,7 @@ export const AuthModal: FC<AuthModalProps> = memo(({ open, onClose }) => {
                     align="center"
                     data-testid="AuthModal-title"
                 >
-                    {isRegister
-                        ? t('Registration')
-                        : t('Login')}
+                    {t(isRegister ? 'Registration' : 'Login')}
                 </Typography>
                 <Box sx={styles.form}>
                     <TextField
@@ -109,9 +107,7 @@ export const AuthModal: FC<AuthModalProps> = memo(({ open, onClose }) => {
                     )}
                 <Box sx={styles.caption}>
                     <Typography data-testid="AuthModal-caption" variant="caption">
-                        { isRegister
-                            ? t('Already have an account?')
-                            : t('Do not have an account yet?')}
+                        {t(isRegister ? 'Already have an account?' : 'Do not have an account yet?')}
                     </Typography>
                     <Link
                         variant="caption"
@@ -119,9 +115,7 @@ export const AuthModal: FC<AuthModalProps> = memo(({ open, onClose }) => {
                         onClick={handleSwitchIsRegister}
                         data-testid="AuthModal-caption-switch"
                     >
-                        { isRegister
-                            ? t('Login')
-                            : t('Registration')}
+                        {t(isRegister ? 'Login' : 'Registration')}
                     </Link>
                 </Box>
             </Box>

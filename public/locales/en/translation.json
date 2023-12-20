@@ -22,7 +22,7 @@
   "Do not have an account yet?": "Dont have an account yet?",
   "Field cannot be empty": "Field cannot be empty",
   "Must be an email": "Must be an email",
-  "Password must be more than 6 characters": "Password must be more than 6 characters",
+  "Password must be at least 6 characters": "Password must be at least 6 characters",
   "An unexpected error occurred": "An unexpected error occurred",
   "Task not found": "Task not found",
   "Sub task not found": "Sub task not found",
