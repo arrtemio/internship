@@ -12,5 +12,20 @@
   "Completed": "Completed",
   "Created": "Created",
   "Done": "Done",
-  "Total Sub Tasks": "Total Sub Tasks"
+  "Total Sub Tasks": "Total Sub Tasks",
+  "LogOut": "LogOut",
+  "Login": "Login",
+  "Registration": "Registration",
+  "Email": "E-mail",
+  "Password": "Password",
+  "Already have an account?": "Already have an account?",
+  "Do not have an account yet?": "Dont have an account yet?",
+  "Field cannot be empty": "Field cannot be empty",
+  "Must be an email": "Must be an email",
+  "Password must be at least 6 characters": "Password must be at least 6 characters",
+  "An unexpected error occurred": "An unexpected error occurred",
+  "Task not found": "Task not found",
+  "Sub task not found": "Sub task not found",
+  "Firebase: Error (auth/invalid-credential).": "Incorrect login or password",
+  "You must be logged in to use the application!": "You must be logged in to use the application!"
 }

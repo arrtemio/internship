@@ -9,6 +9,11 @@ describe('tasksSelectors test', () => {
             isLoading: true,
             error: 'Error',
         },
+        user: {
+            data: null,
+            isLoading: false,
+            isAuth: true,
+        },
     };
 
     test('should return tasks data', () => {
@@ -19,7 +24,7 @@ describe('tasksSelectors test', () => {
         expect(getTasksLoading(state)).toEqual(true);
     });
 
-    test('should return isLoading', () => {
+    test('should return error', () => {
         expect(getTasksError(state)).toEqual('Error');
     });
 

@@ -12,5 +12,20 @@
   "Completed": "Zakończony",
   "Created": "Utworzony",
   "Done": "Zrobione",
-  "Total Sub Tasks": "Łączna liczba zadań podrzędnych"
+  "Total Sub Tasks": "Łączna liczba zadań podrzędnych",
+  "LogOut": "Wyloguj",
+  "Login": "Zaloguj sie",
+  "Registration": "Rejestracja",
+  "Email": "E-mail",
+  "Password": "Hasło",
+  "Already have an account?": "Posiadasz już konto?",
+  "Do not have an account yet?": "Nie masz jeszcze konta?",
+  "Field cannot be empty": "Pole nie może być puste",
+  "Must be an email": "Musi to być e-mail",
+  "Password must be at least 6 characters": "Hasło musi mieć co najmniej 6 znaków",
+  "An unexpected error occurred": "Wystąpił nieoczekiwany błąd",
+  "Task not found": "Nie znaleziono zadania",
+  "Sub task not found": "Nie znaleziono zadania podrzędnego",
+  "Firebase: Error (auth/invalid-credential).": "Nieprawidłowy login lub hasło",
+  "You must be logged in to use the application!": "Aby korzystać z aplikacji musisz być zalogowany!"
 }

@@ -1,4 +1,4 @@
-import { generateRandomId } from './generateRandomID/generateRandomID';
-import { getDateAndTime } from './getDateAndTime/getDateAndTime';
-
-export { generateRandomId, getDateAndTime };
+export { generateRandomId } from './generateRandomID/generateRandomID';
+export { getDateAndTime } from './getDateAndTime/getDateAndTime';
+export { handleAsyncThunkError } from './handleAsyncThunkError/handleAsyncThunkError';
+export { emailChecking, passChecking } from './validation/validation';

@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import App from 'app/App';
 import { setupStore } from 'app/store';
 import { AppThemeProvider } from 'app/providers/AppThemeProvider';
+import { ErrorAndLoadingProvider } from 'app/providers/ErrorAndLoadingProvider';
 
 import 'app/firebase/index';
 import 'shared/config/i18n/i18n';
@@ -16,7 +17,9 @@ root.render(
     <React.StrictMode>
         <Provider store={setupStore()}>
             <AppThemeProvider>
-                <App />
+                <ErrorAndLoadingProvider>
+                    <App />
+                </ErrorAndLoadingProvider>
             </AppThemeProvider>
         </Provider>
     </React.StrictMode>,
