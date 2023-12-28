@@ -1,29 +1,62 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import { Status } from 'entities/Task';
 import '@testing-library/jest-dom/extend-expect';
 import userEvent from '@testing-library/user-event';
 import { act } from 'react-dom/test-utils';
-import { I18nextProvider } from 'react-i18next';
-import i18nForTests from 'shared/config/i18n/i18nForTests';
+import { componentRender } from 'shared/lib/tests';
+import { testTask } from 'shared/test/TestTask';
+import { StateSchema } from 'app/store';
 import { SelectStatus } from './SelectStatus';
 
 describe('SelectStatus component', () => {
+    const state: StateSchema = {
+        tasks: {
+            data: [testTask],
+            isLoading: false,
+            error: undefined,
+        },
+        user: {
+            data: {
+                email: 'qwerty@mail.com',
+                token: '',
+                id: '',
+            },
+            isLoading: false,
+            isAuth: true,
+            error: undefined,
+        },
+    };
+    const wrongEmailState: StateSchema = {
+        tasks: {
+            data: [],
+            isLoading: false,
+            error: undefined,
+        },
+        user: {
+            data: {
+                email: 'qwerty123@mail.com',
+                token: '',
+                id: '',
+            },
+            isLoading: false,
+            error: undefined,
+            isAuth: true,
+        },
+    };
+    const renderedComponent = (state: StateSchema) => componentRender(
+        <SelectStatus value={Status.TO_DO} taskPerformer="qwerty@mail.com" />,
+        {
+            initialState: state,
+        },
+    );
     test('render without errors', () => {
-        render(
-            <I18nextProvider i18n={i18nForTests}>
-                <SelectStatus value={Status.TO_DO} />
-            </I18nextProvider>,
-        );
+        renderedComponent(state);
         expect(screen.getByText(Status.TO_DO)).toBeInTheDocument();
     });
 
     test('open/close status select menu', async () => {
-        render(
-            <I18nextProvider i18n={i18nForTests}>
-                <SelectStatus value={Status.TO_DO} />
-            </I18nextProvider>,
-        );
+        renderedComponent(state);
 
         act(() => {
             userEvent.click(screen.getByText(Status.TO_DO));
@@ -40,5 +73,15 @@ describe('SelectStatus component', () => {
         await waitFor(() => {
             expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
         });
+    });
+
+    test('status select menu should not appear', () => {
+        renderedComponent(wrongEmailState);
+
+        act(() => {
+            userEvent.click(screen.getByText(Status.TO_DO));
+        });
+
+        expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
     });
 });

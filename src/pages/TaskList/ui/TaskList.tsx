@@ -1,14 +1,12 @@
 import React, { useEffect } from 'react';
 import { Box, Container } from '@mui/material';
-import { AddTask } from 'features/Addtask/AddTask';
 import { useAppDispatch, useAppSelector } from 'shared/lib/hooks/redux';
 import { MainTask } from 'widgets/MainTask/MainTask';
-import {
-    createTask, getAllTasks, createTaskDto, getTasksData,
-} from 'entities/Task';
-import { getUserIsAuth, checkIsAuth } from 'entities/User';
+import { getAllTasks, getTasksData } from 'entities/Task';
+import { getUserIsAuth, checkIsAuth, getUserData } from 'entities/User';
 import Typography from '@mui/material/Typography';
 import { useTranslation } from 'react-i18next';
+import { AddMainTask } from 'widgets/AddMainTask/AddMainTask';
 import { TaskListStyle as styles } from './TaskList.style';
 
 export const TaskList = () => {
@@ -16,23 +14,19 @@ export const TaskList = () => {
     const { t } = useTranslation('translation');
     const tasks = useAppSelector(getTasksData);
     const isAuth = useAppSelector(getUserIsAuth);
+    const email = useAppSelector(getUserData)?.email;
 
     useEffect(() => {
         dispatch(checkIsAuth());
 
-        if (isAuth) {
-            dispatch(getAllTasks());
+        if (isAuth && email) {
+            dispatch(getAllTasks(email));
         }
-    }, [dispatch, isAuth]);
-
-    const createNewTask = (title: string) => {
-        const task = createTaskDto(title);
-        dispatch(createTask(task));
-    };
+    }, [dispatch, isAuth, email]);
 
     return isAuth ? (
         <Container sx={styles.container}>
-            <AddTask action={createNewTask} />
+            <AddMainTask />
             <Box sx={styles.box}>
                 {tasks.map((task) => (
                     <MainTask

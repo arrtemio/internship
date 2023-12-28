@@ -57,7 +57,7 @@ describe('AddTask component', () => {
         fireEvent.click(button);
 
         expect(button).toBeDisabled();
-        expect(screen.getByText(/the field cannot be empty/i)).toBeInTheDocument();
+        expect(screen.getByText(/field cannot be empty/i)).toBeInTheDocument();
     });
 
     test('should hide error message when is entered into input', () => {
@@ -74,6 +74,6 @@ describe('AddTask component', () => {
         fireEvent.change(input, { target: { value: taskName } });
 
         expect(button).not.toBeDisabled();
-        expect(screen.queryByText(/the field cannot be empty/i)).not.toBeInTheDocument();
+        expect(screen.queryByText(/field cannot be empty/i)).not.toBeInTheDocument();
     });
 });

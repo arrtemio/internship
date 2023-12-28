@@ -10,9 +10,6 @@ export const TaskListStyle = {
     box: {
         mt: '20px',
         gap: '10px',
-        '& .MuiAccordion-root:hover': {
-            boxShadow: '0 0 2px 1px rgba(0,0,0,0.4)',
-        },
         ...flexColumn,
     },
 };

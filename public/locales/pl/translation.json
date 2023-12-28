@@ -2,7 +2,7 @@
   "Task list": "Lista zadań",
   "Lang": "PL",
   "Click for more": "Kliknij, aby uzyskać więcej",
-  "The field cannot be empty": "Pole nie może być puste",
+  "Field cannot be empty": "Pole nie może być puste",
   "Create": "Tworzyć",
   "Create new task": "Utwórz nowe zadanie",
   "Create sub task": "Utwórz podzadanie",
@@ -20,12 +20,14 @@
   "Password": "Hasło",
   "Already have an account?": "Posiadasz już konto?",
   "Do not have an account yet?": "Nie masz jeszcze konta?",
-  "Field cannot be empty": "Pole nie może być puste",
   "Must be an email": "Musi to być e-mail",
   "Password must be at least 6 characters": "Hasło musi mieć co najmniej 6 znaków",
   "An unexpected error occurred": "Wystąpił nieoczekiwany błąd",
   "Task not found": "Nie znaleziono zadania",
   "Sub task not found": "Nie znaleziono zadania podrzędnego",
   "Firebase: Error (auth/invalid-credential).": "Nieprawidłowy login lub hasło",
-  "You must be logged in to use the application!": "Aby korzystać z aplikacji musisz być zalogowany!"
+  "You must be logged in to use the application!": "Aby korzystać z aplikacji musisz być zalogowany!",
+  "Performer email": "Adres e-mail wykonawcy",
+  "Important": "Ważny",
+  "Private": "Prywatny"
 }

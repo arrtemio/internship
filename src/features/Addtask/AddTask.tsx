@@ -20,10 +20,8 @@ export const AddTask: FC<AddTaskProps> = memo(({
     const [error, setError] = useState<boolean>(false);
     const { t } = useTranslation('translation');
 
-    const labelText = t(placeholder);
-
     const buttonStyle = size === 'medium' ? styles.buttonMedium : styles.buttonSmall;
-    const helperText = error ? t('The field cannot be empty') : ' ';
+    const helperText = error ? t('Field cannot be empty') : ' ';
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (error) setError(false);
@@ -44,7 +42,7 @@ export const AddTask: FC<AddTaskProps> = memo(({
     return (
         <Box sx={styles.addTaskBox}>
             <TextField
-                label={labelText}
+                label={t(placeholder)}
                 value={value}
                 onChange={handleChange}
                 fullWidth
@@ -57,7 +55,6 @@ export const AddTask: FC<AddTaskProps> = memo(({
                 onClick={createTask}
                 sx={buttonStyle}
                 disabled={error}
-                color={error ? 'error' : 'primary'}
                 data-testid={`AddTask-button${id ? `-${id}` : ''}`}
                 size={size}
             >

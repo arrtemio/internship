@@ -1,4 +1,6 @@
-import React, { FC, memo, useState } from 'react';
+import {
+    FC, memo, useMemo, useState,
+} from 'react';
 import {
     Accordion, AccordionDetails, AccordionSummary, Box, Container, Typography,
 } from '@mui/material';
@@ -16,10 +18,16 @@ interface MainTaskProps {
 }
 
 export const MainTask: FC<MainTaskProps> = memo(({ task }) => {
-    const { subTasks, id } = task;
+    const {
+        subTasks, id, taskPerformer, isImportant, status,
+    } = task;
     const [expanded, setExpanded] = useState<boolean>(false);
     const dispatch = useAppDispatch();
     const { t } = useTranslation('translation');
+
+    const wrapperStyle = useMemo(() => (
+        isImportant ? styles.wrapperShadows(status) : undefined
+    ), [isImportant, status]);
 
     const handleExpanded = () => setExpanded((prevState) => !prevState);
 
@@ -33,6 +41,7 @@ export const MainTask: FC<MainTaskProps> = memo(({ task }) => {
             TransitionProps={{ unmountOnExit: true }}
             expanded={expanded}
             data-testid="MainTask"
+            sx={wrapperStyle}
         >
             <AccordionSummary
                 aria-controls={`panel${id}-content`}
@@ -62,6 +71,7 @@ export const MainTask: FC<MainTaskProps> = memo(({ task }) => {
                             <Box sx={styles.subTasksList}>
                                 {subTasks.map((sub) => (
                                     <SubTaskCard
+                                        taskPerformer={taskPerformer}
                                         key={sub.id}
                                         subTask={sub}
                                         taskID={task.id}

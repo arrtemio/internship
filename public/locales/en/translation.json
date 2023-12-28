@@ -2,7 +2,7 @@
   "Task list": "Task list",
   "Lang": "EN",
   "Click for more": "Click for more",
-  "The field cannot be empty": "The field cannot be empty",
+  "Field cannot be empty": "Field cannot be empty",
   "Create": "Create",
   "Create new task": "Create new task",
   "Create sub task": "Create sub task",
@@ -20,12 +20,14 @@
   "Password": "Password",
   "Already have an account?": "Already have an account?",
   "Do not have an account yet?": "Dont have an account yet?",
-  "Field cannot be empty": "Field cannot be empty",
   "Must be an email": "Must be an email",
   "Password must be at least 6 characters": "Password must be at least 6 characters",
   "An unexpected error occurred": "An unexpected error occurred",
   "Task not found": "Task not found",
   "Sub task not found": "Sub task not found",
   "Firebase: Error (auth/invalid-credential).": "Incorrect login or password",
-  "You must be logged in to use the application!": "You must be logged in to use the application!"
+  "You must be logged in to use the application!": "You must be logged in to use the application!",
+  "Performer email": "Performer email",
+  "Important": "Important",
+  "Private": "Private"
 }
