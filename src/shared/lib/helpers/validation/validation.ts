@@ -28,11 +28,15 @@ export class FormValidator {
         return this.isNotEmpty(pass, setter) && this.isPassLengthCorrect(pass, setter);
     }
 
-    static emailChecking(email: string, setter: (message: string) => void): boolean {
-        return this.isNotEmpty(email, setter) && this.isEmail(email, setter);
-    }
+    static emailChecking(email: string, setter: (message: string) => void, allowEmpty: boolean = false): boolean {
+        if (allowEmpty && email === '') {
+            return true;
+        }
 
-    static performerChecking(performer: string, setter: (message: string) => void): boolean {
-        return !performer.trim() || this.isEmail(performer, setter);
+        if (!this.isNotEmpty(email, setter)) {
+            return false;
+        }
+
+        return this.isEmail(email, setter);
     }
 }

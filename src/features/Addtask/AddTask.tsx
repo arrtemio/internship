@@ -1,13 +1,15 @@
 import React, { FC, memo, useState } from 'react';
 import { Box, Button, TextField } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { FormValidator } from 'shared/lib/helpers';
 import { AddTaskStyle as styles } from './AddTask.style';
 
 interface AddTaskProps {
-    action: (title: string) => void;
+    action: (title: string) => boolean;
     placeholder?: string;
     size?: 'small' | 'medium';
     id?: string;
+    disabled?: boolean;
 }
 
 export const AddTask: FC<AddTaskProps> = memo(({
@@ -15,30 +17,27 @@ export const AddTask: FC<AddTaskProps> = memo(({
     id = '',
     placeholder = 'Create new task',
     size = 'medium',
+    disabled = false,
 }) => {
     const [value, setValue] = useState<string>('');
-    const [error, setError] = useState<boolean>(false);
+    const [error, setError] = useState<string>('');
     const { t } = useTranslation('translation');
 
     const buttonStyle = size === 'medium' ? styles.buttonMedium : styles.buttonSmall;
-    const helperText = error ? t('Field cannot be empty') : ' ';
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (error) setError(false);
+        if (error) setError('');
         setValue(event.target.value);
     };
 
     const createTask = () => {
-        const taskName = value.trim();
-        if (!taskName) {
-            setError(true);
-            return;
-        }
+        const isValueValid = FormValidator.isNotEmpty(value, setError);
 
-        action(taskName);
+        const isActionSuccessful = action(value);
 
-        setValue('');
+        if (isValueValid && isActionSuccessful) setValue('');
     };
+
     return (
         <Box sx={styles.addTaskBox}>
             <TextField
@@ -47,14 +46,14 @@ export const AddTask: FC<AddTaskProps> = memo(({
                 onChange={handleChange}
                 fullWidth
                 size={size}
-                error={error}
-                helperText={helperText}
+                error={!!error}
+                helperText={t(error) || ' '}
             />
             <Button
                 variant="outlined"
                 onClick={createTask}
                 sx={buttonStyle}
-                disabled={error}
+                disabled={disabled || !!error}
                 data-testid={`AddTask-button${id ? `-${id}` : ''}`}
                 size={size}
             >

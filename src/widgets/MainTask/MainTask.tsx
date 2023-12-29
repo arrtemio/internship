@@ -1,4 +1,4 @@
-import {
+import React, {
     FC, memo, useMemo, useState,
 } from 'react';
 import {
@@ -32,8 +32,11 @@ export const MainTask: FC<MainTaskProps> = memo(({ task }) => {
     const handleExpanded = () => setExpanded((prevState) => !prevState);
 
     const createNewSubTask = (title: string) => {
+        if (!title.trim()) return false;
+
         const subTask = createSubTaskDto(title);
         dispatch(createSubTask({ subTask, taskID: id }));
+        return true;
     };
 
     return (

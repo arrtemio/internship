@@ -35,26 +35,26 @@ describe('AddMainTask', () => {
         expect(screen.getByLabelText('Performer email')).toBeInTheDocument();
         expect(screen.getByLabelText('Private')).toBeInTheDocument();
         expect(screen.getByLabelText('Important')).toBeInTheDocument();
-        expect(screen.getByTestId('AddMainTask-button')).toBeInTheDocument();
+        expect(screen.getByTestId('AddTask-button')).toBeInTheDocument();
     });
 
     test('should show an error message if the performer email is not an email', () => {
         renderedComponent();
 
         fireEvent.change(screen.getByLabelText('Performer email'), { target: { value: 'asd' } });
-        fireEvent.click(screen.getByTestId('AddMainTask-button'));
+        fireEvent.click(screen.getByTestId('AddTask-button'));
 
         expect(screen.getByText('Must be an email')).toBeInTheDocument();
-        expect(screen.getByTestId('AddMainTask-button')).toBeDisabled();
+        expect(screen.getByTestId('AddTask-button')).toBeDisabled();
     });
 
     test('should show an error message if the task name is empty', () => {
         renderedComponent();
 
-        fireEvent.click(screen.getByTestId('AddMainTask-button'));
+        fireEvent.click(screen.getByTestId('AddTask-button'));
 
         expect(screen.getByText('Field cannot be empty')).toBeInTheDocument();
-        expect(screen.getByTestId('AddMainTask-button')).toBeDisabled();
+        expect(screen.getByTestId('AddTask-button')).toBeDisabled();
     });
 
     test('should hide error message when is entered into input', () => {
@@ -62,7 +62,7 @@ describe('AddMainTask', () => {
 
         const taskName = screen.getByLabelText('Create new task');
         const performerEmail = screen.getByLabelText('Performer email');
-        const button = screen.getByTestId('AddMainTask-button');
+        const button = screen.getByTestId('AddTask-button');
 
         fireEvent.change(performerEmail, { target: { value: 'asd' } });
         fireEvent.click(button);
