@@ -29,7 +29,7 @@ export class FormValidator {
     }
 
     static emailChecking(email: string, setter: (message: string) => void, allowEmpty: boolean = false): boolean {
-        if (allowEmpty && email === '') {
+        if (allowEmpty && !email) {
             return true;
         }
 

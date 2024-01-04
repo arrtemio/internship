@@ -34,20 +34,17 @@ export const AddMainTask = memo(() => {
         setIsImportant(!isImportant);
     };
 
+    const handlePerformerValidation = () => {
+        FormValidator.emailChecking(performer, setPerformerError, true);
+    };
+
     const createNewTask = (taskName: string) => {
-        const isPerformerValid = FormValidator.emailChecking(performer, setPerformerError, true);
-        if (!isPerformerValid) return false;
-
-        if (!taskName.trim()) return false;
-
         const task = createTaskDto(taskName, email, performer, isPrivate, isImportant);
         dispatch(createTask(task));
 
         setPerformer('');
         setIsImportant(false);
         setIsPrivate(false);
-
-        return true;
     };
 
     return (
@@ -61,6 +58,7 @@ export const AddMainTask = memo(() => {
                     onChange={handleChangePerformer}
                     fullWidth
                     error={!!performerError}
+                    onBlur={handlePerformerValidation}
                 />
                 <FormControlLabel
                     control={(

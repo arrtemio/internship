@@ -5,7 +5,7 @@ import { FormValidator } from 'shared/lib/helpers';
 import { AddTaskStyle as styles } from './AddTask.style';
 
 interface AddTaskProps {
-    action: (title: string) => boolean;
+    action: (title: string) => void;
     placeholder?: string;
     size?: 'small' | 'medium';
     id?: string;
@@ -25,17 +25,20 @@ export const AddTask: FC<AddTaskProps> = memo(({
 
     const buttonStyle = size === 'medium' ? styles.buttonMedium : styles.buttonSmall;
 
+    const handleValueValidation = () => {
+        FormValidator.isNotEmpty(value, setError);
+    };
+
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (error) setError('');
         setValue(event.target.value);
     };
 
     const createTask = () => {
-        const isValueValid = FormValidator.isNotEmpty(value, setError);
-
-        const isActionSuccessful = action(value);
-
-        if (isValueValid && isActionSuccessful) setValue('');
+        if (FormValidator.isNotEmpty(value, setError)) {
+            action(value);
+            setValue('');
+        }
     };
 
     return (
@@ -48,6 +51,7 @@ export const AddTask: FC<AddTaskProps> = memo(({
                 size={size}
                 error={!!error}
                 helperText={t(error) || ' '}
+                onBlur={handleValueValidation}
             />
             <Button
                 variant="outlined"
