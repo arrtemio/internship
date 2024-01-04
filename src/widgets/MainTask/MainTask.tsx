@@ -29,14 +29,11 @@ export const MainTask: FC<MainTaskProps> = memo(({ task }) => {
         isImportant ? styles.wrapperShadows(status) : undefined
     ), [isImportant, status]);
 
-    const handleExpanded = () => setExpanded((prevState) => !prevState);
+    const handleExpanded = () => setExpanded(!expanded);
 
     const createNewSubTask = (title: string) => {
-        if (!title.trim()) return false;
-
         const subTask = createSubTaskDto(title);
         dispatch(createSubTask({ subTask, taskID: id }));
-        return true;
     };
 
     return (

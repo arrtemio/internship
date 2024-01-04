@@ -6,7 +6,7 @@ import { AddTask } from './AddTask';
 
 describe('AddTask component', () => {
     const taskName = 'Test task';
-    let mockAction: () => boolean;
+    let mockAction: () => void;
     beforeEach(() => {
         mockAction = jest.fn();
     });

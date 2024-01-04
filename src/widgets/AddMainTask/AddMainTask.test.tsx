@@ -42,7 +42,7 @@ describe('AddMainTask', () => {
         renderedComponent();
 
         fireEvent.change(screen.getByLabelText('Performer email'), { target: { value: 'asd' } });
-        fireEvent.click(screen.getByTestId('AddTask-button'));
+        fireEvent.blur(screen.getByLabelText('Performer email'));
 
         expect(screen.getByText('Must be an email')).toBeInTheDocument();
         expect(screen.getByTestId('AddTask-button')).toBeDisabled();
