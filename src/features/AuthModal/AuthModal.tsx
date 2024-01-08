@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from 'shared/lib/hooks/redux';
 import { signIn, signUp } from 'entities/User';
 import { PassField } from 'shared/ui/PassField/PassField';
-import { emailChecking, passChecking } from 'shared/lib/helpers';
+import { FormValidator } from 'shared/lib/helpers';
 import { AuthModalStyles as styles } from './AuthModal.styles';
 
 interface AuthModalProps {
@@ -43,8 +43,8 @@ export const AuthModal: FC<AuthModalProps> = memo(({ open, onClose }) => {
     };
 
     const handleRegister = () => {
-        const emailCorrect = emailChecking(email, setEmailError);
-        const passCorrect = passChecking(password, setPassError);
+        const emailCorrect = FormValidator.emailChecking(email, setEmailError);
+        const passCorrect = FormValidator.passChecking(password, setPassError);
 
         if (emailCorrect && passCorrect) {
             dispatch(signUp({ email, password }));
@@ -53,8 +53,8 @@ export const AuthModal: FC<AuthModalProps> = memo(({ open, onClose }) => {
     };
 
     const handleLogin = () => {
-        const emailCorrect = emailChecking(email, setEmailError);
-        const passCorrect = passChecking(password, setPassError);
+        const emailCorrect = FormValidator.emailChecking(email, setEmailError);
+        const passCorrect = FormValidator.passChecking(password, setPassError);
 
         if (emailCorrect && passCorrect) {
             dispatch(signIn({ email, password }));

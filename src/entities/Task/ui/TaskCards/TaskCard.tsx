@@ -22,6 +22,7 @@ export const TaskCard: FC<TaskCardProps> = memo(({ task }) => {
         completedAt,
         createdAt,
         title,
+        taskPerformer,
     } = task;
 
     const dispatch = useAppDispatch();
@@ -39,7 +40,11 @@ export const TaskCard: FC<TaskCardProps> = memo(({ task }) => {
     return (
         <Card sx={styles.card} data-testid="TaskCard-card">
             <Box sx={styles.main}>
-                <SelectStatus value={status} onChange={handleChange} />
+                <SelectStatus
+                    value={status}
+                    onChange={handleChange}
+                    taskPerformer={taskPerformer}
+                />
                 <Typography data-testid="TaskCard-title" sx={titleStyle}>
                     {title}
                 </Typography>

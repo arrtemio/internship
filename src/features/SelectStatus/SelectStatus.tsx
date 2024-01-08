@@ -6,15 +6,19 @@ import { Status } from 'entities/Task';
 import { StatusValues } from 'entities/Task/model/types/task';
 import { colorsVariant, statusColors } from 'styles/style';
 import { useTranslation } from 'react-i18next';
+import { useAppSelector } from 'shared/lib/hooks/redux';
+import { getUserData } from 'entities/User';
 import { SelectStatusStyle as styles } from './SelectStatus.style';
 
 interface SelectStatusProps {
     onChange?: (e: SelectChangeEvent) => void;
     value: Status;
+    taskPerformer: string;
 }
 
-export const SelectStatus: FC<SelectStatusProps> = memo(({ onChange, value }) => {
+export const SelectStatus: FC<SelectStatusProps> = memo(({ onChange, value, taskPerformer }) => {
     const { t } = useTranslation('translation');
+    const isPerformer = (useAppSelector(getUserData)?.email || null) === taskPerformer;
 
     const color = colorsVariant[value];
     const selectStyle = styles.select(value);
@@ -39,6 +43,7 @@ export const SelectStatus: FC<SelectStatusProps> = memo(({ onChange, value }) =>
                 onClick={handleClick}
                 color={color}
                 sx={selectStyle}
+                disabled={!isPerformer}
                 data-testid="SelectStatus-select"
             >
                 {StatusValues.map((status) => (

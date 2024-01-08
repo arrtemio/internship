@@ -14,9 +14,10 @@ import { changeSubTaskStatus } from '../../model/actions/tasksActions';
 interface SubTaskCardProps {
     subTask: BaseTask;
     taskID: string;
+    taskPerformer: string;
 }
 
-export const SubTaskCard: FC<SubTaskCardProps> = memo(({ subTask, taskID }) => {
+export const SubTaskCard: FC<SubTaskCardProps> = memo(({ subTask, taskID, taskPerformer }) => {
     const dispatch = useAppDispatch();
     const { status, title, completedAt } = subTask;
     const { t } = useTranslation('translation');
@@ -39,7 +40,11 @@ export const SubTaskCard: FC<SubTaskCardProps> = memo(({ subTask, taskID }) => {
             variant="outlined"
             sx={cardStyle}
         >
-            <SelectStatus value={status} onChange={handleChange} />
+            <SelectStatus
+                value={status}
+                onChange={handleChange}
+                taskPerformer={taskPerformer}
+            />
             <Typography sx={titleStyle}>
                 {title}
             </Typography>

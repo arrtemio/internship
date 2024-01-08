@@ -1,5 +1,5 @@
 import {
-    addDoc, collection, doc, getDoc, getDocs, updateDoc,
+    addDoc, collection, doc, getDoc, getDocs, updateDoc, query, where, or,
 } from 'firebase/firestore';
 import { firestore } from 'app/firebase';
 import { createAsyncThunk } from '@reduxjs/toolkit';
@@ -21,17 +21,26 @@ const getTaskByID = async (taskID: string) => {
     return { taskRef, taskData };
 };
 
-export const getAllTasks = createAsyncThunk<Task[], void, { rejectValue: string }>(
+export const getAllTasks = createAsyncThunk<Task[], string, { rejectValue: string }>(
     'tasks/getAllTasks',
-    async (_, { rejectWithValue }) => {
+    async (email, { rejectWithValue }) => {
         try {
-            const querySnapshot = await getDocs(tasksCollection);
+            const q = query(
+                tasksCollection,
+                or(
+                    where('isPrivate', '==', false),
+                    where('taskPerformer', '==', email),
+                    where('author', '==', email),
+                ),
+            );
+            const querySnapshot = await getDocs(q);
+
             const tasks: Task[] = [];
             querySnapshot.forEach((doc) => {
                 tasks.push({ id: doc.id, ...doc.data() } as Task);
             });
 
-            return tasks;
+            return tasks.sort((a, b) => b.createdAt - a.createdAt);
         } catch (error) {
             return rejectWithValue(handleAsyncThunkError(error));
         }
@@ -41,6 +50,10 @@ export const getAllTasks = createAsyncThunk<Task[], void, { rejectValue: string 
 export const createTask = createAsyncThunk<Task, TaskDTO, { rejectValue: string }>(
     'tasks/createTask',
     async (task, { rejectWithValue }) => {
+        const { taskPerformer, author } = task;
+
+        if (!taskPerformer) task.taskPerformer = author;
+
         try {
             const taskRef = await addDoc(tasksCollection, task);
             const newTask: Task = { id: taskRef.id, ...task };

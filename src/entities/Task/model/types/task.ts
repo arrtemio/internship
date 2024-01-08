@@ -20,11 +20,19 @@ export interface BaseTask extends BaseTaskDTO {
 export interface TaskDTO extends BaseTaskDTO {
     createdAt: number;
     subTasks: BaseTask[];
+    author: string;
+    taskPerformer: string;
+    isPrivate: boolean;
+    isImportant: boolean;
 }
 
 export interface Task extends BaseTask {
     createdAt: number;
     subTasks: BaseTask[];
+    author: string;
+    taskPerformer: string;
+    isPrivate: boolean;
+    isImportant: boolean;
 }
 
 export const createSubTaskDto = (title: string): BaseTask => (
@@ -36,12 +44,16 @@ export const createSubTaskDto = (title: string): BaseTask => (
     }
 );
 
-export const createTaskDto = (title: string): TaskDTO => (
+export const createTaskDto = (title: string, author: string, taskPerformer: string, isPrivate: boolean, isImportant: boolean): TaskDTO => (
     {
         title,
         completedAt: null,
         status: Status.TO_DO,
         createdAt: Date.now(),
+        author,
+        taskPerformer: taskPerformer.trim(),
+        isPrivate,
+        isImportant,
         subTasks: [],
     }
 );

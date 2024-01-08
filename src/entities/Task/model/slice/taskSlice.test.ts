@@ -15,13 +15,13 @@ describe('tasksSlice', () => {
     const randomID = generateRandomId();
 
     test('Get all tasks pending', () => {
-        const newState = tasksReducer(state, getAllTasks.pending(''));
+        const newState = tasksReducer(state, getAllTasks.pending('', ''));
 
         expect(newState.isLoading).toEqual(true);
         expect(newState.error).toEqual(undefined);
     });
     test('Get all tasks success', () => {
-        const newState = tasksReducer(state, getAllTasks.fulfilled([testTask], ''));
+        const newState = tasksReducer(state, getAllTasks.fulfilled([testTask], '', ''));
 
         expect(newState.data).toEqual([testTask]);
     });

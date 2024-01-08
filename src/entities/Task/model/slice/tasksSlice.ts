@@ -41,6 +41,7 @@ export const tasksSlice = createSlice({
             .addCase(createTask.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.data.push(action.payload);
+                state.data.sort((a, b) => b.createdAt - a.createdAt);
             })
             .addCase(createTask.rejected, (state, action) => {
                 state.isLoading = false;

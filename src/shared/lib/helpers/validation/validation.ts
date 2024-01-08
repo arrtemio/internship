@@ -1,24 +1,42 @@
-export const emailChecking = (email: string, setter: (message: string) => void) => {
-    if (!email.trim()) {
-        setter('Field cannot be empty');
-        return false;
+export class FormValidator {
+    static isNotEmpty(value: string, setter: (message: string) => void): boolean {
+        if (!value.trim()) {
+            setter('Field cannot be empty');
+            return false;
+        }
+        return true;
     }
-    const reg = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!reg.test(email)) {
-        setter('Must be an email');
-        return false;
-    }
-    return true;
-};
 
-export const passChecking = (pass: string, setter: (message: string) => void) => {
-    if (!pass.trim()) {
-        setter('Field cannot be empty');
-        return false;
+    static isEmail(value: string, setter: (message: string) => void): boolean {
+        const reg = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!reg.test(value)) {
+            setter('Must be an email');
+            return false;
+        }
+        return true;
     }
-    if (pass.length < 6) {
-        setter('Password must be at least 6 characters');
-        return false;
+
+    static isPassLengthCorrect(value: string, setter: (message: string) => void): boolean {
+        if (value.trim().length < 6) {
+            setter('Password must be at least 6 characters');
+            return false;
+        }
+        return true;
     }
-    return true;
-};
+
+    static passChecking(pass: string, setter: (message: string) => void): boolean {
+        return this.isNotEmpty(pass, setter) && this.isPassLengthCorrect(pass, setter);
+    }
+
+    static emailChecking(email: string, setter: (message: string) => void, allowEmpty: boolean = false): boolean {
+        if (allowEmpty && !email) {
+            return true;
+        }
+
+        if (!this.isNotEmpty(email, setter)) {
+            return false;
+        }
+
+        return this.isEmail(email, setter);
+    }
+}

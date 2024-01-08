@@ -6,6 +6,10 @@ export const testTask: Task = {
     completedAt: null,
     title: 'test task',
     createdAt: 1699860692936,
+    taskPerformer: '',
+    author: '',
+    isPrivate: false,
+    isImportant: false,
     subTasks: [
         {
             id: 'bdkldfnb123',
