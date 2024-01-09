@@ -1,6 +1,4 @@
-import {
-    FC, memo, useState, ChangeEvent,
-} from 'react';
+import { FC, memo, useState } from 'react';
 import { ModalWrapper } from 'shared/ui/ModalWrapper/ModalWrapper';
 import {
     Box, Button, Link, TextField, Typography,
@@ -9,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from 'shared/lib/hooks/redux';
 import { signIn, signUp } from 'entities/User';
 import { PassField } from 'shared/ui/PassField/PassField';
-import { FormValidator } from 'shared/lib/helpers';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { AuthModalStyles as styles } from './AuthModal.styles';
 
 interface AuthModalProps {
@@ -17,49 +15,35 @@ interface AuthModalProps {
     onClose: () => void;
 }
 
+export type AuthInputs = {
+    email: string;
+    password: string;
+}
+
 export const AuthModal: FC<AuthModalProps> = memo(({ open, onClose }) => {
     const dispatch = useAppDispatch();
+
+    const {
+        register, handleSubmit, formState: { errors },
+    } = useForm<AuthInputs>({
+        defaultValues: {
+            email: '',
+            password: '',
+        },
+    });
+
     const [isRegister, setIsRegister] = useState(false);
-    const [email, setEmail] = useState('');
-    const [emailError, setEmailError] = useState('');
-
-    const [password, setPassword] = useState('');
-    const [passError, setPassError] = useState('');
-
     const { t } = useTranslation('translation');
 
     const handleSwitchIsRegister = () => {
-        setIsRegister((prevState) => !prevState);
+        setIsRegister(!isRegister);
     };
 
-    const handleChangeEmail = (e: ChangeEvent<HTMLInputElement>) => {
-        if (emailError) setEmailError('');
-        setEmail(e.target.value);
-    };
+    const onSubmitHandle: SubmitHandler<AuthInputs> = (data) => {
+        const { email, password } = data;
+        const authAction = isRegister ? signUp : signIn;
 
-    const handleChangePass = (e: ChangeEvent<HTMLInputElement>) => {
-        if (passError) setPassError('');
-        setPassword(e.target.value);
-    };
-
-    const handleRegister = () => {
-        const emailCorrect = FormValidator.emailChecking(email, setEmailError);
-        const passCorrect = FormValidator.passChecking(password, setPassError);
-
-        if (emailCorrect && passCorrect) {
-            dispatch(signUp({ email, password }));
-            onClose();
-        }
-    };
-
-    const handleLogin = () => {
-        const emailCorrect = FormValidator.emailChecking(email, setEmailError);
-        const passCorrect = FormValidator.passChecking(password, setPassError);
-
-        if (emailCorrect && passCorrect) {
-            dispatch(signIn({ email, password }));
-            onClose();
-        }
+        dispatch(authAction({ email, password }));
     };
 
     return (
@@ -77,34 +61,32 @@ export const AuthModal: FC<AuthModalProps> = memo(({ open, onClose }) => {
                 </Typography>
                 <Box sx={styles.form}>
                     <TextField
+                        {...register('email', {
+                            required: t('Field cannot be empty'),
+                            pattern: {
+                                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                                message: 'Must be an email',
+                            },
+                        })}
                         placeholder={t('Email')}
-                        type="email"
-                        value={email}
-                        onChange={handleChangeEmail}
-                        error={!!emailError}
-                        helperText={t(emailError) || ' '}
-                        data-testid="AuthModal-email"
                         label={t('Email')}
+                        error={!!errors.email?.message}
+                        helperText={errors.email?.message ? t(errors.email.message) : ' '}
+                        data-testid="AuthModal-email"
                     />
                     <PassField
-                        value={password}
-                        onChange={handleChangePass}
-                        error={!!passError}
-                        helperText={t(passError)}
-                        testedComponent="AuthModal"
+                        register={register}
+                        error={!!errors.password?.message}
+                        helperText={errors.password?.message ? t(errors.password.message) : ' '}
                     />
+                    <Button
+                        data-testid={`AuthModal-btn-${isRegister ? 'register' : 'login'}`}
+                        onClick={handleSubmit(onSubmitHandle)}
+                        type="submit"
+                    >
+                        {t(isRegister ? 'Registration' : 'Login')}
+                    </Button>
                 </Box>
-                { isRegister
-                    ? (
-                        <Button data-testid="AuthModal-btn-register" onClick={handleRegister}>
-                            {t('Registration')}
-                        </Button>
-                    )
-                    : (
-                        <Button data-testid="AuthModal-btn-login" onClick={handleLogin}>
-                            {t('Login')}
-                        </Button>
-                    )}
                 <Box sx={styles.caption}>
                     <Typography data-testid="AuthModal-caption" variant="caption">
                         {t(isRegister ? 'Already have an account?' : 'Do not have an account yet?')}

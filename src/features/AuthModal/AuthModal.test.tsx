@@ -1,4 +1,4 @@
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { componentRender } from 'shared/lib/tests';
 import { AuthModal } from './AuthModal';
 import '@testing-library/jest-dom/extend-expect';
@@ -34,22 +34,26 @@ describe('AuthModal', () => {
         expect(captionSwitchLink).toHaveTextContent('Login');
     });
 
-    test('Empty email and password submit', () => {
+    test('Empty email and password submit', async () => {
         renderComponent();
 
         fireEvent.click(screen.getByTestId('AuthModal-btn-login'));
 
-        expect(screen.getAllByText('Field cannot be empty')).toHaveLength(2);
+        await waitFor(() => {
+            expect(screen.getAllByText('Field cannot be empty')).toHaveLength(2);
+        });
     });
 
-    test('Incorrect email and password submit', () => {
+    test('Incorrect email and password submit', async () => {
         renderComponent();
 
         fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'asd' } });
         fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'asd' } });
         fireEvent.click(screen.getByTestId('AuthModal-btn-login'));
 
-        expect(screen.getByText('Must be an email')).toBeInTheDocument();
-        expect(screen.getByText('Password must be at least 6 characters')).toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.getByText('Must be an email')).toBeInTheDocument();
+            expect(screen.getByText('Password must be at least 6 characters')).toBeInTheDocument();
+        });
     });
 });

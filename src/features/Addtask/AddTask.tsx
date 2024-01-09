@@ -1,7 +1,7 @@
-import React, { FC, memo, useState } from 'react';
+import React, { FC, memo } from 'react';
 import { Box, Button, TextField } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { FormValidator } from 'shared/lib/helpers';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { AddTaskStyle as styles } from './AddTask.style';
 
 interface AddTaskProps {
@@ -12,6 +12,10 @@ interface AddTaskProps {
     disabled?: boolean;
 }
 
+type AddTaskForm = {
+    value: string,
+};
+
 export const AddTask: FC<AddTaskProps> = memo(({
     action,
     id = '',
@@ -19,47 +23,42 @@ export const AddTask: FC<AddTaskProps> = memo(({
     size = 'medium',
     disabled = false,
 }) => {
-    const [value, setValue] = useState<string>('');
-    const [error, setError] = useState<string>('');
     const { t } = useTranslation('translation');
+    const {
+        register, handleSubmit, formState: { errors }, reset,
+    } = useForm<AddTaskForm>({
+        defaultValues: {
+            value: '',
+        },
+    });
 
     const buttonStyle = size === 'medium' ? styles.buttonMedium : styles.buttonSmall;
 
-    const handleValueValidation = () => {
-        FormValidator.isNotEmpty(value, setError);
-    };
-
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (error) setError('');
-        setValue(event.target.value);
-    };
-
-    const createTask = () => {
-        if (FormValidator.isNotEmpty(value, setError)) {
-            action(value);
-            setValue('');
-        }
+    const createTask: SubmitHandler<AddTaskForm> = (data) => {
+        action(data.value);
+        reset();
     };
 
     return (
         <Box sx={styles.addTaskBox}>
             <TextField
                 label={t(placeholder)}
-                value={value}
-                onChange={handleChange}
                 fullWidth
                 size={size}
-                error={!!error}
-                helperText={t(error) || ' '}
-                onBlur={handleValueValidation}
+                error={!!errors.value?.message}
+                helperText={errors.value?.message ? t(errors.value.message) : ' '}
+                {...register('value', {
+                    required: 'Field cannot be empty',
+                })}
             />
             <Button
                 variant="outlined"
-                onClick={createTask}
+                onClick={handleSubmit(createTask)}
                 sx={buttonStyle}
-                disabled={disabled || !!error}
+                disabled={disabled || !!errors.value?.message}
                 data-testid={`AddTask-button${id ? `-${id}` : ''}`}
                 size={size}
+                type="submit"
             >
                 {t('Create')}
             </Button>

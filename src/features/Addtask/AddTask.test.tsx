@@ -1,7 +1,10 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import {
+    fireEvent, render, screen, waitFor,
+} from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTests from 'shared/config/i18n/i18nForTests';
+import { act } from 'react-dom/test-utils';
 import { AddTask } from './AddTask';
 
 describe('AddTask component', () => {
@@ -30,7 +33,7 @@ describe('AddTask component', () => {
         expect(screen.getByLabelText(new RegExp(text, 'i'))).toBeInTheDocument();
     });
 
-    test('should call action with correct task name when create button is clicked', () => {
+    test('should call action with correct task name when create button is clicked', async () => {
         render(
             <I18nextProvider i18n={i18nForTests}>
                 <AddTask action={mockAction} />
@@ -42,11 +45,12 @@ describe('AddTask component', () => {
 
         fireEvent.change(input, { target: { value: taskName } });
         fireEvent.click(button);
-
-        expect(mockAction).toHaveBeenCalledWith(taskName);
+        await waitFor(() => {
+            expect(mockAction).toHaveBeenCalledWith(taskName);
+        });
     });
 
-    test('should show an error message if the task name is empty when create button is clicked', () => {
+    test('should show an error message if the task name is empty when create button is clicked', async () => {
         render(
             <I18nextProvider i18n={i18nForTests}>
                 <AddTask action={mockAction} />
@@ -56,11 +60,13 @@ describe('AddTask component', () => {
         const button = screen.getByTestId('AddTask-button');
         fireEvent.click(button);
 
-        expect(button).toBeDisabled();
-        expect(screen.getByText(/field cannot be empty/i)).toBeInTheDocument();
+        await waitFor(() => {
+            expect(button).toBeDisabled();
+            expect(screen.getByText(/field cannot be empty/i)).toBeInTheDocument();
+        });
     });
 
-    test('should hide error message when is entered into input', () => {
+    test('should hide error message when is entered into input', async () => {
         render(
             <I18nextProvider i18n={i18nForTests}>
                 <AddTask action={mockAction} />
@@ -70,10 +76,14 @@ describe('AddTask component', () => {
         const input = screen.getByLabelText(/create new task/i);
         const button = screen.getByTestId('AddTask-button');
 
-        fireEvent.click(button);
-        fireEvent.change(input, { target: { value: taskName } });
+        await act(async () => {
+            fireEvent.click(button);
+            fireEvent.change(input, { target: { value: taskName } });
 
-        expect(button).not.toBeDisabled();
-        expect(screen.queryByText(/field cannot be empty/i)).not.toBeInTheDocument();
+            await waitFor(() => {
+                expect(button).not.toBeDisabled();
+                expect(screen.queryByText(/field cannot be empty/i)).not.toBeInTheDocument();
+            });
+        });
     });
 });

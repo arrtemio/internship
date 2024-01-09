@@ -1,4 +1,4 @@
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { componentRender } from 'shared/lib/tests';
 import { StateSchema } from 'app/store';
 import { AddMainTask } from './AddMainTask';
@@ -48,13 +48,15 @@ describe('AddMainTask', () => {
         expect(screen.getByTestId('AddTask-button')).toBeDisabled();
     });
 
-    test('should show an error message if the task name is empty', () => {
+    test('should show an error message if the task name is empty', async () => {
         renderedComponent();
 
         fireEvent.click(screen.getByTestId('AddTask-button'));
 
-        expect(screen.getByText('Field cannot be empty')).toBeInTheDocument();
-        expect(screen.getByTestId('AddTask-button')).toBeDisabled();
+        await waitFor(() => {
+            expect(screen.getByText('Field cannot be empty')).toBeInTheDocument();
+            expect(screen.getByTestId('AddTask-button')).toBeDisabled();
+        });
     });
 
     test('should hide error message when is entered into input', () => {
