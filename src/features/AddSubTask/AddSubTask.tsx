@@ -2,39 +2,31 @@ import React, { FC, memo } from 'react';
 import { Box, Button, TextField } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { AddTaskStyle as styles } from './AddTask.style';
+import { AddSubTaskStyle as styles } from './AddSubTask.style';
 
-interface AddTaskProps {
+interface AddSubTaskProps {
     action: (title: string) => void;
-    placeholder?: string;
-    size?: 'small' | 'medium';
     id?: string;
-    disabled?: boolean;
 }
 
-type AddTaskForm = {
+type AddSubTaskForm = {
     value: string,
 };
 
-export const AddTask: FC<AddTaskProps> = memo(({
+export const AddSubTask: FC<AddSubTaskProps> = memo(({
     action,
     id = '',
-    placeholder = 'Create new task',
-    size = 'medium',
-    disabled = false,
 }) => {
     const { t } = useTranslation('translation');
     const {
         register, handleSubmit, formState: { errors }, reset,
-    } = useForm<AddTaskForm>({
+    } = useForm<AddSubTaskForm>({
         defaultValues: {
             value: '',
         },
     });
 
-    const buttonStyle = size === 'medium' ? styles.buttonMedium : styles.buttonSmall;
-
-    const createTask: SubmitHandler<AddTaskForm> = (data) => {
+    const createTask: SubmitHandler<AddSubTaskForm> = (data) => {
         action(data.value);
         reset();
     };
@@ -42,9 +34,10 @@ export const AddTask: FC<AddTaskProps> = memo(({
     return (
         <Box sx={styles.addTaskBox}>
             <TextField
-                label={t(placeholder)}
+                label={t('Create sub task')}
+                placeholder={t('Create sub task')}
                 fullWidth
-                size={size}
+                size="small"
                 error={!!errors.value?.message}
                 helperText={errors.value?.message ? t(errors.value.message) : ' '}
                 {...register('value', {
@@ -54,10 +47,10 @@ export const AddTask: FC<AddTaskProps> = memo(({
             <Button
                 variant="outlined"
                 onClick={handleSubmit(createTask)}
-                sx={buttonStyle}
-                disabled={disabled || !!errors.value?.message}
-                data-testid={`AddTask-button${id ? `-${id}` : ''}`}
-                size={size}
+                sx={styles.buttonSmall}
+                disabled={!!errors.value?.message}
+                data-testid={`AddSubTask-button${id ? `-${id}` : ''}`}
+                size="small"
                 type="submit"
             >
                 {t('Create')}

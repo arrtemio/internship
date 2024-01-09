@@ -5,9 +5,9 @@ import '@testing-library/jest-dom/extend-expect';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTests from 'shared/config/i18n/i18nForTests';
 import { act } from 'react-dom/test-utils';
-import { AddTask } from './AddTask';
+import { AddSubTask } from './AddSubTask';
 
-describe('AddTask component', () => {
+describe('AddSubTask component', () => {
     const taskName = 'Test task';
     let mockAction: () => void;
     beforeEach(() => {
@@ -17,31 +17,22 @@ describe('AddTask component', () => {
     test('should render without errors', () => {
         render(
             <I18nextProvider i18n={i18nForTests}>
-                <AddTask action={mockAction} />
+                <AddSubTask action={mockAction} />
             </I18nextProvider>,
         );
-        expect(screen.getByLabelText(/create new task/i)).toBeInTheDocument();
-        expect(screen.getByTestId('AddTask-button')).toBeInTheDocument();
-    });
-
-    test.each(['test placeholder'])('render with the provided placeholder', (text: string) => {
-        render(
-            <I18nextProvider i18n={i18nForTests}>
-                <AddTask action={mockAction} placeholder={text} />
-            </I18nextProvider>,
-        );
-        expect(screen.getByLabelText(new RegExp(text, 'i'))).toBeInTheDocument();
+        expect(screen.getByLabelText(/create sub task/i)).toBeInTheDocument();
+        expect(screen.getByTestId('AddSubTask-button')).toBeInTheDocument();
     });
 
     test('should call action with correct task name when create button is clicked', async () => {
         render(
             <I18nextProvider i18n={i18nForTests}>
-                <AddTask action={mockAction} />
+                <AddSubTask action={mockAction} />
             </I18nextProvider>,
         );
 
-        const input = screen.getByLabelText(/create new task/i);
-        const button = screen.getByTestId('AddTask-button');
+        const input = screen.getByLabelText(/create sub task/i);
+        const button = screen.getByTestId('AddSubTask-button');
 
         fireEvent.change(input, { target: { value: taskName } });
         fireEvent.click(button);
@@ -53,11 +44,11 @@ describe('AddTask component', () => {
     test('should show an error message if the task name is empty when create button is clicked', async () => {
         render(
             <I18nextProvider i18n={i18nForTests}>
-                <AddTask action={mockAction} />
+                <AddSubTask action={mockAction} />
             </I18nextProvider>,
         );
 
-        const button = screen.getByTestId('AddTask-button');
+        const button = screen.getByTestId('AddSubTask-button');
         fireEvent.click(button);
 
         await waitFor(() => {
@@ -69,12 +60,12 @@ describe('AddTask component', () => {
     test('should hide error message when is entered into input', async () => {
         render(
             <I18nextProvider i18n={i18nForTests}>
-                <AddTask action={mockAction} />
+                <AddSubTask action={mockAction} />
             </I18nextProvider>,
         );
 
-        const input = screen.getByLabelText(/create new task/i);
-        const button = screen.getByTestId('AddTask-button');
+        const input = screen.getByLabelText(/create sub task/i);
+        const button = screen.getByTestId('AddSubTask-button');
 
         await act(async () => {
             fireEvent.click(button);

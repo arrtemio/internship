@@ -14,6 +14,10 @@ export const AddMainTaskStyle = {
         alignItems: 'center',
         gap: '20px',
     },
+    top_inputs: {
+        display: 'flex',
+        gap: '15px',
+    },
     button: {
         height: '56px',
     },

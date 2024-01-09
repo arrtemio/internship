@@ -7,7 +7,7 @@ import {
 
 import { SubTaskCard, Task, TaskCard } from 'entities/Task';
 import { useAppDispatch } from 'shared/lib/hooks/redux';
-import { AddTask } from 'features/Addtask/AddTask';
+import { AddSubTask } from 'features/AddSubTask/AddSubTask';
 import { useTranslation } from 'react-i18next';
 import { createSubTaskDto } from 'entities/Task/model/types/task';
 import { createSubTask } from 'entities/Task/model/actions/tasksActions';
@@ -60,9 +60,7 @@ export const MainTask: FC<MainTaskProps> = memo(({ task }) => {
             </AccordionSummary>
             <AccordionDetails>
                 <Container sx={styles.details} data-testid="MainTask-details">
-                    <AddTask
-                        size="small"
-                        placeholder="Create sub task"
+                    <AddSubTask
                         action={createNewSubTask}
                         id={task.id}
                     />
