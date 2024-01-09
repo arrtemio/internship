@@ -4,7 +4,7 @@ import { userReducer, UserSchema } from 'entities/User';
 
 export interface StateSchema {
     tasks: TasksSchema,
-    user: UserSchema
+    user: UserSchema,
 }
 
 const rootReducer = combineReducers<StateSchema>({

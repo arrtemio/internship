@@ -1,5 +1,6 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { componentRender } from 'shared/lib/tests';
+import { FormMessages } from 'shared/lib/messages';
 import { AuthModal } from './AuthModal';
 import '@testing-library/jest-dom/extend-expect';
 
@@ -40,7 +41,7 @@ describe('AuthModal', () => {
         fireEvent.click(screen.getByTestId('AuthModal-btn-login'));
 
         await waitFor(() => {
-            expect(screen.getAllByText('Field cannot be empty')).toHaveLength(2);
+            expect(screen.getAllByText(FormMessages.EMPTY)).toHaveLength(2);
         });
     });
 
@@ -52,8 +53,8 @@ describe('AuthModal', () => {
         fireEvent.click(screen.getByTestId('AuthModal-btn-login'));
 
         await waitFor(() => {
-            expect(screen.getByText('Must be an email')).toBeInTheDocument();
-            expect(screen.getByText('Password must be at least 6 characters')).toBeInTheDocument();
+            expect(screen.getByText(FormMessages.EMAIL)).toBeInTheDocument();
+            expect(screen.getByText(FormMessages.PASSWORD)).toBeInTheDocument();
         });
     });
 });

@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, memo, useState } from 'react';
 import {
     FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput,
 } from '@mui/material';
@@ -6,6 +6,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { UseFormRegister } from 'react-hook-form';
 import { AuthInputs } from 'features/AuthModal/AuthModal';
+import { FormMessages } from '../../lib/messages';
 
 interface PassFieldProps {
     register: UseFormRegister<AuthInputs>;
@@ -13,10 +14,8 @@ interface PassFieldProps {
     helperText: string;
 }
 
-export const PassField: FC<PassFieldProps> = (props) => {
-    const {
-        helperText, error, register,
-    } = props;
+export const PassField: FC<PassFieldProps> = memo((props) => {
+    const { helperText, error, register } = props;
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const { t } = useTranslation('translation');
 
@@ -27,13 +26,15 @@ export const PassField: FC<PassFieldProps> = (props) => {
     };
     return (
         <FormControl variant="outlined">
-            <InputLabel htmlFor="outlined-adornment-password">{t('Password')}</InputLabel>
+            <InputLabel htmlFor="outlined-adornment-password">
+                {t('Password')}
+            </InputLabel>
             <OutlinedInput
                 {...register(
                     'password',
                     {
-                        required: t('Field cannot be empty'),
-                        minLength: { value: 6, message: 'Password must be at least 6 characters' },
+                        required: FormMessages.EMPTY,
+                        minLength: { value: 6, message: FormMessages.PASSWORD },
                     },
                 )
                 }
@@ -57,7 +58,9 @@ export const PassField: FC<PassFieldProps> = (props) => {
                     </InputAdornment>
                 )}
             />
-            <FormHelperText error={error}>{helperText}</FormHelperText>
+            <FormHelperText error={error}>
+                {helperText}
+            </FormHelperText>
         </FormControl>
     );
-};
+});

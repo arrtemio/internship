@@ -6,11 +6,8 @@ import {
 } from '@mui/material';
 
 import { SubTaskCard, Task, TaskCard } from 'entities/Task';
-import { useAppDispatch } from 'shared/lib/hooks/redux';
-import { AddTask } from 'features/Addtask/AddTask';
+import { AddSubTask } from 'features/AddSubTask/AddSubTask';
 import { useTranslation } from 'react-i18next';
-import { createSubTaskDto } from 'entities/Task/model/types/task';
-import { createSubTask } from 'entities/Task/model/actions/tasksActions';
 import { MainTaskStyle as styles } from './MainTask.style';
 
 interface MainTaskProps {
@@ -22,7 +19,6 @@ export const MainTask: FC<MainTaskProps> = memo(({ task }) => {
         subTasks, id, taskPerformer, isImportant, status,
     } = task;
     const [expanded, setExpanded] = useState<boolean>(false);
-    const dispatch = useAppDispatch();
     const { t } = useTranslation('translation');
 
     const wrapperStyle = useMemo(() => (
@@ -30,11 +26,6 @@ export const MainTask: FC<MainTaskProps> = memo(({ task }) => {
     ), [isImportant, status]);
 
     const handleExpanded = () => setExpanded(!expanded);
-
-    const createNewSubTask = (title: string) => {
-        const subTask = createSubTaskDto(title);
-        dispatch(createSubTask({ subTask, taskID: id }));
-    };
 
     return (
         <Accordion
@@ -60,12 +51,7 @@ export const MainTask: FC<MainTaskProps> = memo(({ task }) => {
             </AccordionSummary>
             <AccordionDetails>
                 <Container sx={styles.details} data-testid="MainTask-details">
-                    <AddTask
-                        size="small"
-                        placeholder="Create sub task"
-                        action={createNewSubTask}
-                        id={task.id}
-                    />
+                    <AddSubTask id={task.id} />
                     {subTasks
                         && (
                             <Box sx={styles.subTasksList}>

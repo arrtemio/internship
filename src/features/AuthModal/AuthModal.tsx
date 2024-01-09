@@ -8,6 +8,8 @@ import { useAppDispatch } from 'shared/lib/hooks/redux';
 import { signIn, signUp } from 'entities/User';
 import { PassField } from 'shared/ui/PassField/PassField';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { FormMessages } from 'shared/lib/messages';
+
 import { AuthModalStyles as styles } from './AuthModal.styles';
 
 interface AuthModalProps {
@@ -65,7 +67,7 @@ export const AuthModal: FC<AuthModalProps> = memo(({ open, onClose }) => {
                             required: t('Field cannot be empty'),
                             pattern: {
                                 value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                                message: 'Must be an email',
+                                message: FormMessages.EMAIL,
                             },
                         })}
                         placeholder={t('Email')}

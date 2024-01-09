@@ -1,6 +1,8 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { componentRender } from 'shared/lib/tests';
 import { StateSchema } from 'app/store';
+import { act } from 'react-dom/test-utils';
+import { FormMessages } from 'shared/lib/messages';
 import { AddMainTask } from './AddMainTask';
 
 import '@testing-library/jest-dom/extend-expect';
@@ -38,14 +40,16 @@ describe('AddMainTask', () => {
         expect(screen.getByTestId('AddTask-button')).toBeInTheDocument();
     });
 
-    test('should show an error message if the performer email is not an email', () => {
+    test('should show an error message if the performer email is not an email', async () => {
         renderedComponent();
 
         fireEvent.change(screen.getByLabelText('Performer email'), { target: { value: 'asd' } });
-        fireEvent.blur(screen.getByLabelText('Performer email'));
+        fireEvent.click(screen.getByTestId('AddTask-button'));
 
-        expect(screen.getByText('Must be an email')).toBeInTheDocument();
-        expect(screen.getByTestId('AddTask-button')).toBeDisabled();
+        await waitFor(() => {
+            expect(screen.getByText(FormMessages.EMAIL)).toBeInTheDocument();
+            expect(screen.getByTestId('AddTask-button')).toBeDisabled();
+        });
     });
 
     test('should show an error message if the task name is empty', async () => {
@@ -54,25 +58,29 @@ describe('AddMainTask', () => {
         fireEvent.click(screen.getByTestId('AddTask-button'));
 
         await waitFor(() => {
-            expect(screen.getByText('Field cannot be empty')).toBeInTheDocument();
+            expect(screen.getByText(FormMessages.EMPTY)).toBeInTheDocument();
             expect(screen.getByTestId('AddTask-button')).toBeDisabled();
         });
     });
 
-    test('should hide error message when is entered into input', () => {
+    test('should hide error message when is entered into input', async () => {
         renderedComponent();
 
         const taskName = screen.getByLabelText('Create new task');
         const performerEmail = screen.getByLabelText('Performer email');
         const button = screen.getByTestId('AddTask-button');
 
-        fireEvent.change(performerEmail, { target: { value: 'asd' } });
-        fireEvent.click(button);
-        fireEvent.change(taskName, { target: { value: 'asd' } });
-        fireEvent.change(performerEmail, { target: { value: '' } });
+        await act(async () => {
+            fireEvent.change(performerEmail, { target: { value: 'asd' } });
+            fireEvent.click(button);
+            fireEvent.change(taskName, { target: { value: 'asd' } });
+            fireEvent.change(performerEmail, { target: { value: '' } });
 
-        expect(button).not.toBeDisabled();
-        expect(screen.queryByText('Field cannot be empty')).not.toBeInTheDocument();
-        expect(screen.queryByText('Must be an email')).not.toBeInTheDocument();
+            await waitFor(() => {
+                expect(button).not.toBeDisabled();
+                expect(screen.queryByText(FormMessages.EMPTY)).not.toBeInTheDocument();
+                expect(screen.queryByText(FormMessages.EMAIL)).not.toBeInTheDocument();
+            });
+        });
     });
 });
