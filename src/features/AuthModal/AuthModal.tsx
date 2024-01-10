@@ -64,7 +64,7 @@ export const AuthModal: FC<AuthModalProps> = memo(({ open, onClose }) => {
                 <Box sx={styles.form}>
                     <TextField
                         {...register('email', {
-                            required: t('Field cannot be empty'),
+                            required: FormMessages.EMPTY,
                             pattern: {
                                 value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                                 message: FormMessages.EMAIL,
