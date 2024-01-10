@@ -1,4 +1,4 @@
-export { createTaskDto } from './model/types/task';
+export { createTaskDto, createSubTaskDto } from './model/types/task';
 export { getTasksData, getTasksLoading, getTasksError } from './model/selectors/tasksSelectors';
 export { tasksReducer } from './model/slice/tasksSlice';
 export { Status } from './model/types/task';
