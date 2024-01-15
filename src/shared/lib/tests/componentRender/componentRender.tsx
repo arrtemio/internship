@@ -5,6 +5,7 @@ import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTests from 'shared/config/i18n/i18nForTests';
+import { BrowserRouter } from 'react-router-dom';
 
 interface ComponentRenderOptions {
     initialState?: PreloadedState<RootState>;
@@ -13,10 +14,12 @@ interface ComponentRenderOptions {
 export const componentRender = (component: ReactNode, options: ComponentRenderOptions = {}) => {
     const { initialState } = options;
     return render(
-        <Provider store={setupStore(initialState)}>
-            <I18nextProvider i18n={i18nForTests}>
-                {component}
-            </I18nextProvider>
-        </Provider>,
+        <BrowserRouter>
+            <Provider store={setupStore(initialState)}>
+                <I18nextProvider i18n={i18nForTests}>
+                    {component}
+                </I18nextProvider>
+            </Provider>
+        </BrowserRouter>,
     );
 };

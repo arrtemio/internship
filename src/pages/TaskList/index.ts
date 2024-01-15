@@ -1,1 +1,1 @@
-export { TaskList } from './ui/TaskList';
+export { LazyTasksList as TaskList } from './ui/LazyTasksList';

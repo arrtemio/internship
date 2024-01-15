@@ -1,5 +1,3 @@
-import { flexColumn } from 'styles/style';
-
 export const SubTaskCardStyles = {
     date: {
         textAlign: 'right',
@@ -22,7 +20,8 @@ export const TaskCardStyles = {
     card: {
         width: '100%',
         boxShadow: 'none',
-        ...flexColumn,
+        display: 'flex',
+        flexDirection: 'column',
     },
     main: {
         width: '100%',
@@ -40,6 +39,7 @@ export const TaskCardStyles = {
     date: {
         whiteSpace: 'nowrap',
         textAlign: 'right',
-        ...flexColumn,
+        display: 'flex',
+        flexDirection: 'column',
     },
 };

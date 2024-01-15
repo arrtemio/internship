@@ -1,14 +1,13 @@
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import ThemeSwitcher from 'features/ThemeSwitcher/ThemeSwitcher';
-import { flexGrow } from 'styles/style';
+import {
+    AppBar, Box, Toolbar, Typography, Button,
+} from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { memo, useState } from 'react';
+import { Link } from 'react-router-dom';
+import ThemeSwitcher from 'features/ThemeSwitcher/ThemeSwitcher';
+import { flexGrow } from 'styles/style';
 import LangSwitcher from 'features/LangSwitcher/LangSwitcher';
 import { useAppDispatch, useAppSelector } from 'shared/lib/hooks/redux';
-import { Button } from '@mui/material';
 import { AuthModal } from 'features/AuthModal/AuthModal';
 import { getUserIsAuth, logOut } from 'entities/User';
 
@@ -41,6 +40,23 @@ export const NavBar = memo(() => {
                     >
                         { t('Task list') }
                     </Typography>
+                    <Box mr="20px">
+                        <Button
+                            component={Link}
+                            to="/"
+                            color="inherit"
+                        >
+                            { t('Tasks') }
+                        </Button>
+                        <Button
+                            component={Link}
+                            to="/statistics"
+                            color="inherit"
+                            data-testid="ToStatistics"
+                        >
+                            { t('Statistics') }
+                        </Button>
+                    </Box>
                     <LangSwitcher />
                     <ThemeSwitcher />
                     {isAuth

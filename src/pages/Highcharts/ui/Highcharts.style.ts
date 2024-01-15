@@ -1,17 +1,17 @@
-export const AuthModalStyles = {
+export const HighchartsStyle = {
     wrapper: {
+        mt: '20px',
         display: 'flex',
         flexDirection: 'column',
-        gap: '15px',
+        gap: '50px',
     },
-    form: {
+    sec_chart: {
         display: 'flex',
         flexDirection: 'column',
-        width: '100%',
+        gap: '20px',
+    },
+    select: {
+        display: 'flex',
         gap: '10px',
-    },
-    caption: {
-        display: 'flex',
-        gap: '6px',
     },
 };

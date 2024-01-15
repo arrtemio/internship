@@ -29,5 +29,17 @@
   "You must be logged in to use the application!": "You must be logged in to use the application!",
   "Performer email": "Performer email",
   "Important": "Important",
-  "Private": "Private"
+  "Private": "Private",
+  "Completed tasks": "Completed tasks",
+  "Created tasks": "Created tasks",
+  "Number of tasks": "Number of tasks",
+  "Day of the month": "Day of the month",
+  "Number of tasks created and completed": "Number of tasks created and completed",
+  "Current number of tasks": "Current number of tasks",
+  "Page not found!": "Page not found!",
+  "Statistics": "Statistics",
+  "Tasks": "Tasks",
+  "Tasks statistics": "Tasks statistics",
+  "Year": "Year",
+  "Month": "Month"
 }
