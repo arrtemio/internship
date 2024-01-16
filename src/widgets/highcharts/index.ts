@@ -1,2 +1,2 @@
-export { TaskCountByStatusChart } from './ui/TaskCountByStatusChart';
-export { DailyTaskActivityChart } from './ui/DailyTaskActivityChart';
+export { TaskCountByStatusChart } from './ui/TaskCountByStatusChart/TaskCountByStatusChart';
+export { DailyTaskActivityChart } from './ui/DailyTaskActivityChart/DailyTaskActivityChart';

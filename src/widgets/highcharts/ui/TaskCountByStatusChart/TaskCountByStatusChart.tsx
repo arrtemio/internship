@@ -6,7 +6,7 @@ import { useAppSelector } from 'shared/lib/hooks/redux';
 import { getTasksData, Status } from 'entities/Task';
 import { statusColors } from 'styles/style';
 import { useTheme } from 'app/providers/AppThemeProvider';
-import { addColorSchemeToHighcharts } from '../lib/addColorSchemeToHighcharts';
+import { addColorSchemeToHighcharts } from '../../lib/addColorSchemeToHighcharts';
 
 export const TaskCountByStatusChart = memo(() => {
     const tasks = useAppSelector(getTasksData);
