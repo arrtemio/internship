@@ -1,12 +1,29 @@
-import { Task } from 'entities/Task';
+import { Status, Task } from 'entities/Task';
 
-export const getDataForChart = (month: number, year: number, tasks: Task[]) => {
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
+const getDaysInMonth = (month: number, year: number) => new Date(year, month + 1, 0).getDate();
+
+export const shortMonthNames = [
+    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+];
+
+export const isWeekend = (date: Date) => {
+    const day = date.getDay();
+    return day === 0 || day === 6;
+};
+
+export const getDatesForChart = (month: number, year: number) => {
+    const daysInMonth = getDaysInMonth(month, year);
     const dates: Date[] = [];
 
     for (let i = 1; i <= daysInMonth; i++) {
         dates.push(new Date(year, month, i));
     }
+
+    return dates;
+};
+
+export const getTasksCountByMonth = (month: number, year: number, tasks: Task[]) => {
+    const daysInMonth = getDaysInMonth(month, year);
 
     const createdTasksCount: number[] = Array(daysInMonth).fill(0);
     const completedTasksCount: number[] = Array(daysInMonth).fill(0);
@@ -24,5 +41,28 @@ export const getDataForChart = (month: number, year: number, tasks: Task[]) => {
         }
     });
 
-    return { dates, createdTasksCount, completedTasksCount };
+    return { createdTasksCount, completedTasksCount };
+};
+
+export const getTasksCountByStatus = (tasks: Task[], status: Status): number => (
+    tasks.filter((task) => task.status === status).length
+);
+
+export const getTasksYears = (tasks: Task[]): number[] => {
+    const currentYear = new Date(Date.now()).getFullYear();
+
+    if (!tasks.length) return [currentYear];
+
+    const years: number[] = [];
+
+    const firstYear = tasks.reduce((min, task) => {
+        const taskYear = new Date(task.createdAt).getFullYear();
+        return taskYear < min ? taskYear : min;
+    }, currentYear);
+
+    for (let i = firstYear; i <= currentYear; i++) {
+        years.push(i);
+    }
+
+    return years;
 };

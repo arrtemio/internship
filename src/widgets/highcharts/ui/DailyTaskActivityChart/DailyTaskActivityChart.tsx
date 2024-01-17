@@ -9,16 +9,12 @@ import HighchartsReact from 'highcharts-react-official';
 import { useTranslation } from 'react-i18next';
 import { useAppSelector } from 'shared/lib/hooks/redux';
 import { getTasksData } from 'entities/Task';
-import { getDataForChart } from 'shared/lib/helpers';
+import {
+    getDatesForChart, getTasksCountByMonth, getTasksYears, shortMonthNames as months,
+} from 'shared/lib/helpers';
 import { useTheme } from 'app/providers/AppThemeProvider';
-import { addColorSchemeToHighcharts } from '../../lib/addColorSchemeToHighcharts';
+import { createOptions } from './createOptions';
 import { DailyTaskActivityChartStyle as styles } from './DailyTaskActivityChart.style';
-
-interface Band {
-    color: string;
-    from: number;
-    to: number;
-}
 
 export const DailyTaskActivityChart = memo(() => {
     const tasks = useAppSelector(getTasksData);
@@ -26,6 +22,7 @@ export const DailyTaskActivityChart = memo(() => {
     const { t } = useTranslation('translation');
     const { theme: { palette: { mode } } } = useTheme();
     const currentDate = new Date(Date.now());
+    const years = useMemo(() => getTasksYears(tasks), [tasks]);
 
     const [year, setYear] = useState<number>(currentDate.getFullYear());
     const [month, setMonth] = useState<number>(currentDate.getMonth());
@@ -38,58 +35,16 @@ export const DailyTaskActivityChart = memo(() => {
         setYear(Number(event.target.value));
     };
 
-    const months = [
-        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
-    ];
+    const dates = useMemo(() => getDatesForChart(month, year), [year, month]);
 
     const {
-        dates, createdTasksCount, completedTasksCount,
-    } = useMemo(() => getDataForChart(month, year, tasks), [year, month, tasks]);
+        createdTasksCount, completedTasksCount,
+    } = useMemo(() => getTasksCountByMonth(month, year, tasks), [year, month, tasks]);
 
-    const isWeekend = (date: Date) => {
-        const day = date.getDay();
-        return day === 0 || day === 6;
-    };
-
-    const options: Highcharts.Options = useMemo(() => addColorSchemeToHighcharts({
-        title: {
-            text: t('Number of tasks created and completed'),
-        },
-        xAxis: {
-            title: {
-                text: t('Day of the month'),
-            },
-            categories: dates.map((date) => date.getDate().toString()),
-            plotBands: dates.reduce((bands: Band[], date, index) => {
-                if (isWeekend(date)) {
-                    const band = {
-                        color: 'rgba(64,238,6,0.34)',
-                        from: index - 0.5,
-                        to: index + 0.5,
-                    };
-                    bands.push(band);
-                }
-                return bands;
-            }, []),
-        },
-        yAxis: {
-            title: {
-                text: t('Number of tasks'),
-            },
-        },
-        series: [{
-            type: 'line',
-            name: t('Created tasks'),
-            data: createdTasksCount,
-        }, {
-            type: 'line',
-            name: t('Completed tasks'),
-            data: completedTasksCount,
-        }],
-        credits: {
-            enabled: false,
-        },
-    }, mode), [completedTasksCount, createdTasksCount, dates, t, mode]);
+    const options: Highcharts.Options = useMemo(
+        () => createOptions(t, dates, completedTasksCount, createdTasksCount, mode),
+        [completedTasksCount, createdTasksCount, dates, t, mode],
+    );
 
     return (
         <Box sx={styles.wrapper}>
@@ -123,8 +78,11 @@ export const DailyTaskActivityChart = memo(() => {
                         label={t('Year')}
                         onChange={handleChangeYear}
                     >
-                        <MenuItem value={2023}>2023</MenuItem>
-                        <MenuItem value={2024}>2024</MenuItem>
+                        {years.map((y) => (
+                            <MenuItem key={y} value={y}>
+                                {y}
+                            </MenuItem>
+                        ))}
                     </Select>
                 </FormControl>
             </Box>
