@@ -53,16 +53,10 @@ export const getTasksYears = (tasks: Task[]): number[] => {
 
     if (!tasks.length) return [currentYear];
 
-    const years: number[] = [];
-
     const firstYear = tasks.reduce((min, task) => {
         const taskYear = new Date(task.createdAt).getFullYear();
         return taskYear < min ? taskYear : min;
     }, currentYear);
 
-    for (let i = firstYear; i <= currentYear; i++) {
-        years.push(i);
-    }
-
-    return years;
+    return Array.from({ length: currentYear - firstYear + 1 }, (_, i) => i + firstYear);
 };
