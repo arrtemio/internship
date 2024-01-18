@@ -70,7 +70,6 @@ export const checkIsAuth = () => (dispatch: AppDispatch) => {
             dispatch(userActions.authTrue({ email: user.email || '', id: user.uid, token: user.refreshToken }));
         } else {
             dispatch(userActions.setIsLoading(false));
-            dispatch(userActions.authFalse());
         }
     });
 };

@@ -29,5 +29,17 @@
   "You must be logged in to use the application!": "Aby korzystać z aplikacji musisz być zalogowany!",
   "Performer email": "Adres e-mail wykonawcy",
   "Important": "Ważny",
-  "Private": "Prywatny"
+  "Private": "Prywatny",
+  "Completed tasks": "Wykonane zadania",
+  "Created tasks": "Utworzone zadania",
+  "Number of tasks": "Liczba zadań",
+  "Day of the month": "Dzień miesiąca",
+  "Number of tasks created and completed": "Liczba utworzonych i ukończonych zadań",
+  "Current number of tasks": "Aktualna ilość zadań",
+  "Page not found!": "Strona nie znaleziona!",
+  "Statistics": "Statystyka",
+  "Tasks": "Zadania",
+  "Tasks statistics": "Statystyki zadań",
+  "Year": "Year",
+  "Month": "Month"
 }

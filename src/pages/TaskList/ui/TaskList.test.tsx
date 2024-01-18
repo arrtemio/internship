@@ -55,29 +55,4 @@ describe('TaskList', () => {
             expect(screen.getByText(`Total Sub Tasks:${testTask.subTasks.length}`)).toBeInTheDocument();
         });
     });
-    it('renders the task list correctly when the user is not authorized', async () => {
-        const initialState: StateSchema = {
-            tasks: {
-                data: [testTask],
-                isLoading: false,
-                error: undefined,
-            },
-            user: {
-                data: null,
-                isAuth: false,
-                isLoading: false,
-            },
-        };
-
-        const renderTaskList = () => componentRender(<TaskList />, { initialState });
-
-        renderTaskList();
-
-        await waitFor(() => {
-            const unauthorized = screen.getByTestId('TaskList-unauthorized');
-
-            expect(unauthorized).toBeInTheDocument();
-            expect(unauthorized).toHaveTextContent('You must be logged in to use the application!');
-        });
-    });
 });

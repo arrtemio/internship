@@ -1,12 +1,12 @@
-import { flexColumn } from 'styles/style';
-
 export const AuthModalStyles = {
     wrapper: {
-        ...flexColumn,
+        display: 'flex',
+        flexDirection: 'column',
         gap: '15px',
     },
     form: {
-        ...flexColumn,
+        display: 'flex',
+        flexDirection: 'column',
         width: '100%',
         gap: '10px',
     },

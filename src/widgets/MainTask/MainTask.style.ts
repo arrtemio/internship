@@ -1,10 +1,11 @@
-import { flexColumn, statusColors } from 'styles/style';
+import { statusColors } from 'styles/style';
 import { Status } from 'entities/Task';
 
 export const MainTaskStyle = {
     taskBox: {
         width: '100%',
-        ...flexColumn,
+        display: 'flex',
+        flexDirection: 'column',
     },
     click: {
         fontSize: 'small',
@@ -12,11 +13,13 @@ export const MainTaskStyle = {
     },
     details: {
         gap: '10px',
-        ...flexColumn,
+        display: 'flex',
+        flexDirection: 'column',
     },
     subTasksList: {
         gap: '5px',
-        ...flexColumn,
+        display: 'flex',
+        flexDirection: 'column',
     },
     wrapperShadows: (status: Status) => {
         const color = statusColors[status];

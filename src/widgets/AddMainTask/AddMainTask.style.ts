@@ -1,12 +1,11 @@
-import { flexColumn } from 'styles/style';
-
 export const AddMainTaskStyle = {
     taskBox: {
         display: 'flex',
         gap: '20px',
     },
     wrapper: {
-        ...flexColumn,
+        display: 'flex',
+        flexDirection: 'column',
         gap: '10px',
     },
     inputs: {

@@ -10,6 +10,10 @@ export const flexGrow = {
     webkitFlexGrow: 1,
 };
 
+export const errorAlign = {
+    mt: '30vh',
+};
+
 export const statusColors = {
     [Status.COMPLETED]: '#2e7d32',
     [Status.IN_PROGRESS]: '#9c27b0',
