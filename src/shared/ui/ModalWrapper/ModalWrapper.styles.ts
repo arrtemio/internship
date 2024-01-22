@@ -1,10 +1,10 @@
 export const ModalWrapperStyles = {
     box: {
-        position: 'absolute' as 'absolute',
+        position: 'absolute',
         top: '30%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: 400,
+        width: 'inherit',
         bgcolor: 'background.paper',
         boxShadow: 24,
         p: 2,

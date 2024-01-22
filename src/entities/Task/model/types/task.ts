@@ -6,7 +6,7 @@ export enum Status {
     IN_PROGRESS = 'In progress'
 }
 
-export const StatusValues = Object.values(Status);
+export const StatusValues: Status[] = [Status.TO_DO, Status.IN_PROGRESS, Status.COMPLETED];
 
 export interface BaseTaskDTO {
     title: string;

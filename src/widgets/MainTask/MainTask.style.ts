@@ -4,6 +4,7 @@ import { Status } from 'entities/Task';
 export const MainTaskStyle = {
     taskBox: {
         width: '100%',
+        minWidth: '600px',
         display: 'flex',
         flexDirection: 'column',
     },
