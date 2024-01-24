@@ -28,6 +28,9 @@ export const styles = {
     wrapperDragShadow: {
         boxShadow: '1px 1px 9px 0 rgba(222, 206, 142, 1)',
     },
+    empty: {
+        visibility: 'hidden',
+    },
     board_card: (isDisabled: boolean) => ({
         display: 'flex',
         flexDirection: 'column',
@@ -40,6 +43,10 @@ export const styles = {
         fontSize: 'large',
         textDecoration: status === Status.COMPLETED ? 'line-through' : 'none',
         mb: '10px',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        maxWidth: '340px',
     }),
     wrapperShadows: (status: Status) => {
         const color = statusColors[status];

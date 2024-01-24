@@ -35,6 +35,9 @@ export const TaskCardStyles = {
         fontSize: 'large',
         width: '100%',
         textAlign: 'left',
+        maxWidth: '400px',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
     },
     date: {
         whiteSpace: 'nowrap',

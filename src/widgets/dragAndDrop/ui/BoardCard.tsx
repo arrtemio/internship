@@ -53,7 +53,11 @@ export const BoardCard: FC<BoardCardProps> = ({ task, index }) => {
                         {...provided.dragHandleProps}
                     >
                         <Card sx={styles.board_card(isDragDisabled)}>
-                            <Typography align="left" sx={styles.title(status)} data-testid="BoardCard-title">
+                            <Typography
+                                align="left"
+                                sx={styles.title(status)}
+                                data-testid="BoardCard-title"
+                            >
                                 {title}
                             </Typography>
                             <Box sx={styles.date}>
@@ -62,18 +66,28 @@ export const BoardCard: FC<BoardCardProps> = ({ task, index }) => {
                                     :
                                     {createdTime}
                                 </Typography>
-                                {completeTime && (
-                                    <Typography variant="caption">
-                                        {t('Completed')}
-                                        :
-                                        {completeTime}
-                                    </Typography>
-                                )}
+                                {completeTime && !snapshot.isDragging
+                                    ? (
+                                        <Typography variant="caption">
+                                            {t('Completed')}
+                                            :
+                                            {completeTime}
+                                        </Typography>
+                                    )
+                                    : (
+                                        <Typography
+                                            sx={styles.empty}
+                                            variant="caption"
+                                        >
+                                            -
+                                        </Typography>
+                                    )}
                             </Box>
                             <Button
                                 variant="text"
                                 sx={styles.more}
                                 onClick={handleOpenModal}
+                                data-testid="BoardCard-Btn"
                             >
                                 {t('Click for more')}
                             </Button>
