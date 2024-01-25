@@ -8,6 +8,7 @@ import { getDateAndTime } from 'shared/lib/helpers';
 import { SelectStatus } from 'features/SelectStatus/SelectStatus';
 import { statusColors } from 'styles/style';
 import { useTranslation } from 'react-i18next';
+import { LabelValue } from 'shared/ui/LabelValue/LabelValue';
 import { SubTaskCardStyles as styles } from './TaskCards.style';
 import { changeSubTaskStatus } from '../../model/actions/tasksActions';
 
@@ -50,11 +51,7 @@ export const SubTaskCard: FC<SubTaskCardProps> = memo(({ subTask, taskID, taskPe
             </Typography>
             <Box sx={styles.date}>
                 { completedAt && (
-                    <Typography variant="caption">
-                        {t('Done')}
-                        :
-                        {completedTime}
-                    </Typography>
+                    <LabelValue label={t('Done')} value={completedTime} />
                 ) }
             </Box>
         </Card>

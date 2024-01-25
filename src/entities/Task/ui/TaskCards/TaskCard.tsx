@@ -7,6 +7,7 @@ import { getDateAndTime } from 'shared/lib/helpers';
 import { SelectStatus } from 'features/SelectStatus/SelectStatus';
 import { Status, Task } from 'entities/Task';
 import { useTranslation } from 'react-i18next';
+import { LabelValue } from 'shared/ui/LabelValue/LabelValue';
 import { TaskCardStyles as styles } from './TaskCards.style';
 import { changeTaskStatus } from '../../model/actions/tasksActions';
 
@@ -49,26 +50,20 @@ export const TaskCard: FC<TaskCardProps> = memo(({ task }) => {
                     {title}
                 </Typography>
                 <Box sx={styles.date}>
-                    <Typography variant="caption">
-                        {t('Created')}
-                        :
-                        {createdTime}
-                    </Typography>
+                    <LabelValue label={t('Created')} value={createdTime} />
                     { completedAt && (
-                        <Typography variant="caption">
-                            {t('Done')}
-                            :
-                            {completeTime}
-                        </Typography>
+                        <LabelValue label={t('Done')} value={completeTime} />
                     ) }
                 </Box>
             </Box>
             <Box>
-                <Typography data-testid="TaskCard-total" align="right">
-                    {t('Total Sub Tasks')}
-                    :
-                    {subTasks.length}
-                </Typography>
+                <LabelValue
+                    label={t('Total Sub Tasks')}
+                    value={subTasks.length}
+                    variant="body1"
+                    align="right"
+                    testID="TaskCard-total"
+                />
             </Box>
         </Card>
     );

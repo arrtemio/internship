@@ -3,6 +3,7 @@ export const AuthModalStyles = {
         display: 'flex',
         flexDirection: 'column',
         gap: '15px',
+        width: '400px',
     },
     form: {
         display: 'flex',

@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { TaskList } from 'pages/TaskList';
+import { TaskBoard } from 'pages/TaskBoard';
 import { Highcharts } from 'pages/Highcharts';
 import { Error404 } from 'pages/Error404';
 import { Unauthorized } from 'pages/Unauthorized';
@@ -10,7 +10,7 @@ interface IRoute {
 }
 
 export const authRoutes: IRoute[] = [
-    { path: '/', element: <TaskList /> },
+    { path: '/', element: <TaskBoard /> },
     { path: '/statistics', element: <Highcharts /> },
     { path: '*', element: <Error404 /> },
 ];

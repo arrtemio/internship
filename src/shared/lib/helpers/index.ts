@@ -4,3 +4,4 @@ export { handleAsyncThunkError } from './handleAsyncThunkError/handleAsyncThunkE
 export {
     isWeekend, getDatesForChart, getTasksCountByMonth, shortMonthNames, getTasksCountByStatus, getTasksYears,
 } from './getDataForChart/getDataForChart';
+export { getTasksByStatus } from './getTasksByStatus/getTasksByStatus';

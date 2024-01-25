@@ -38,11 +38,11 @@ describe('App test', () => {
 
     const renderedComponent = (state: StateSchema) => componentRender(<App />, { initialState: state });
 
-    test('Should open tasks page when user is auth', async () => {
+    test('Should open tasks board page when user is auth', async () => {
         renderedComponent(state);
 
         await waitFor(() => {
-            expect(screen.getByTestId('TaskList')).toBeInTheDocument();
+            expect(screen.getByTestId('TaskBoard')).toBeInTheDocument();
         });
     });
 

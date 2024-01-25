@@ -6,6 +6,6 @@ describe('getDateAndTime', () => {
             .toMatch(/^\d{2}\.\d{2}\.\d{4} \/ \d{2}:\d{2}:\d{2}$/);
     });
     test('with null', () => {
-        expect(getDateAndTime(null)).toEqual(null);
+        expect(getDateAndTime(null)).toEqual('');
     });
 });
