@@ -1,19 +1,32 @@
 import { Status } from 'entities/Task';
 import { statusColors } from 'styles/style';
 
+const tasksWrapperStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    gap: '10px',
+    padding: '5px',
+};
+
+const tasksDragging = {
+    ...tasksWrapperStyle,
+    backgroundColor: 'rgba(101,155,248,0.5)',
+    boxShadow: '',
+};
+
+const tasksDraggingAboveWrapper = {
+    ...tasksWrapperStyle,
+    backgroundColor: 'rgba(26,150,26,0.5)',
+    boxShadow: '0 0 0 3px rgba(26,150,26,1)',
+};
+
 export const styles = {
     column: {
         display: 'flex',
         flexDirection: 'column',
         width: '100%',
         gap: '20px',
-        padding: '8px',
-    },
-    tasks: {
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%',
-        gap: '10px',
     },
     date: {
         whiteSpace: 'nowrap',
@@ -31,6 +44,13 @@ export const styles = {
     empty: {
         visibility: 'hidden',
     },
+    tasksWrapper: (isDragging: boolean, isDraggingOver: boolean) => (
+        (isDragging && isDraggingOver)
+            ? tasksDraggingAboveWrapper
+            : (isDragging && !isDraggingOver)
+                ? tasksDragging
+                : tasksWrapperStyle
+    ),
     board_card: (isDisabled: boolean) => ({
         display: 'flex',
         flexDirection: 'column',

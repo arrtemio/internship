@@ -11,11 +11,11 @@ import { styles } from './styles';
 interface BoardCellProps {
     tasks: Task[],
     status: Status,
+    isDraggable: boolean,
 }
 
-export const BoardColumn: FC<BoardCellProps> = memo(({ tasks, status }) => {
+export const BoardColumn: FC<BoardCellProps> = memo(({ tasks, status, isDraggable }) => {
     const { t } = useTranslation('translation');
-
     const cellTasks = useMemo(() => getTasksByStatus(tasks, status), [tasks, status]);
 
     return (
@@ -26,7 +26,7 @@ export const BoardColumn: FC<BoardCellProps> = memo(({ tasks, status }) => {
             <StrictModeDroppable droppableId={status}>
                 {(provided, snapshot) => (
                     <Box
-                        sx={styles.tasks}
+                        sx={styles.tasksWrapper(isDraggable, snapshot.isDraggingOver)}
                         ref={provided.innerRef}
                         {...provided.droppableProps}
                     >

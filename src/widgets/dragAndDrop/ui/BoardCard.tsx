@@ -9,6 +9,7 @@ import { Task } from 'entities/Task';
 import { getUserData } from 'entities/User';
 import { ModalWrapper } from 'shared/ui/ModalWrapper/ModalWrapper';
 import { getDateAndTime } from 'shared/lib/helpers';
+import { LabelValue } from 'shared/ui/LabelValue/LabelValue';
 import { styles } from './styles';
 import { MainTask } from '../../MainTask/MainTask';
 
@@ -61,18 +62,10 @@ export const BoardCard: FC<BoardCardProps> = ({ task, index }) => {
                                 {title}
                             </Typography>
                             <Box sx={styles.date}>
-                                <Typography variant="caption">
-                                    {t('Created')}
-                                    :
-                                    {createdTime}
-                                </Typography>
+                                <LabelValue label={t('Created')} value={createdTime} />
                                 {completeTime && !snapshot.isDragging
                                     ? (
-                                        <Typography variant="caption">
-                                            {t('Completed')}
-                                            :
-                                            {completeTime}
-                                        </Typography>
+                                        <LabelValue label={t('Completed')} value={completeTime} />
                                     )
                                     : (
                                         <Typography
