@@ -42,6 +42,21 @@ export const subscribeToTasks = (email: string) => (dispatch: AppDispatch) => {
             });
 
             dispatch(tasksActions.setTasks(tasks.sort((a, b) => b.createdAt - a.createdAt)));
+
+            snapshot.docChanges().forEach((change) => {
+                if (change.type === 'added') {
+                    const task = change.doc.data() as Task;
+
+                    if (task.taskPerformer === email && (task.createdAt >= (Date.now() - 1000))) {
+                        console.log('you have new task: ', { title: task.title, isImportant: task.isImportant });
+                        dispatch(tasksActions.setMessage({
+                            title: task.title,
+                            isImportant: task.isImportant,
+                            taskID: change.doc.id,
+                        }));
+                    }
+                }
+            });
         },
         (error) => {
             dispatch(tasksActions.setError(handleAsyncThunkError(error)));
