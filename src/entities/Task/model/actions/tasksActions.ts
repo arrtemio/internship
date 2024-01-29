@@ -1,13 +1,15 @@
 import {
-    addDoc, collection, doc, getDoc, getDocs, updateDoc, query, where, or,
+    addDoc, collection, doc, getDoc, onSnapshot, or, query, updateDoc, where,
 } from 'firebase/firestore';
 import { firestore } from 'app/firebase';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { handleAsyncThunkError } from 'shared/lib/helpers';
+import { AppDispatch } from 'app/store';
 import { changeSubTaskStatusFn, changeTaskStatusFn, createSubTaskFn } from '../utils/tasksUtils';
 import {
     BaseTask, ChangeSubTaskStatus, ChangeTaskStatus, CreateSubTask, Task, TaskDTO,
 } from '../types/task';
+import { tasksActions } from '../slice/tasksSlice';
 
 const tasksCollection = collection(firestore, 'tasks');
 
@@ -21,33 +23,27 @@ const getTaskByID = async (taskID: string) => {
     return { taskRef, taskData };
 };
 
-export const getAllTasks = createAsyncThunk<Task[], string, { rejectValue: string }>(
-    'tasks/getAllTasks',
-    async (email, { rejectWithValue }) => {
-        try {
-            const q = query(
-                tasksCollection,
-                or(
-                    where('isPrivate', '==', false),
-                    where('taskPerformer', '==', email),
-                    where('author', '==', email),
-                ),
-            );
-            const querySnapshot = await getDocs(q);
+export const subscribeToTasks = (email: string) => (dispatch: AppDispatch) => {
+    const q = query(
+        tasksCollection,
+        or(
+            where('isPrivate', '==', false),
+            where('taskPerformer', '==', email),
+            where('author', '==', email),
+        ),
+    );
 
-            const tasks: Task[] = [];
-            querySnapshot.forEach((doc) => {
-                tasks.push({ id: doc.id, ...doc.data() } as Task);
-            });
+    return onSnapshot(q, (snapshot) => {
+        const tasks: Task[] = [];
+        snapshot.forEach((doc) => {
+            tasks.push({ id: doc.id, ...doc.data() } as Task);
+        });
 
-            return tasks.sort((a, b) => b.createdAt - a.createdAt);
-        } catch (error) {
-            return rejectWithValue(handleAsyncThunkError(error));
-        }
-    },
-);
+        dispatch(tasksActions.setTasks(tasks.sort((a, b) => b.createdAt - a.createdAt)));
+    });
+};
 
-export const createTask = createAsyncThunk<Task, TaskDTO, { rejectValue: string }>(
+export const createTask = createAsyncThunk<null, TaskDTO, { rejectValue: string }>(
     'tasks/createTask',
     async (task, { rejectWithValue }) => {
         const { taskPerformer, author } = task;
@@ -55,17 +51,16 @@ export const createTask = createAsyncThunk<Task, TaskDTO, { rejectValue: string 
         if (!taskPerformer) task.taskPerformer = author;
 
         try {
-            const taskRef = await addDoc(tasksCollection, task);
-            const newTask: Task = { id: taskRef.id, ...task };
+            await addDoc(tasksCollection, task);
 
-            return newTask;
+            return null;
         } catch (error) {
             return rejectWithValue(handleAsyncThunkError(error));
         }
     },
 );
 
-export const changeTaskStatus = createAsyncThunk<ChangeTaskStatus, ChangeTaskStatus, { rejectValue: string }>(
+export const changeTaskStatus = createAsyncThunk<null, ChangeTaskStatus, { rejectValue: string }>(
     'tasks/changeTaskStatus',
     async ({ taskID, status }, { rejectWithValue }) => {
         try {
@@ -74,14 +69,14 @@ export const changeTaskStatus = createAsyncThunk<ChangeTaskStatus, ChangeTaskSta
 
             await updateDoc(taskRef, { ...taskData });
 
-            return { taskID, status };
+            return null;
         } catch (error) {
             return rejectWithValue(handleAsyncThunkError(error));
         }
     },
 );
 
-export const createSubTask = createAsyncThunk<CreateSubTask, CreateSubTask, { rejectValue: string }>(
+export const createSubTask = createAsyncThunk<null, CreateSubTask, { rejectValue: string }>(
     'tasks/createSubTask',
     async ({ taskID, subTask }, { rejectWithValue }) => {
         try {
@@ -90,14 +85,14 @@ export const createSubTask = createAsyncThunk<CreateSubTask, CreateSubTask, { re
 
             await updateDoc(taskRef, { ...taskData });
 
-            return { subTask, taskID };
+            return null;
         } catch (error) {
             return rejectWithValue(handleAsyncThunkError(error));
         }
     },
 );
 
-export const changeSubTaskStatus = createAsyncThunk<ChangeSubTaskStatus, ChangeSubTaskStatus, { rejectValue: string }>(
+export const changeSubTaskStatus = createAsyncThunk<null, ChangeSubTaskStatus, { rejectValue: string }>(
     'tasks/changeSubTaskStatus',
     async ({ status, taskID, subTaskID }, { rejectWithValue }) => {
         try {
@@ -110,7 +105,7 @@ export const changeSubTaskStatus = createAsyncThunk<ChangeSubTaskStatus, ChangeS
 
             await updateDoc(taskRef, { ...taskData });
 
-            return { status, taskID, subTaskID };
+            return null;
         } catch (error) {
             return rejectWithValue(handleAsyncThunkError(error));
         }
