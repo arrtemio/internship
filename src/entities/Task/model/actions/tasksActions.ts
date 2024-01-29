@@ -33,14 +33,20 @@ export const subscribeToTasks = (email: string) => (dispatch: AppDispatch) => {
         ),
     );
 
-    return onSnapshot(q, (snapshot) => {
-        const tasks: Task[] = [];
-        snapshot.forEach((doc) => {
-            tasks.push({ id: doc.id, ...doc.data() } as Task);
-        });
+    return onSnapshot(
+        q,
+        (snapshot) => {
+            const tasks: Task[] = [];
+            snapshot.forEach((doc) => {
+                tasks.push({ id: doc.id, ...doc.data() } as Task);
+            });
 
-        dispatch(tasksActions.setTasks(tasks.sort((a, b) => b.createdAt - a.createdAt)));
-    });
+            dispatch(tasksActions.setTasks(tasks.sort((a, b) => b.createdAt - a.createdAt)));
+        },
+        (error) => {
+            dispatch(tasksActions.setError(handleAsyncThunkError(error)));
+        },
+    );
 };
 
 export const createTask = createAsyncThunk<null, TaskDTO, { rejectValue: string }>(

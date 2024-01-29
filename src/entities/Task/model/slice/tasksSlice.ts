@@ -24,6 +24,9 @@ export const tasksSlice = createSlice({
         removeMessage: (state, action: PayloadAction<string>) => {
             state.messages = state.messages.filter((message) => message.taskID !== action.payload);
         },
+        setError: (state, action: PayloadAction<string>) => {
+            state.error = action.payload;
+        },
     },
     extraReducers: (builder) => {
         builder
