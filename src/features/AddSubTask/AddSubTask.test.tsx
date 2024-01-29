@@ -8,7 +8,11 @@ import { AddSubTask } from './AddSubTask';
 
 describe('AddSubTask component', () => {
     const renderedComponent = () => componentRender(<AddSubTask id={testTask.id} />, {
-        initialState: { tasks: { data: [testTask], isLoading: false, error: undefined } },
+        initialState: {
+            tasks: {
+                data: [testTask], isLoading: false, error: undefined, messages: [],
+            },
+        },
     });
 
     const taskName = 'Test task';

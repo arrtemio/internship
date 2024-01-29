@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Task, TasksSchema } from '../types/task';
+import { IMessage, Task, TasksSchema } from '../types/task';
 import {
     changeSubTaskStatus, changeTaskStatus, createSubTask, createTask,
 } from '../actions/tasksActions';
@@ -8,6 +8,7 @@ const initialState: TasksSchema = {
     data: [],
     isLoading: false,
     error: undefined,
+    messages: [],
 };
 
 export const tasksSlice = createSlice({
@@ -16,6 +17,12 @@ export const tasksSlice = createSlice({
     reducers: {
         setTasks: (state, action: PayloadAction<Task[]>) => {
             state.data = action.payload;
+        },
+        setMessage: (state, action: PayloadAction<IMessage>) => {
+            state.messages.push(action.payload);
+        },
+        removeMessage: (state, action: PayloadAction<string>) => {
+            state.messages = state.messages.filter((message) => message.taskID !== action.payload);
         },
     },
     extraReducers: (builder) => {

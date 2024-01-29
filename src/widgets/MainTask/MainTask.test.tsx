@@ -10,7 +10,11 @@ jest.mock('shared/lib/helpers');
 
 describe('MainTask test', () => {
     const renderMainTask = () => componentRender(<MainTask task={testTask} />, {
-        initialState: { tasks: { data: [testTask], isLoading: false, error: undefined } },
+        initialState: {
+            tasks: {
+                data: [testTask], isLoading: false, error: undefined, messages: [],
+            },
+        },
     });
 
     beforeEach(() => {

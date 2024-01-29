@@ -15,6 +15,7 @@ describe('TaskBoard', () => {
             data: [testTask],
             isLoading: false,
             error: undefined,
+            messages: [],
         },
         user: {
             data: { ...testUser, email: '' },

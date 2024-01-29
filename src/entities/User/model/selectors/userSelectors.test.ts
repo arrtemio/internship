@@ -10,6 +10,7 @@ describe('userSelectors test', () => {
             data: [],
             isLoading: false,
             error: undefined,
+            messages: [],
         },
         user: {
             data: testUser,

@@ -1,4 +1,6 @@
-import { Status, BaseTask, Task } from 'entities/Task';
+import {
+    Status, BaseTask, Task, IMessage,
+} from 'entities/Task';
 
 export const testTask: Task = {
     id: 'Asdager123',
@@ -25,4 +27,10 @@ export const testSubtask: BaseTask = {
     status: Status.TO_DO,
     title: 'test subtask 2',
     completedAt: null,
+};
+
+export const testMessage: IMessage = {
+    title: 'test title',
+    taskID: 'Asdager123',
+    isImportant: false,
 };

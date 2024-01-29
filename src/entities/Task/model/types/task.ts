@@ -58,10 +58,17 @@ export const createTaskDto = (title: string, author: string, taskPerformer: stri
     }
 );
 
+export interface IMessage {
+    title: string;
+    isImportant: boolean;
+    taskID: string;
+}
+
 export interface TasksSchema {
     data: Task[];
     isLoading: boolean;
     error: string | undefined;
+    messages: IMessage[];
 }
 
 interface TaskID {

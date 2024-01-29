@@ -15,6 +15,7 @@ describe('SelectStatus component', () => {
             data: [testTask],
             isLoading: false,
             error: undefined,
+            messages: [],
         },
         user: {
             data: {
@@ -32,6 +33,7 @@ describe('SelectStatus component', () => {
             data: [],
             isLoading: false,
             error: undefined,
+            messages: [],
         },
         user: {
             data: {

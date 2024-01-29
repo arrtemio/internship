@@ -13,6 +13,7 @@ describe('AddMainTask', () => {
             data: [],
             isLoading: false,
             error: undefined,
+            messages: [],
         },
         user: {
             data: {
