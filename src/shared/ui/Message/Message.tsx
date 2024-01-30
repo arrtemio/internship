@@ -20,7 +20,9 @@ export const Message: FC<MessageProps> = memo(({ message }) => {
     const dispatch = useAppDispatch();
     const { t } = useTranslation('translation');
     const [isOpen, setIsOpen] = useState<boolean>(true);
-    const { title, taskID, isImportant } = message;
+    const {
+        title, taskID, isImportant, type,
+    } = message;
 
     const deleteMessage = useCallback(() => {
         dispatch(tasksActions.removeMessage(taskID));
@@ -52,7 +54,7 @@ export const Message: FC<MessageProps> = memo(({ message }) => {
                     </IconButton>
                 )}
             >
-                <AlertTitle>{t('You have a new task')}</AlertTitle>
+                <AlertTitle>{t(type)}</AlertTitle>
                 <Typography variant="body1">{title}</Typography>
             </Alert>
         );

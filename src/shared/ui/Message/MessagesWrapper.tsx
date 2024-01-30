@@ -1,13 +1,18 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import { Stack } from '@mui/material';
 import { getMessages } from 'entities/Task';
-import { useAppSelector } from '../../lib/hooks/redux';
 import { Message } from './Message';
+import { useAppSelector } from '../../lib/hooks/redux';
+import { getPermission } from '../../lib/notification';
 
 import { MessageStyle as styles } from './Message.style';
 
 export const MessagesWrapper = memo(() => {
     const messages = useAppSelector(getMessages);
+
+    useEffect(() => {
+        getPermission();
+    }, []);
 
     if (messages.length) {
         return (

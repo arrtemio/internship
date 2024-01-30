@@ -1,5 +1,5 @@
 import {
-    Status, BaseTask, Task, IMessage,
+    Status, BaseTask, Task, IMessage, Messages,
 } from 'entities/Task';
 
 export const testTask: Task = {
@@ -30,6 +30,7 @@ export const testSubtask: BaseTask = {
 };
 
 export const testMessage: IMessage = {
+    type: Messages.CREATED,
     title: 'test title',
     taskID: 'Asdager123',
     isImportant: false,

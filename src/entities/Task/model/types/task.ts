@@ -58,7 +58,13 @@ export const createTaskDto = (title: string, author: string, taskPerformer: stri
     }
 );
 
+export enum Messages {
+    NEW_TASK = 'You have a new task',
+    CREATED = 'Task created',
+}
+
 export interface IMessage {
+    type: string,
     title: string;
     isImportant: boolean;
     taskID: string;

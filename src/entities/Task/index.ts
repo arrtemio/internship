@@ -3,7 +3,7 @@ export {
     getTasksData, getTasksLoading, getTasksError, getMessages,
 } from './model/selectors/tasksSelectors';
 export { tasksReducer, tasksActions } from './model/slice/tasksSlice';
-export { Status } from './model/types/task';
+export { Status, Messages } from './model/types/task';
 export type {
     Task, BaseTask, TasksSchema, IMessage,
 } from './model/types/task';

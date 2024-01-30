@@ -5,9 +5,10 @@ import { firestore } from 'app/firebase';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { handleAsyncThunkError } from 'shared/lib/helpers';
 import { AppDispatch } from 'app/store';
+import { notification } from 'shared/lib/notification';
 import { changeSubTaskStatusFn, changeTaskStatusFn, createSubTaskFn } from '../utils/tasksUtils';
 import {
-    BaseTask, ChangeSubTaskStatus, ChangeTaskStatus, CreateSubTask, Task, TaskDTO,
+    BaseTask, ChangeSubTaskStatus, ChangeTaskStatus, CreateSubTask, Messages, Task, TaskDTO,
 } from '../types/task';
 import { tasksActions } from '../slice/tasksSlice';
 
@@ -48,8 +49,17 @@ export const subscribeToTasks = (email: string) => (dispatch: AppDispatch) => {
                     const task = change.doc.data() as Task;
 
                     if (task.taskPerformer === email && (task.createdAt >= (Date.now() - 1000))) {
-                        console.log('you have new task: ', { title: task.title, isImportant: task.isImportant });
+                        notification(task.title, task.isImportant);
                         dispatch(tasksActions.setMessage({
+                            type: Messages.NEW_TASK,
+                            title: task.title,
+                            isImportant: task.isImportant,
+                            taskID: change.doc.id,
+                        }));
+                    }
+                    if (task.author === email && (task.createdAt >= (Date.now() - 1000))) {
+                        dispatch(tasksActions.setMessage({
+                            type: Messages.CREATED,
                             title: task.title,
                             isImportant: task.isImportant,
                             taskID: change.doc.id,
