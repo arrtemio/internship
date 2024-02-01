@@ -29,7 +29,8 @@ export const TaskBoard = memo(() => {
                 unsubscribe();
             };
         }
-        return undefined;
+
+        return () => {};
     }, [dispatch, email]);
 
     const onDragEnd = useCallback((result: DropResult) => {

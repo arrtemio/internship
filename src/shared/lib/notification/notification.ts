@@ -1,13 +1,8 @@
 import { Messages } from 'entities/Task';
 
 export const getPermission = () => {
-    if ('Notification' in window) {
-        if (Notification.permission === 'granted') {
-            return;
-        }
-        if (Notification.permission === 'default' || Notification.permission === 'denied') {
-            Notification.requestPermission();
-        }
+    if (Notification.permission !== 'granted') {
+        Notification.requestPermission();
     }
 };
 

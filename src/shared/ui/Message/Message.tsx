@@ -37,28 +37,26 @@ export const Message: FC<MessageProps> = memo(({ message }) => {
         };
     }, [dispatch, deleteMessage]);
 
-    if (isOpen) {
-        return (
-            <Alert
-                severity="info"
-                variant="filled"
-                sx={styles.alert(isImportant)}
-                action={(
-                    <IconButton
-                        aria-label="close"
-                        color="inherit"
-                        size="small"
-                        onClick={deleteMessage}
-                    >
-                        <CloseIcon fontSize="inherit" />
-                    </IconButton>
-                )}
-            >
-                <AlertTitle>{t(type)}</AlertTitle>
-                <Typography variant="body1">{title}</Typography>
-            </Alert>
-        );
-    }
+    if (!isOpen) return null;
 
-    return null;
+    return (
+        <Alert
+            severity="info"
+            variant="filled"
+            sx={styles.alert(isImportant)}
+            action={(
+                <IconButton
+                    aria-label="close"
+                    color="inherit"
+                    size="small"
+                    onClick={deleteMessage}
+                >
+                    <CloseIcon fontSize="inherit" />
+                </IconButton>
+            )}
+        >
+            <AlertTitle>{t(type)}</AlertTitle>
+            <Typography variant="body1">{title}</Typography>
+        </Alert>
+    );
 });

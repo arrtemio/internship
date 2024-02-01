@@ -22,7 +22,8 @@ export const Highcharts = memo(() => {
                 unsubscribe();
             };
         }
-        return undefined;
+
+        return () => {};
     }, [dispatch, email]);
 
     return (
