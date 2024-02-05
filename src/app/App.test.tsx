@@ -16,6 +16,7 @@ describe('App test', () => {
             data: [testTask],
             isLoading: false,
             error: undefined,
+            messages: [],
         },
         user: {
             data: testUser,
@@ -28,6 +29,7 @@ describe('App test', () => {
             data: [],
             isLoading: false,
             error: undefined,
+            messages: [],
         },
         user: {
             data: null,

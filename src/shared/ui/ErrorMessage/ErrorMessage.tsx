@@ -1,6 +1,7 @@
 import { FC, memo, useState } from 'react';
 import { Alert, Snackbar } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+
 import { ErrorMessageStyle as styles } from './ErrorMessage.style';
 
 interface ErrorMessageProps {

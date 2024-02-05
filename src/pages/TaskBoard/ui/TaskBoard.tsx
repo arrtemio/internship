@@ -5,7 +5,7 @@ import { Box, Container } from '@mui/material';
 import { DragDropContext, DragStart, DropResult } from 'react-beautiful-dnd';
 import { useAppDispatch, useAppSelector } from 'shared/lib/hooks/redux';
 import {
-    changeTaskStatus, getAllTasks, getTasksData, Status,
+    changeTaskStatus, getTasksData, Status, subscribeToTasks,
 } from 'entities/Task';
 import { getUserData } from 'entities/User';
 import { StatusValues } from 'entities/Task/model/types/task';
@@ -23,8 +23,14 @@ export const TaskBoard = memo(() => {
 
     useEffect(() => {
         if (email) {
-            dispatch(getAllTasks(email));
+            const unsubscribe = dispatch(subscribeToTasks(email));
+
+            return () => {
+                unsubscribe();
+            };
         }
+
+        return () => {};
     }, [dispatch, email]);
 
     const onDragEnd = useCallback((result: DropResult) => {

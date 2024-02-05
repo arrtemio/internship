@@ -3,7 +3,7 @@ import { Container } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from 'shared/lib/hooks/redux';
-import { getAllTasks } from 'entities/Task';
+import { subscribeToTasks } from 'entities/Task';
 import { getUserData } from 'entities/User';
 import { TaskCountByStatusChart, DailyTaskActivityChart } from 'widgets/highcharts';
 
@@ -16,8 +16,14 @@ export const Highcharts = memo(() => {
 
     useEffect(() => {
         if (email) {
-            dispatch(getAllTasks(email));
+            const unsubscribe = dispatch(subscribeToTasks(email));
+
+            return () => {
+                unsubscribe();
+            };
         }
+
+        return () => {};
     }, [dispatch, email]);
 
     return (
